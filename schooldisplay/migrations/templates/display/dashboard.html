@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام إدارة التوقيت - مدرسة الخالدية الابتدائية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Tajawal", sans-serif;
+            background: #0f172a;
+            color: #f9fafb;
+            direction: rtl;
+        }
+
+        header {
+            text-align: center;
+            padding: 1.5rem 0;
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.8);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #e2e8f0;
+            font-size: 1.2rem;
+        }
+
+        .time-now {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+
+        .date-now {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.6rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .tag-class {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+
+        .tag-break {
+            background: rgba(234, 179, 8, 0.2);
+            color: #fde047;
+        }
+
+        .tag-start {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+
+        .tag-end {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fecaca;
+        }
+
+        .error {
+            color: #fecaca;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>نظام إدارة التوقيت المدرسي</h1>
+    <p>مدرسة الخالدية الابتدائية</p>
+</header>
+
+<div class="container">
+    <div class="grid">
+        <section class="card">
+            <h2>الوقت الحالي</h2>
+            <div id="timeNow" class="time-now">--:--:--</div>
+            <div id="dateNow" class="date-now">--/--/----</div>
+            <div id="currentPeriod" style="text-align:center; margin-top:1rem;"></div>
+            <div id="countdown" style="text-align:center; font-size:1.5rem; margin-top:0.5rem;"></div>
+            <div class="error" id="errorBox" style="display:none;"></div>
+        </section>
+
+        <section class="card">
+            <h2>جدول اليوم</h2>
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>الفترة</th>
+                        <th>النوع</th>
+                        <th>من</th>
+                        <th>إلى</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="4">جاري تحميل الجدول...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+<script>
+(function(){
+    const timeNow = document.getElementById("timeNow");
+    const dateNow = document.getElementById("dateNow");
+    const errorBox = document.getElementById("errorBox");
+    const tableBody = document.querySelector("#scheduleTable tbody");
+    const currentPeriodEl = document.getElementById("currentPeriod");
+    const countdownEl = document.getElementById("countdown");
+
+    let schedule = [];
+
+    function formatTime(date) {
+        const h = String(date.getHours()).padStart(2, "0");
+        const m = String(date.getMinutes()).padStart(2, "0");
+        const s = String(date.getSeconds()).padStart(2, "0");
+        return `${h}:${m}:${s}`;
+    }
+
+    function formatDate(date) {
+        const days = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+        return `${days[date.getDay()]} - ${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`;
+    }
+
+    async function loadSchedule() {
+        try {
+            const res = await fetch("/timetable/api/today-schedule/");
+            const data = await res.json();
+
+            if (!data.success) {
+                errorBox.textContent = data.message || "لا يوجد جدول لهذا اليوم.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            errorBox.style.display = "none";
+            schedule = data.periods;
+            renderTable();
+        } catch (err) {
+            errorBox.textContent = "فشل الاتصال بالخادم.";
+            errorBox.style.display = "block";
+        }
+    }
+
+    function renderTable() {
+        tableBody.innerHTML = "";
+        schedule.forEach(p => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${p.name}</td>
+                <td><span class="tag tag-${p.type}">${typeLabel(p.type)}</span></td>
+                <td>${new Date(p.start).toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
+                <td>${new Date(p.end).toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    }
+
+    function typeLabel(type) {
+        switch(type){
+            case "start": return "بداية الدوام";
+            case "class": return "حصة";
+            case "break": return "فسحة";
+            case "end": return "نهاية الدوام";
+            default: return "فترة";
+        }
+    }
+
+    function updateClock() {
+        const now = new Date();
+        timeNow.textContent = formatTime(now);
+        dateNow.textContent = formatDate(now);
+
+        if (schedule.length === 0) return;
+
+        let current = null;
+        for (const p of schedule) {
+            const start = new Date(p.start);
+            const end = new Date(p.end);
+            if (now >= start && now <= end) {
+                current = p;
+                break;
+            }
+        }
+
+        if (current) {
+            currentPeriodEl.innerHTML = `<strong>الفترة الحالية:</strong> ${current.name} (${typeLabel(current.type)})`;
+            const end = new Date(current.end);
+            const diff = Math.max(0, (end - now) / 1000);
+            const m = Math.floor(diff / 60);
+            const s = Math.floor(diff % 60);
+            countdownEl.textContent = `الوقت المتبقي: ${m} دقيقة و ${s} ثانية`;
+        } else {
+            currentPeriodEl.textContent = "لا توجد فترة حالية الآن.";
+            countdownEl.textContent = "";
+        }
+    }
+
+    loadSchedule();
+    setInterval(updateClock, 1000);
+})();
+</script>
+</body>
+</html>

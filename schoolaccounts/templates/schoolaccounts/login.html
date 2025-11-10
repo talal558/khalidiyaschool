@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول - نظام إدارة التوقيت</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Tahoma", "Arial", sans-serif;
+            direction: rtl;
+            background: radial-gradient(circle at top, #1e293b, #020617);
+            color: #e5e7eb;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 1rem;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 1.25rem;
+            padding: 1.75rem 1.5rem 1.5rem;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .card-header p {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .school-name {
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        form {
+            margin-top: 0.75rem;
+        }
+
+        .field {
+            margin-bottom: 0.9rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            color: #e5e7eb;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.55rem 0.7rem;
+            border-radius: 0.65rem;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: rgba(15, 23, 42, 0.9);
+            color: #f9fafb;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+        }
+
+        .btn-submit {
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.2rem;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #f9fafb;
+            box-shadow: 0 12px 30px rgba(34, 197, 94, 0.35);
+            transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.08s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 35px rgba(34, 197, 94, 0.45);
+            opacity: 0.96;
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .messages {
+            margin-bottom: 0.75rem;
+        }
+
+        .messages ul {
+            list-style: none;
+        }
+
+        .messages li {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.6);
+            color: #fecaca;
+            border-radius: 0.75rem;
+            padding: 0.45rem 0.6rem;
+            font-size: 0.82rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-note {
+            margin-top: 0.9rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .footer-note span {
+            color: #38bdf8;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 1.4rem 1.1rem 1.1rem;
+            }
+
+            .card-header h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="card">
+        <div class="card-header">
+            <h1>تسجيل الدخول</h1>
+            <p>نظام إدارة التوقيت لـ
+                <span class="school-name">مدرسة الخالدية الابتدائية</span>
+            </p>
+        </div>
+
+        <div class="messages">
+            {% if messages %}
+                <ul>
+                    {% for msg in messages %}
+                        <li>{{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="field">
+                <label for="id_username">اسم المستخدم</label>
+                <input id="id_username" type="text" name="username" autocomplete="username" required>
+            </div>
+            <div class="field">
+                <label for="id_password">كلمة المرور</label>
+                <input id="id_password" type="password" name="password" autocomplete="current-password" required>
+            </div>
+            <button class="btn-submit" type="submit">دخول إلى النظام</button>
+        </form>
+
+        <div class="footer-note">
+            لوحة توقيت مدرسية • <span>khalidiyaschool</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
