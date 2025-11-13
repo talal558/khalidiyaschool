@@ -23,6 +23,7 @@ ALLOWED_HOSTS = [
 
 # التطبيقات المثبتة
 INSTALLED_APPS = [
+    # تطبيقات Django الأساسية
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -30,7 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # تطبيقاتك أنت
+    # تطبيقات المشروع
     "schoolcore",
     "schoolaccounts",
     "schooltimetable",
@@ -82,10 +83,18 @@ DATABASES = {
 
 # التحقق من قوة كلمات المرور
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },
 ]
 
 # اللغة والمنطقة الزمنية
@@ -96,10 +105,16 @@ USE_TZ = True
 
 # الملفات الثابتة
 STATIC_URL = "/static/"
+
+# مجلدات الملفات الثابتة في وضع التطوير
 STATICFILES_DIRS = [
     BASE_DIR / "staticfiles",
 ]
 
+# في وضع الإنتاج يمكن تفعيل STATIC_ROOT ليتم جمع الملفات فيه
+# STATIC_ROOT = BASE_DIR / "static"
+
+# الإعداد الافتراضي لمفتاح الحقول
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # إعدادات تسجيل الدخول
@@ -108,4 +123,5 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 # حالياً نستخدم نموذج المستخدم الافتراضي لدجانغو
-# (لا تضف AUTH_USER_MODEL هنا حتى نجهز موديل مخصص لاحقاً)
+# عند إنشاء موديل مستخدم مخصص يمكن إضافة:
+# AUTH_USER_MODEL = "schoolaccounts.CustomUser"

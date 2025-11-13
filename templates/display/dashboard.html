@@ -1,516 +1,98 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>لوحة التوقيت - مدرسة الخالدية الابتدائية</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ✅ تعريف الترميز -->
+  <meta charset="UTF-8" />
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <!-- ✅ عنوان الصفحة -->
+  <title>لوحة التوقيت - مدرسة الخالدية الابتدائية</title>
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Tahoma", "Arial", sans-serif;
-            direction: rtl;
-            background: radial-gradient(circle at top, #1e293b, #020617);
-            color: #e5e7eb;
-            min-height: 100vh;
-        }
+  <!-- ✅ ضبط عرض الصفحة للأجهزة المختلفة -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        header {
-            text-align: center;
-            padding: 1.3rem 0 1rem;
-        }
+  <!-- ✅ تحميل ملفات التنسيق -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
-        header h1 {
-            font-size: 1.6rem;
-            margin-bottom: 0.2rem;
-        }
-
-        header p {
-            font-size: 0.9rem;
-            color: #9ca3af;
-        }
-
-        .school-name {
-            color: #38bdf8;
-            font-weight: 600;
-        }
-
-        .page-wrapper {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 1.3rem;
-        }
-
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: rgba(15, 23, 42, 0.96);
-            border-radius: 1.25rem;
-            padding: 1.2rem 1.1rem 1rem;
-            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.95);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .card h2 {
-            font-size: 1.1rem;
-            margin-bottom: 0.6rem;
-            color: #e5e7eb;
-        }
-
-        .time-now {
-            font-size: 2.3rem;
-            font-weight: 700;
-            text-align: center;
-            margin: 0.4rem 0;
-            letter-spacing: 0.08em;
-        }
-
-        .date-now {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #9ca3af;
-        }
-
-        .current-box {
-            margin-top: 1rem;
-            padding: 0.75rem 0.8rem;
-            border-radius: 0.9rem;
-            background: radial-gradient(circle at top right, rgba(56,189,248,0.25), rgba(15,23,42,0.95));
-            border: 1px solid rgba(56,189,248,0.6);
-        }
-
-        .current-title {
-            font-size: 0.9rem;
-            color: #cbd5f5;
-            margin-bottom: 0.25rem;
-        }
-
-        .current-name {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .countdown {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #22c55e;
-        }
-
-        .next-period {
-            margin-top: 0.4rem;
-            font-size: 0.85rem;
-            color: #e5e7eb;
-        }
-
-        .no-period {
-            margin-top: 1.1rem;
-            font-size: 0.9rem;
-            text-align: center;
-            color: #9ca3af;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0.4rem;
-            font-size: 0.9rem;
-        }
-
-        th, td {
-            padding: 0.55rem 0.35rem;
-            text-align: center;
-        }
-
-        th {
-            font-size: 0.85rem;
-            background: rgba(15, 23, 42, 0.9);
-            color: #e5e7eb;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.45);
-        }
-
-        tbody tr {
-            border-bottom: 1px solid rgba(30, 41, 59, 0.8);
-        }
-
-        tbody tr:last-child {
-            border-bottom: none;
-        }
-
-        tbody tr:nth-child(even) {
-            background: rgba(15, 23, 42, 0.85);
-        }
-
-        .row-current {
-            background: rgba(34, 197, 94, 0.18) !important;
-        }
-
-        .row-finished {
-            opacity: 0.55;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 0.15rem 0.5rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-        }
-
-        .tag-start {
-            background: rgba(16, 185, 129, 0.2);
-            color: #6ee7b7;
-            border: 1px solid rgba(16, 185, 129, 0.7);
-        }
-
-        .tag-class {
-            background: rgba(59, 130, 246, 0.2);
-            color: #bfdbfe;
-            border: 1px solid rgba(59, 130, 246, 0.8);
-        }
-
-        .tag-break {
-            background: rgba(234, 179, 8, 0.2);
-            color: #fde68a;
-            border: 1px solid rgba(234, 179, 8, 0.9);
-        }
-
-        .tag-end {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fecaca;
-            border: 1px solid rgba(239, 68, 68, 0.8);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            display: inline-block;
-        }
-
-        .status-running {
-            background: #22c55e;
-            box-shadow: 0 0 8px #22c55e;
-        }
-
-        .status-upcoming {
-            background: #38bdf8;
-        }
-
-        .status-done {
-            background: #6b7280;
-        }
-
-        .schedule-meta {
-            font-size: 0.8rem;
-            color: #9ca3af;
-            margin-bottom: 0.4rem;
-        }
-
-        .error {
-            margin-top: 0.6rem;
-            font-size: 0.85rem;
-            color: #fecaca;
-            text-align: center;
-        }
-
-        .footer-note {
-            margin-top: 0.9rem;
-            font-size: 0.78rem;
-            color: #6b7280;
-            text-align: left;
-        }
-
-        .footer-note span {
-            color: #38bdf8;
-        }
-    </style>
+  <!-- ✅ تحسين SEO وإمكانية الوصول -->
+  <meta name="description" content="لوحة عرض التوقيت المدرسي لمدرسة الخالدية الابتدائية، تعرض الوقت الحالي وجدول الحصص اليومي بشكل حي.">
+  <meta name="author" content="khalidiyaschool">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 </head>
+
 <body>
-<header>
-    <h1>لوحة التوقيت المدرسي</h1>
-    <p>نظام إدارة الوقت لـ <span class="school-name">مدرسة الخالدية الابتدائية</span></p>
-</header>
+  <div class="dashboard-wrapper">
+    <!-- الهيدر -->
+    <header class="dashboard-header">
+      <h1>لوحة التوقيت المدرسي</h1>
+      <p>نظام إدارة الوقت لـ <span class="school-name">مدرسة الخالدية الابتدائية</span></p>
+    </header>
 
-<div class="page-wrapper">
-    <div class="grid">
-        <!-- بطاقة الوقت والفترة الحالية -->
-        <section class="card">
-            <h2>الوقت الحالي</h2>
-            <div id="timeNow" class="time-now">--:--:--</div>
-            <div id="dateNow" class="date-now">--/--/----</div>
+    <!-- المحتوى الرئيسي -->
+    <main class="dashboard-content">
+      <!-- بطاقة الوقت الدائرية -->
+      <section class="time-card" aria-labelledby="now-title">
+        <h2 id="now-title" class="card-title">الوقت الحالي</h2>
 
-            <div id="currentBox" class="current-box" style="display: none;">
-                <div class="current-title">الفترة الحالية</div>
-                <div id="currentName" class="current-name">--</div>
-                <div id="countdown" class="countdown">--:--:--</div>
-                <div id="nextPeriod" class="next-period"></div>
-            </div>
+        <div class="circle-wrapper" role="img" aria-label="ساعة رقمية حية">
+          <div class="circle-clock">
+            <div id="timeNow" class="circle-time">--:--:--</div>
+            <div id="dateNow" class="circle-date">--/--/----</div>
+          </div>
+        </div>
 
-            <div id="noPeriod" class="no-period">
-                لا توجد فترة جارية في هذا الوقت.
-            </div>
+        <div id="currentBox" class="current-box hidden" aria-live="polite">
+          <div class="current-title">الفترة الحالية</div>
+          <div id="currentName" class="current-name">--</div>
+          <div id="countdown" class="countdown">--:--:--</div>
+          <div id="nextPeriod" class="next-period"></div>
+        </div>
 
-            <div id="errorBox" class="error" style="display:none;"></div>
+        <div id="noPeriod" class="no-period" aria-live="polite">
+          لا توجد فترة جارية في هذا الوقت.
+        </div>
 
-            <div class="footer-note">
-                لوحة عرض • <span>khalidiyaschool</span>
-            </div>
-        </section>
+        <div id="errorBox" class="error hidden" role="alert"></div>
 
-        <!-- بطاقة جدول اليوم -->
-        <section class="card">
-            <h2>جدول اليوم</h2>
-            <div id="scheduleMeta" class="schedule-meta">
-                جاري تحميل الجدول...
-            </div>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>الحالة</th>
-                        <th>الفترة</th>
-                        <th>النوع</th>
-                        <th>من</th>
-                        <th>إلى</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                    <tr>
-                        <td colspan="5" style="font-size:0.8rem; color:#9ca3af;">
-                            جاري تحميل الجدول...
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        <div class="footer-note">لوحة عرض • <span>khalidiyaschool</span></div>
+      </section>
+
+      <!-- بطاقة جدول اليوم (الجدول التقليدي) -->
+      <section class="schedule-card" aria-labelledby="today-title">
+        <h2 id="today-title" class="card-title">جدول اليوم</h2>
+
+        <div id="scheduleMeta" class="schedule-meta">جاري تحميل الجدول...</div>
+
+        <div class="table-container">
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th scope="col">الحالة</th>
+                <th scope="col">الفترة</th>
+                <th scope="col">النوع</th>
+                <th scope="col">من</th>
+                <th scope="col">إلى</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="5" class="table-placeholder">جاري تحميل الجدول...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ✅ دعم المستخدمين الذين لا يملكون JavaScript -->
+  <noscript>
+    <div class="error" style="text-align:center;margin:1rem auto;max-width:900px;">
+      هذه الصفحة تتطلب تفعيل JavaScript لعرض الساعة والجدول.
     </div>
-</div>
+  </noscript>
 
-<script>
-(function () {
-    const timeNowEl = document.getElementById("timeNow");
-    const dateNowEl = document.getElementById("dateNow");
-    const errorBox = document.getElementById("errorBox");
-    const scheduleMeta = document.getElementById("scheduleMeta");
-    const tableBody = document.getElementById("tableBody");
-    const currentBox = document.getElementById("currentBox");
-    const currentNameEl = document.getElementById("currentName");
-    const countdownEl = document.getElementById("countdown");
-    const nextPeriodEl = document.getElementById("nextPeriod");
-    const noPeriodEl = document.getElementById("noPeriod");
-
-    let periods = [];
-
-    function pad(n) {
-        return n.toString().padStart(2, "0");
-    }
-
-    function formatTime(date) {
-        return pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds());
-    }
-
-    function formatDate(date) {
-        const days = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
-        const months = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
-        return days[date.getDay()] + " - " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
-    }
-
-    function typeLabel(type) {
-        switch (type) {
-            case "start": return "بداية الدوام";
-            case "class": return "حصة دراسية";
-            case "break": return "فسحة / استراحة";
-            case "end": return "نهاية الدوام";
-            default: return "فترة";
-        }
-    }
-
-    function typeClass(type) {
-        switch (type) {
-            case "start": return "tag tag-start";
-            case "class": return "tag tag-class";
-            case "break": return "tag tag-break";
-            case "end": return "tag tag-end";
-            default: return "tag";
-        }
-    }
-
-    async function loadSchedule() {
-        try {
-            const res = await fetch("/timetable/api/today-schedule/");
-            const data = await res.json();
-
-            if (!data.success) {
-                scheduleMeta.textContent = data.message || "لا يوجد جدول لهذا اليوم.";
-                tableBody.innerHTML = "";
-                errorBox.style.display = "none";
-                periods = [];
-                return;
-            }
-
-            periods = data.periods || [];
-            scheduleMeta.textContent = "تاريخ اليوم: " + data.date + " – جدول: " + data.schedule_name;
-            errorBox.style.display = "none";
-            renderTable();
-        } catch (e) {
-            errorBox.textContent = "فشل الاتصال بالخادم.";
-            errorBox.style.display = "block";
-        }
-    }
-
-    function renderTable() {
-        tableBody.innerHTML = "";
-
-        if (!periods.length) {
-            const tr = document.createElement("tr");
-            const td = document.createElement("td");
-            td.colSpan = 5;
-            td.style.fontSize = "0.8rem";
-            td.style.color = "#9ca3af";
-            td.textContent = "لا يوجد جدول مفعّل لهذا اليوم.";
-            tr.appendChild(td);
-            tableBody.appendChild(tr);
-            return;
-        }
-
-        const now = new Date();
-
-        periods.forEach(p => {
-            const start = new Date(p.start);
-            const end = new Date(p.end);
-
-            let rowClass = "";
-            let statusClass = "";
-            let statusTitle = "";
-
-            if (now > end) {
-                rowClass = "row-finished";
-                statusClass = "status-dot status-done";
-                statusTitle = "انتهت";
-            } else if (now >= start && now <= end) {
-                rowClass = "row-current";
-                statusClass = "status-dot status-running";
-                statusTitle = "جارية الآن";
-            } else {
-                statusClass = "status-dot status-upcoming";
-                statusTitle = "قادمة";
-            }
-
-            const tr = document.createElement("tr");
-            if (rowClass) tr.className = rowClass;
-
-            const tdStatus = document.createElement("td");
-            const dot = document.createElement("span");
-            dot.className = statusClass;
-            dot.title = statusTitle;
-            tdStatus.appendChild(dot);
-
-            const tdName = document.createElement("td");
-            tdName.textContent = p.name;
-
-            const tdType = document.createElement("td");
-            const spanType = document.createElement("span");
-            spanType.className = typeClass(p.type);
-            spanType.textContent = typeLabel(p.type);
-            tdType.appendChild(spanType);
-
-            const tdStart = document.createElement("td");
-            tdStart.textContent = start.toLocaleTimeString("ar-SA", {hour: "2-digit", minute: "2-digit"});
-
-            const tdEnd = document.createElement("td");
-            tdEnd.textContent = end.toLocaleTimeString("ar-SA", {hour: "2-digit", minute: "2-digit"});
-
-            tr.appendChild(tdStatus);
-            tr.appendChild(tdName);
-            tr.appendChild(tdType);
-            tr.appendChild(tdStart);
-            tr.appendChild(tdEnd);
-
-            tableBody.appendChild(tr);
-        });
-    }
-
-    function updateClockAndState() {
-        const now = new Date();
-        timeNowEl.textContent = formatTime(now);
-        dateNowEl.textContent = formatDate(now);
-
-        if (!periods.length) {
-            currentBox.style.display = "none";
-            noPeriodEl.style.display = "block";
-            countdownEl.textContent = "";
-            nextPeriodEl.textContent = "";
-            return;
-        }
-
-        let current = null;
-        let currentIndex = -1;
-
-        periods.forEach((p, idx) => {
-            const start = new Date(p.start);
-            const end = new Date(p.end);
-            if (now >= start && now <= end) {
-                current = p;
-                currentIndex = idx;
-            }
-        });
-
-        if (!current) {
-            currentBox.style.display = "none";
-            noPeriodEl.style.display = "block";
-            countdownEl.textContent = "";
-            nextPeriodEl.textContent = "";
-        } else {
-            currentBox.style.display = "block";
-            noPeriodEl.style.display = "none";
-
-            currentNameEl.textContent = current.name + " (" + typeLabel(current.type) + ")";
-
-            const end = new Date(current.end);
-            let diffSec = Math.max(0, Math.floor((end - now) / 1000));
-            const m = Math.floor(diffSec / 60);
-            const s = diffSec % 60;
-            countdownEl.textContent = "الوقت المتبقي: " + pad(m) + ":" + pad(s);
-
-            const next = periods[currentIndex + 1];
-            if (next) {
-                const ns = new Date(next.start);
-                nextPeriodEl.textContent =
-                    "الفترة القادمة: " + next.name +
-                    " (" + typeLabel(next.type) + ") – " +
-                    ns.toLocaleTimeString("ar-SA", {hour: "2-digit", minute: "2-digit"});
-            } else {
-                nextPeriodEl.textContent = "لا توجد فترة أخرى بعد هذه الفترة.";
-            }
-        }
-
-        // إعادة رسم الجدول كل ثانية لتحديث الألوان والحالات
-        renderTable();
-    }
-
-    // تشغيل أولي
-    loadSchedule();
-    updateClockAndState();
-    setInterval(updateClockAndState, 1000);
-    // تحديث الجدول كل 5 دقائق
-    setInterval(loadSchedule, 5 * 60 * 1000);
-})();
-</script>
+  <!-- ✅ تحميل سكربتات بعد تحميل الصفحة -->
+  <script src="{% static 'js/dashboard.js' %}" defer></script>
 </body>
 </html>
