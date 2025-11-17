@@ -1,6 +1,15 @@
 from django.urls import path
-from . import views
+from display import views as display_views  # نستخدم الفيوز من تطبيق display
+
+app_name = "schooldisplay"  # عشان {% url 'schooldisplay:dashboard' %} تشتغل
 
 urlpatterns = [
-    path("", views.dashboard, name="dashboard"),
+    # الرئيسية (لوحة التوقيت)
+    path("", display_views.dashboard, name="dashboard"),
+
+    # لوحة التحكم
+    path("control-panel/", display_views.control_panel, name="control_panel"),
+
+    # لوحة العام المدرسي
+    path("school-year/", display_views.school_year_board, name="school_year_board"),
 ]

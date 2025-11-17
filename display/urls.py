@@ -1,7 +1,9 @@
 from django.urls import path
 from . import views
 
-app_name = "display"
+app_name = "schooldisplay"
+
 urlpatterns = [
-    path("dashboard/", views.dashboard, name="dashboard"),
+    # صفحات أخرى...
+    path("school-year/", views.school_year_board, name="school_year_board"),
 ]

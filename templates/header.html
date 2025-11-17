@@ -1,0 +1,31 @@
+<header class="site-header">
+    <div class="header-inner">
+        <div class="brand">
+            <div class="brand-icon">⏱</div>
+            <div class="brand-text">
+                <div class="brand-title">لوحة التوقيت المدرسي</div>
+                <div class="brand-subtitle">مدرسة الخالدية الابتدائية</div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <!-- الرئيسية -->
+            <a class="nav-link nav-link-active"
+               href="{% url 'schooldisplay:dashboard' %}">
+                الرئيسية
+            </a>
+
+            <!-- لوحة التحكم -->
+            <a class="nav-link"
+               href="{% url 'schooldisplay:control_panel' %}">
+                لوحة التحكم
+            </a>
+
+            <!-- تسجيل الدخول -->
+            <a class="nav-link"
+               href="{% url 'login' %}">
+                تسجيل الدخول
+            </a>
+        </nav>
+    </div>
+</header>

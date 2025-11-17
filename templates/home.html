@@ -6,17 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        /* ===== الأساسيات ===== */
         :root {
             --bg-main: #020617;
             --bg-card: #020617;
-            --bg-card-soft: #0b1220;
             --text-main: #e5e7eb;
             --text-muted: #9ca3af;
-            --accent: #22d3ee;
-            --accent-soft: rgba(34, 211, 238, 0.15);
-            --danger: #f97373;
-            --success: #4ade80;
         }
 
         * {
@@ -31,39 +25,116 @@
             color: var(--text-main);
         }
 
-        /* ===== الهيدر ===== */
-        header {
-            text-align: center;
-            padding: 1.5rem 0 0.5rem;
+        /* ===== الشريط العلوي ===== */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(15, 23, 42, 0.96);
+            -webkit-backdrop-filter: blur(18px); /* دعم سفاري */
+            backdrop-filter: blur(18px);         /* بقية المتصفحات */
+            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.7rem;
-            letter-spacing: 0.08em;
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.6rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
         }
 
-        header p {
-            margin: 0.35rem 0 0;
-            font-size: 0.9rem;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .brand-icon {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow:
+                0 0 25px rgba(56, 189, 248, 0.4),
+                0 0 0 1px rgba(15, 23, 42, 0.9);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.1rem;
+            letter-spacing: 0.06em;
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
-        /* ===== الحاوية العامة (عريضة) ===== */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: #e5e7eb;
+            text-decoration: none;
+            border: 1px solid transparent;
+            background: transparent;
+            transition: all 0.18s ease-out;
+        }
+
+        .nav-link:hover {
+            border-color: rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .nav-link-active {
+            border-color: rgba(56, 189, 248, 0.8);
+            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.95));
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .main-nav {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+        }
+
+        /* ===== الحاوية الرئيسية ===== */
         .page-wrapper {
             max-width: 1280px;
             margin: 0 auto 2rem;
             padding: 1rem 1.5rem 2rem;
         }
 
-        /* تخطيط عريض: صف علوي + صف سفلي */
         .layout-wide {
             display: grid;
             grid-template-rows: auto auto;
             gap: 1.5rem;
         }
 
-        /* الصف العلوي: الساعة + جدول اليوم */
         .top-row {
             display: grid;
             grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.7fr);
@@ -71,7 +142,6 @@
             align-items: stretch;
         }
 
-        /* الصف السفلي: 3 جداول */
         .bottom-row {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -119,7 +189,6 @@
         .card h2 {
             margin: 0;
             font-size: 1.1rem;
-            color: #e5e7eb;
         }
 
         .card-subtitle {
@@ -133,7 +202,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
             min-height: 340px;
         }
 
@@ -201,7 +269,7 @@
         }
 
         .current-countdown {
-            font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
             font-size: 0.9rem;
             white-space: nowrap;
         }
@@ -213,7 +281,6 @@
             text-align: center;
         }
 
-        /* حالات إخفاء/إظهار */
         .hidden {
             display: none;
         }
@@ -233,7 +300,7 @@
             list-style: disc;
         }
 
-        /* ===== جدول اليوم ===== */
+        /* ===== جدول اليوم والجداول الأخرى ===== */
         .table-card-header {
             display: flex;
             justify-content: space-between;
@@ -374,21 +441,58 @@
             background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 1));
         }
 
-        /* ===== الجداول السفلية (انتظار / نشاط) ===== */
-
         .sub-title {
             margin-top: 0.25rem;
             font-size: 0.8rem;
             color: var(--text-muted);
         }
+
+        /* ===== الفوتر ===== */
+        .site-footer {
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 23, 42, 0.98);
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.7rem 1.5rem 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .footer-main {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .footer-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .footer-separator {
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>لوحة التوقيت المدرسي</h1>
-    <p>نظام إدارة الفترات والجداول • مدرسة الخالدية الابتدائية</p>
-</header>
+{% include "header.html" %}
 
 <main class="page-wrapper">
     <div class="layout-wide">
@@ -546,6 +650,8 @@
     </div>
 </main>
 
+{% include "footer.html" %}
+
 <script>
 (function () {
     const timeNow = document.getElementById("timeNow");
@@ -629,7 +735,7 @@
             schedulePeriods = data.periods || [];
 
             renderMainScheduleTable();
-            updateClock();  // تحديث الحالة الحالية مباشرة بعد تحميل الجدول
+            updateClock();
         } catch (err) {
             mainScheduleBody.innerHTML = `<tr><td colspan="6">فشل الاتصال بخادم الجدول.</td></tr>`;
             scheduleError.textContent = "تعذر تحميل جدول اليوم. تحقق من الاتصال أو من إعدادات API.";
@@ -650,7 +756,6 @@
         let currentId = null;
         let nextId = null;
 
-        // تحديد الحالية والتالية
         schedulePeriods.forEach((p, index) => {
             const start = new Date(p.start);
             const end = new Date(p.end);
@@ -801,7 +906,9 @@
             currentPeriodText.textContent = `الفترة الحالية: ${current.name} (${typeLabel(current.type)})`;
 
             if (next) {
-                nextPeriodText.textContent = `الفترة التالية: ${next.name} (${typeLabel(next.type)}) عند ${new Date(next.start).toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}`;
+                nextPeriodText.textContent =
+                    `الفترة التالية: ${next.name} (${typeLabel(next.type)}) عند ` +
+                    new Date(next.start).toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"});
             } else {
                 nextPeriodText.textContent = "لا توجد فترات لاحقة اليوم.";
             }
@@ -817,7 +924,6 @@
         }
     }
 
-    // بدء التشغيل
     loadTodaySchedule();
     loadWaitingSlots();
     loadActivitySlots();
