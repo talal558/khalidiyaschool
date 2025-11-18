@@ -148,6 +148,142 @@
             color: var(--accent);
             margin-bottom: 0.45rem;
         }
+
+        /* قسم الجداول الجديد */
+        .tables-section {
+            margin-top: 2rem;
+        }
+
+        .tables-header {
+            margin-bottom: 0.75rem;
+        }
+
+        .tables-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .tables-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .tables-grid {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1rem;
+        }
+
+        @media (min-width: 1024px) {
+            .tables-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .table-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+            border-radius: 1.35rem;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+            padding: 1rem 1.1rem 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 55%),
+                radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.15), transparent 60%);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .table-card-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .table-card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .table-card-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+
+        .table-wrapper {
+            border-radius: 1rem;
+            border: 1px solid rgba(30, 64, 175, 0.9);
+            background: radial-gradient(circle at top, #020617, #020617);
+            overflow: hidden;
+            max-height: 320px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-scroll {
+            overflow-y: auto;
+        }
+
+        .table-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #020617;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #38bdf8, #0ea5e9);
+            border-radius: 999px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 100%;
+        }
+
+        thead {
+            background: linear-gradient(to left, #0f172a, #020617);
+        }
+
+        th, td {
+            padding: 0.55rem 0.4rem;
+            font-size: 0.8rem;
+            text-align: center;
+            border-bottom: 1px solid #1f2937;
+            white-space: nowrap;
+        }
+
+        th {
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        tbody tr:hover {
+            background: rgba(56, 189, 248, 0.12);
+        }
+
+        .note-danger {
+            color: #f97373;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -156,6 +292,8 @@
 
 <main class="control-panel">
     <div class="page-wrapper">
+
+        <!-- قسم البطاقات (كما هو) -->
         <header class="cp-header">
             <h1 class="cp-title">لوحة التحكم</h1>
             <p class="cp-subtitle">
@@ -212,6 +350,126 @@
                 </div>
             </article>
         </section>
+
+        <!-- قسم الجداول المنقولة من الصفحة الرئيسية -->
+        <section class="tables-section">
+            <header class="tables-header">
+                <h2 class="tables-title">جداول المعلمين لليوم</h2>
+                <p class="tables-subtitle">
+                    يعرض الجدولين حصص النشاط وحصص الانتظار للمعلمين لليوم الدراسي الحالي.
+                </p>
+            </header>
+
+            <div class="tables-grid">
+                <!-- جدول النشاط -->
+                <article class="table-card">
+                    <div class="table-card-inner">
+                        <h3 class="table-card-title">جدول النشاط للمعلمين (اليوم)</h3>
+                        <p class="table-card-sub">
+                            يعرض جميع حصص النشاط المسجلة لليوم الدراسي.
+                        </p>
+
+                        <div class="table-wrapper">
+                            <div class="table-scroll">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>المعلم</th>
+                                            <th>الرمز</th>
+                                            <th>من</th>
+                                            <th>إلى</th>
+                                            <th>ملاحظات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>احمد محمد الميلان</td>
+                                            <td>معلم : دين</td>
+                                            <td>١٢:٤٥</td>
+                                            <td>١٣:٣٠</td>
+                                            <td>الرياضة / الصف ٥ / ١</td>
+                                        </tr>
+                                        <tr>
+                                            <td>حسين جابر الغامدي</td>
+                                            <td>معلم : إنجليزي</td>
+                                            <td>١١:٤٥</td>
+                                            <td>١٢:٣٠</td>
+                                            <td>الرياضة / الصف ٦</td>
+                                        </tr>
+                                        <tr>
+                                            <td>خالد ابراهيم الدخيل</td>
+                                            <td>معلم : بدنية</td>
+                                            <td>١١:٠٠</td>
+                                            <td>١١:٤٥</td>
+                                            <td>الرياضة / الصف ٦ / ٢</td>
+                                        </tr>
+                                        <!-- أضف صفوفًا أخرى هنا حسب حاجتك -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- جدول الانتظار -->
+                <article class="table-card">
+                    <div class="table-card-inner">
+                        <h3 class="table-card-title">جدول الانتظار للمعلمين (اليوم)</h3>
+                        <p class="table-card-sub">
+                            يعرض جميع حصص الانتظار المحددة لليوم الدراسي الحالي.
+                        </p>
+
+                        <div class="table-wrapper">
+                            <div class="table-scroll">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>المعلم</th>
+                                            <th>الرمز</th>
+                                            <th>من</th>
+                                            <th>إلى</th>
+                                            <th>ملاحظات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>احمد محمد الميلان</td>
+                                            <td>معلم : دين</td>
+                                            <td>٧:١٥</td>
+                                            <td>٨:٠٠</td>
+                                            <td class="note-danger">منتظر٢</td>
+                                        </tr>
+                                        <tr>
+                                            <td>صالح عوض الشهري</td>
+                                            <td>معلم : عربي</td>
+                                            <td>٨:٠٠</td>
+                                            <td>٨:٤٥</td>
+                                            <td class="note-danger">منتظر١</td>
+                                        </tr>
+                                        <tr>
+                                            <td>عبدالحميد محمد التويجري</td>
+                                            <td>معلم : اجتماعيات</td>
+                                            <td>٨:٤٥</td>
+                                            <td>٩:٣٠</td>
+                                            <td class="note-danger">منتظر٣</td>
+                                        </tr>
+                                        <tr>
+                                            <td>راشد محمد الماضي</td>
+                                            <td>معلم : عربي</td>
+                                            <td>٩:٣٠</td>
+                                            <td>١٠:١٥</td>
+                                            <td class="note-danger">منتظر٢</td>
+                                        </tr>
+                                        <!-- أضف صفوفًا أخرى هنا حسب حاجتك -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
     </div>
 </main>
 

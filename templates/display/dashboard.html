@@ -1,8 +1,9 @@
- <head>
-       <meta charset="UTF-8">
-       <title>لوحة التوقيت المدرسي - مدرسة الخالدية الابتدائية</title>
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة التوقيت المدرسي - مدرسة الخالدية الابتدائية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- خط عربي -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -137,16 +138,18 @@
             gap: 1.5rem;
         }
 
+        /* الصف العلوي: جدول اليوم + الساعة */
         .top-row {
             display: grid;
-            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.7fr);
+            grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
             gap: 1.5rem;
             align-items: stretch;
         }
 
+        /* الصف السفلي: بطاقات الفصول */
         .bottom-row {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: minmax(0, 1fr);
             gap: 1.25rem;
         }
 
@@ -205,6 +208,11 @@
             flex-direction: column;
             align-items: center;
             min-height: 340px;
+            order: 2; /* يمين */
+        }
+
+        .schedule-card {
+            order: 1; /* يسار */
         }
 
         .clock-wrapper {
@@ -293,16 +301,7 @@
             margin-top: 0.15rem;
         }
 
-        .notes-list {
-            margin-top: 0.75rem;
-            padding-right: 1.1rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-            list-style: disc;
-        }
-
-        /* ===== جدول اليوم والجداول الأخرى ===== */
+        /* ===== جدول اليوم ===== */
         .table-card-header {
             display: flex;
             justify-content: space-between;
@@ -336,7 +335,8 @@
             font-size: 0.88rem;
         }
 
-        th, td {
+        th,
+        td {
             padding: 0.35rem 0.4rem;
             text-align: center;
             border-bottom: 1px solid rgba(30, 64, 175, 0.35);
@@ -427,20 +427,12 @@
             color: #6b7280;
         }
 
-        .error-text {
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: #fecaca;
-            text-align: center;
-        }
-
-        .table-wrapper {
-            max-height: 270px;
-            overflow-y: auto;
-            margin-top: 0.5rem;
-            border-radius: 0.75rem;
-            border: 1px solid rgba(30, 64, 175, 0.5);
-            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 1));
+        /* ===== بطاقات الفصول ===== */
+        .classes-card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
         }
 
         .sub-title {
@@ -449,7 +441,67 @@
             color: var(--text-muted);
         }
 
-        /* ===== الفوتر (الشريط السفلي) ===== */
+        .classes-grid {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .classes-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .classes-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .class-card {
+            border-radius: 1rem;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 1));
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.85);
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .class-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .class-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .class-actions {
+            margin-top: 0.3rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .class-btn {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.7);
+            background: rgba(15, 23, 42, 0.95);
+            color: #e0f2fe;
+            cursor: pointer;
+        }
+
+        .class-btn:hover {
+            background: rgba(56, 189, 248, 0.18);
+        }
+
+        /* ===== الفوتر ===== */
         .site-footer {
             margin-top: 1.5rem;
             border-top: 1px solid rgba(148, 163, 184, 0.25);
@@ -502,39 +554,11 @@
 <main class="page-wrapper">
     <div class="layout-wide">
 
-        <!-- الصف العلوي: الساعة + جدول اليوم -->
+        <!-- الصف العلوي: جدول اليوم + الساعة -->
         <section class="top-row">
 
-            <!-- بطاقة الساعة / الحصة الحالية -->
-            <article class="card clock-card">
-                <div class="card-inner">
-                    <h2>الوقت الحالي</h2>
-                    <p class="card-subtitle" id="todayLabel">--</p>
-
-                    <div class="clock-wrapper">
-                        <div class="clock-ring"></div>
-                        <div>
-                            <div id="timeNow" class="clock-time">--:--:--</div>
-                            <div id="dateNow" class="clock-date">-- --- ----</div>
-                        </div>
-                    </div>
-
-                    <div id="currentInfoBox" class="current-period-box hidden">
-                        <div>
-                            <div class="current-period-title" id="currentPeriodText"></div>
-                            <div id="nextPeriodText" class="small-note"></div>
-                        </div>
-                        <div class="current-countdown" id="countdownText">--:--</div>
-                    </div>
-
-                    <div id="noCurrentPeriod" class="no-period">
-                        لا توجد فترة جارية في هذا الوقت.
-                    </div>
-                </div>
-            </article>
-
             <!-- بطاقة جدول اليوم -->
-            <article class="card">
+            <article class="card schedule-card">
                 <div class="card-inner">
                     <div class="table-card-header">
                         <div>
@@ -572,83 +596,124 @@
                     <div id="scheduleError" class="error-text hidden"></div>
                 </div>
             </article>
+
+            <!-- بطاقة الساعة / الحصة الحالية -->
+            <article class="card clock-card">
+                <div class="card-inner">
+                    <h2>الوقت الحالي</h2>
+                    <p class="card-subtitle" id="todayLabel">--</p>
+
+                    <div class="clock-wrapper">
+                        <div class="clock-ring"></div>
+                        <div>
+                            <div id="timeNow" class="clock-time">--:--:--</div>
+                            <div id="dateNow" class="clock-date">-- --- ----</div>
+                        </div>
+                    </div>
+
+                    <div id="currentInfoBox" class="current-period-box hidden">
+                        <div>
+                            <div class="current-period-title" id="currentPeriodText"></div>
+                            <div id="nextPeriodText" class="small-note"></div>
+                        </div>
+                        <div class="current-countdown" id="countdownText">--:--</div>
+                    </div>
+
+                    <div id="noCurrentPeriod" class="no-period">
+                        لا توجد فترة جارية في هذا الوقت.
+                    </div>
+                </div>
+            </article>
+
         </section>
 
-        <!-- الصف السفلي: الجداول الأخرى -->
+        <!-- الصف السفلي: بطاقات الفصول (٩ بطاقات) -->
         <section class="bottom-row">
-
-            <!-- جدول الانتظار -->
             <article class="card">
                 <div class="card-inner">
-                    <h2>جدول الانتظار للمعلمين (اليوم)</h2>
-                    <p class="sub-title">يعرض جميع حصص الانتظار المحددة لليوم الدراسي الحالي.</p>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>المعلم</th>
-                                <th>الرمز</th>
-                                <th>من</th>
-                                <th>إلى</th>
-                                <th>ملاحظات</th>
-                            </tr>
-                            </thead>
-                            <tbody id="waitingSlotsBody">
-                            <tr>
-                                <td colspan="5">جاري تحميل جدول حصص الانتظار...</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="classes-card-title">
+                        <div>
+                            <h2>بطاقات الفصول</h2>
+                            <p class="sub-title">
+                                يمكنك استخدام هذه البطاقات لاحقًا لفتح شاشة خاصة بكل فصل أو جدول حصصه.
+                            </p>
+                        </div>
                     </div>
 
-                    <div id="waitingError" class="error-text hidden"></div>
-                </div>
-            </article>
-
-            <!-- جدول النشاط -->
-            <article class="card">
-                <div class="card-inner">
-                    <h2>جدول النشاط للمعلمين (اليوم)</h2>
-                    <p class="sub-title">يعرض جميع حصص النشاط المسجلة لليوم الدراسي.</p>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>المعلم</th>
-                                <th>الرمز</th>
-                                <th>من</th>
-                                <th>إلى</th>
-                                <th>ملاحظات</th>
-                            </tr>
-                            </thead>
-                            <tbody id="activitySlotsBody">
-                            <tr>
-                                <td colspan="5">جاري تحميل جدول حصص النشاط...</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="classes-grid">
+                        <!-- 1 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف الرابع (أ)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 2 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف الرابع (ب)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 3 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف الرابع (ج)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 4 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف الخامس (أ)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 5 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف الخامس (ب)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 6 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف الخامس (ج)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 7 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف السادس (أ)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 8 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف السادس (ب)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
+                        <!-- 9 -->
+                        <div class="class-card">
+                            <div class="class-name">الصف السادس (ج)</div>
+                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
+                            <div class="class-actions">
+                                <button type="button" class="class-btn">عرض الفصل</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div id="activityError" class="error-text hidden"></div>
-                </div>
-            </article>
-
-            <!-- ملاحظات النظام -->
-            <article class="card">
-                <div class="card-inner">
-                    <h2>ملاحظات النظام</h2>
-                    <p class="sub-title">
-                        يتم تحديث العد التنازلي والوقت تلقائيًا كل ثانية، بينما يتم تحديث الجداول كل مرة تعيد فيها تحميل الصفحة.
-                    </p>
-
-                    <ul class="notes-list">
-                        <li>يعتمد جدول اليوم على <strong>DaySchedule</strong> و <strong>SpecialDay</strong> في قاعدة البيانات.</li>
-                        <li>جداول الانتظار والنشاط تُقرأ من <strong>TeacherWaitingSlot</strong> و <strong>TeacherActivitySlot</strong>.</li>
-                        <li>تأكد من ضبط التوقيت الزمني في الإعدادات <code>TIME_ZONE</code> على <strong>Asia/Riyadh</strong>.</li>
-                        <li>يمكن تخصيص هذه البطاقة لاحقًا لعرض تنبيهات أو رسائل إدارية.</li>
-                    </ul>
                 </div>
             </article>
         </section>
@@ -672,12 +737,6 @@
     const nextPeriodText = document.getElementById("nextPeriodText");
     const countdownText = document.getElementById("countdownText");
     const noCurrentPeriod = document.getElementById("noCurrentPeriod");
-
-    const waitingSlotsBody = document.getElementById("waitingSlotsBody");
-    const waitingError = document.getElementById("waitingError");
-
-    const activitySlotsBody = document.getElementById("activitySlotsBody");
-    const activityError = document.getElementById("activityError");
 
     let schedulePeriods = [];
 
@@ -720,7 +779,8 @@
             const data = await res.json();
 
             if (!data.success) {
-                mainScheduleBody.innerHTML = `<tr><td colspan="6">${data.message || "لا يوجد جدول لهذا اليوم."}</td></tr>`;
+                mainScheduleBody.innerHTML =
+                    `<tr><td colspan="6">${data.message || "لا يوجد جدول لهذا اليوم."}</td></tr>`;
                 scheduleError.textContent = "";
                 scheduleError.classList.add("hidden");
                 currentInfoBox.classList.add("hidden");
@@ -742,8 +802,10 @@
             renderMainScheduleTable();
             updateClock();
         } catch (err) {
-            mainScheduleBody.innerHTML = `<tr><td colspan="6">فشل الاتصال بخادم الجدول.</td></tr>`;
-            scheduleError.textContent = "تعذر تحميل جدول اليوم. تحقق من الاتصال أو من إعدادات API.";
+            mainScheduleBody.innerHTML =
+                `<tr><td colspan="6">فشل الاتصال بخادم الجدول.</td></tr>`;
+            scheduleError.textContent =
+                "تعذر تحميل جدول اليوم. تحقق من الاتصال أو من إعدادات API.";
             scheduleError.classList.remove("hidden");
             schedulePeriods = [];
         }
@@ -751,7 +813,8 @@
 
     function renderMainScheduleTable() {
         if (!schedulePeriods.length) {
-            mainScheduleBody.innerHTML = `<tr><td colspan="6">لا توجد فترات محددة لهذا اليوم.</td></tr>`;
+            mainScheduleBody.innerHTML =
+                `<tr><td colspan="6">لا توجد فترات محددة لهذا اليوم.</td></tr>`;
             return;
         }
 
@@ -796,88 +859,6 @@
         });
     }
 
-    async function loadWaitingSlots() {
-        try {
-            const res = await fetch("/timetable/api/teacher-waiting-slots/");
-            const data = await res.json();
-
-            if (!data.success) {
-                waitingSlotsBody.innerHTML = `<tr><td colspan="5">${data.message || "لا توجد حصص انتظار لهذا اليوم."}</td></tr>`;
-                waitingError.classList.add("hidden");
-                return;
-            }
-
-            const slots = data.slots || [];
-            if (!slots.length) {
-                waitingSlotsBody.innerHTML = `<tr><td colspan="5">لا توجد حصص انتظار لليوم الحالي.</td></tr>`;
-                waitingError.classList.add("hidden");
-                return;
-            }
-
-            waitingSlotsBody.innerHTML = "";
-            slots.forEach((s) => {
-                const startD = new Date(s.start);
-                const endD = new Date(s.end);
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${s.teacher_name || "-"}</td>
-                    <td>${s.teacher_code || "-"}</td>
-                    <td>${startD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${endD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${s.note || "-"}</td>
-                `;
-                waitingSlotsBody.appendChild(tr);
-            });
-
-            waitingError.classList.add("hidden");
-        } catch (err) {
-            waitingSlotsBody.innerHTML = `<tr><td colspan="5">فشل في تحميل جدول حصص الانتظار.</td></tr>`;
-            waitingError.textContent = "تعذر الوصول إلى API حصص الانتظار. تأكد من الإعدادات.";
-            waitingError.classList.remove("hidden");
-        }
-    }
-
-    async function loadActivitySlots() {
-        try {
-            const res = await fetch("/timetable/api/teacher-activity-slots/");
-            const data = await res.json();
-
-            if (!data.success) {
-                activitySlotsBody.innerHTML = `<tr><td colspan="5">${data.message || "لا توجد حصص نشاط لهذا اليوم."}</td></tr>`;
-                activityError.classList.add("hidden");
-                return;
-            }
-
-            const slots = data.slots || [];
-            if (!slots.length) {
-                activitySlotsBody.innerHTML = `<tr><td colspan="5">لا توجد حصص نشاط لليوم الحالي.</td></tr>`;
-                activityError.classList.add("hidden");
-                return;
-            }
-
-            activitySlotsBody.innerHTML = "";
-            slots.forEach((s) => {
-                const startD = new Date(s.start);
-                const endD = new Date(s.end);
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${s.teacher_name || "-"}</td>
-                    <td>${s.teacher_code || "-"}</td>
-                    <td>${startD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${endD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${s.note || "-"}</td>
-                `;
-                activitySlotsBody.appendChild(tr);
-            });
-
-            activityError.classList.add("hidden");
-        } catch (err) {
-            activitySlotsBody.innerHTML = `<tr><td colspan="5">فشل في تحميل جدول حصص النشاط.</td></tr>`;
-            activityError.textContent = "تعذر الوصول إلى API حصص النشاط. تأكد من الإعدادات.";
-            activityError.classList.remove("hidden");
-        }
-    }
-
     function updateClock() {
         const now = new Date();
         timeNow.textContent = formatTime(now);
@@ -908,7 +889,8 @@
             currentInfoBox.classList.remove("hidden");
             noCurrentPeriod.classList.add("hidden");
 
-            currentPeriodText.textContent = `الفترة الحالية: ${current.name} (${typeLabel(current.type)})`;
+            currentPeriodText.textContent =
+                `الفترة الحالية: ${current.name} (${typeLabel(current.type)})`;
 
             if (next) {
                 nextPeriodText.textContent =
@@ -930,8 +912,6 @@
     }
 
     loadTodaySchedule();
-    loadWaitingSlots();
-    loadActivitySlots();
     setInterval(updateClock, 1000);
 })();
 </script>
