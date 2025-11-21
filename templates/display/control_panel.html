@@ -34,6 +34,103 @@
             flex-direction: column;
         }
 
+        /* ===== الشريط العلوي (مطابق للـ dashboard) ===== */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(15, 23, 42, 0.96);
+            -webkit-backdrop-filter: blur(18px);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.6rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .brand-icon {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow:
+                0 0 25px rgba(56, 189, 248, 0.4),
+                0 0 0 1px rgba(15, 23, 42, 0.9);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.1rem;
+            letter-spacing: 0.06em;
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: #e5e7eb;
+            text-decoration: none;
+            border: 1px solid transparent;
+            background: transparent;
+            transition: all 0.18s ease-out;
+        }
+
+        .nav-link:hover {
+            border-color: rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .nav-link-active {
+            border-color: rgba(56, 189, 248, 0.8);
+            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.95));
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .main-nav {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+        }
+
         /* الحاوية الداخلية لمحتوى الصفحة */
         main.control-panel {
             flex: 1;
@@ -237,9 +334,11 @@
         .table-scroll::-webkit-scrollbar {
             width: 8px;
         }
+
         .table-scroll::-webkit-scrollbar-track {
             background: #020617;
         }
+
         .table-scroll::-webkit-scrollbar-thumb {
             background: linear-gradient(to bottom, #38bdf8, #0ea5e9);
             border-radius: 999px;
@@ -255,7 +354,8 @@
             background: linear-gradient(to left, #0f172a, #020617);
         }
 
-        th, td {
+        th,
+        td {
             padding: 0.55rem 0.4rem;
             font-size: 0.8rem;
             text-align: center;
@@ -284,6 +384,51 @@
             color: #f97373;
             font-weight: 600;
         }
+
+        /* ===== الفوتر (مطابق للـ dashboard) ===== */
+        .site-footer {
+            margin-top: 1.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.25);
+            background: radial-gradient(circle at top, #020617 0, #020617 40%, #020617 100%);
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.75rem 1.5rem 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .footer-main,
+        .footer-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-separator {
+            opacity: 0.5;
+        }
+
+        .footer-main strong,
+        .footer-meta strong {
+            color: #e5e7eb;
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -293,7 +438,7 @@
 <main class="control-panel">
     <div class="page-wrapper">
 
-        <!-- قسم البطاقات (كما هو) -->
+        <!-- قسم البطاقات -->
         <header class="cp-header">
             <h1 class="cp-title">لوحة التحكم</h1>
             <p class="cp-subtitle">
@@ -351,7 +496,7 @@
             </article>
         </section>
 
-        <!-- قسم الجداول المنقولة من الصفحة الرئيسية -->
+        <!-- قسم الجداول -->
         <section class="tables-section">
             <header class="tables-header">
                 <h2 class="tables-title">جداول المعلمين لليوم</h2>
@@ -403,7 +548,7 @@
                                             <td>١١:٤٥</td>
                                             <td>الرياضة / الصف ٦ / ٢</td>
                                         </tr>
-                                        <!-- أضف صفوفًا أخرى هنا حسب حاجتك -->
+                                        <!-- صفوف إضافية عند الحاجة -->
                                     </tbody>
                                 </table>
                             </div>
@@ -460,7 +605,7 @@
                                             <td>١٠:١٥</td>
                                             <td class="note-danger">منتظر٢</td>
                                         </tr>
-                                        <!-- أضف صفوفًا أخرى هنا حسب حاجتك -->
+                                        <!-- صفوف إضافية عند الحاجة -->
                                     </tbody>
                                 </table>
                             </div>

@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تسجيل الدخول - مدرسة الخالدية الابتدائية</title>
+    <title>إنشاء حساب جديد - مدرسة الخالدية الابتدائية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- خط عربي -->
@@ -27,7 +27,8 @@
         }
 
         body {
-            font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
             background: radial-gradient(circle at top, #1f2937 0, #020617 50%, #020617 100%);
             color: var(--text-main);
             min-height: 100vh;
@@ -35,13 +36,13 @@
             flex-direction: column;
         }
 
-        /* ===== الشريط العلوي (header) ===== */
+        /* ===== الشريط العلوي ===== */
         .site-header {
             position: sticky;
             top: 0;
             z-index: 20;
             background: rgba(15, 23, 42, 0.96);
-            -webkit-backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px); /* دعم Safari */
             backdrop-filter: blur(18px);
             border-bottom: 1px solid rgba(148, 163, 184, 0.25);
         }
@@ -53,7 +54,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 1rem;
         }
 
         .brand {
@@ -113,12 +113,6 @@
             background: rgba(15, 23, 42, 0.9);
         }
 
-        .nav-link-active {
-            border-color: rgba(56, 189, 248, 0.8);
-            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.95));
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-        }
-
         @media (max-width: 768px) {
             .header-inner {
                 flex-direction: column;
@@ -127,12 +121,11 @@
 
             .main-nav {
                 width: 100%;
-                justify-content: flex-start;
                 flex-wrap: wrap;
             }
         }
 
-        /* ===== محتوى صفحة الدخول ===== */
+        /* ===== صفحة التسجيل ===== */
         main.auth-page {
             flex: 1;
             display: flex;
@@ -143,13 +136,11 @@
 
         .auth-card {
             width: 100%;
-            max-width: 480px;
-            background: radial-gradient(circle at top, #020617 0, #020617 60%, #020617 100%);
+            max-width: 500px;
+            background: radial-gradient(circle at top, #020617, #020617 90%);
             border-radius: 1.8rem;
             border: 1px solid var(--border-soft);
-            box-shadow:
-                0 25px 70px rgba(15, 23, 42, 0.95),
-                0 0 0 1px rgba(15, 23, 42, 1);
+            box-shadow: 0 25px 70px rgba(15, 23, 42, 0.95);
             padding: 2.2rem 2.3rem 1.8rem;
             position: relative;
             overflow: hidden;
@@ -162,7 +153,6 @@
             background:
                 radial-gradient(circle at top, rgba(56, 189, 248, 0.25), transparent 55%),
                 radial-gradient(circle at bottom, rgba(34, 197, 94, 0.18), transparent 55%);
-            opacity: 0.9;
             pointer-events: none;
         }
 
@@ -180,14 +170,9 @@
 
         .auth-subtitle {
             text-align: center;
-            font-size: 0.9rem;
             color: var(--text-muted);
+            font-size: 0.9rem;
             margin-bottom: 1.4rem;
-        }
-
-        .auth-subtitle span.school-name {
-            color: var(--accent);
-            font-weight: 600;
         }
 
         .auth-form-group {
@@ -280,24 +265,15 @@
             color: #e5e7eb;
         }
 
-        .auth-footer-text a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .auth-footer-text a:hover {
-            text-decoration: underline;
-        }
-
         /* رسالة الخطأ بدون inline style */
         .form-error {
             color: #fca5a5;
             font-size: 0.8rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
             text-align: center;
         }
 
-        /* ===== الفوتر (footer) ===== */
+        /* ===== الفوتر ===== */
         .site-footer {
             margin-top: 1.5rem;
             border-top: 1px solid rgba(148, 163, 184, 0.25);
@@ -343,6 +319,7 @@
         }
     </style>
 </head>
+
 <body>
 
 {% include "header.html" %}
@@ -350,17 +327,14 @@
 <main class="auth-page">
     <section class="auth-card">
         <div class="auth-inner">
-            <h1 class="auth-title">تسجيل الدخول</h1>
-            <p class="auth-subtitle">
-                نظام إدارة التوقيت · <span class="school-name">مدرسة الخالدية الابتدائية</span>
-            </p>
 
-            <form method="post" action="{% url 'schoolaccounts:login' %}">
+            <h1 class="auth-title">إنشاء حساب جديد</h1>
+            <p class="auth-subtitle">تعبئة بيانات المستخدم لإعطائه صلاحية الدخول للنظام.</p>
+
+            <form method="post" action="{% url 'schoolaccounts:signup' %}">
                 {% csrf_token %}
                 {% if error %}
-                    <p class="form-error">
-                        {{ error }}
-                    </p>
+                    <p class="form-error">{{ error }}</p>
                 {% endif %}
 
                 <div class="auth-form-group">
@@ -370,39 +344,55 @@
                         name="username"
                         id="id_username"
                         class="auth-input"
-                        autocomplete="username"
                         required
                     >
                 </div>
 
                 <div class="auth-form-group">
-                    <label class="auth-label" for="id_password">كلمة المرور</label>
+                    <label class="auth-label" for="id_email">البريد الإلكتروني (اختياري)</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="id_email"
+                        class="auth-input"
+                    >
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label" for="id_password1">كلمة المرور</label>
                     <input
                         type="password"
-                        name="password"
-                        id="id_password"
+                        name="password1"
+                        id="id_password1"
                         class="auth-input"
-                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label" for="id_password2">تأكيد كلمة المرور</label>
+                    <input
+                        type="password"
+                        name="password2"
+                        id="id_password2"
+                        class="auth-input"
                         required
                     >
                 </div>
 
                 <div class="auth-actions">
-                    <!-- زر دخول -->
                     <button type="submit" class="btn-primary">
-                        دخول إلى النظام
+                        إنشاء الحساب
                     </button>
 
-                    <!-- زر تسجيل جديد (رابط لصفحة التسجيل) -->
-                    <a href="{% url 'schoolaccounts:signup' %}" class="btn-secondary">
-                        إنشاء حساب جديد
+                    <a href="{% url 'schoolaccounts:login' %}" class="btn-secondary">
+                        لدي حساب بالفعل – تسجيل الدخول
                     </a>
                 </div>
             </form>
 
             <p class="auth-footer-text">
-                khalidiyaschool • <strong>لوحة توقيت مدرسية</strong> ·
-                <a href="{% url 'schooldisplay:dashboard' %}">العودة إلى الصفحة الرئيسية</a>
+                khalidiyaschool • <strong>لوحة توقيت مدرسية</strong>
             </p>
         </div>
     </section>

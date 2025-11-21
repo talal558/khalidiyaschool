@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 
 from django.http import JsonResponse
 from django.utils import timezone
@@ -20,10 +20,20 @@ def _get_today_weekday_code() -> int:
     إلى كود DAYS_OF_WEEK (الأحد=0 .. الخميس=4).
     """
     django_weekday = timezone.localdate().weekday()  # Monday=0 .. Sunday=6
+
     # إذا كان الأحد (6) نخليه 0، والباقي نحركه واحد
     if django_weekday == 6:
         return 0
     return django_weekday + 1
+
+
+def _build_aware_datetime(today, time_value):
+    """
+    يبني datetime aware (مع المنطقة الزمنية الحالية)
+    من تاريخ اليوم + وقت معين.
+    """
+    dt = datetime.combine(today, time_value)
+    return timezone.make_aware(dt, timezone.get_current_timezone())
 
 
 # =========================
@@ -34,6 +44,27 @@ def api_today_schedule(request):
     """
     يرجع جدول اليوم (DaySchedule + Periods) بناءً على اليوم الحالي
     مع مراعاة SpecialDay إن وجد.
+    الاستجابة متوافقة مع JavaScript في dashboard.html:
+    {
+        "success": True/False,
+        "message": "...",        # في حالة عدم النجاح
+        "schedule": {
+            "id": ...,
+            "day": ...,
+            "day_name": "...",
+            "description": "...",
+        },
+        "periods": [
+            {
+                "id": ...,
+                "name": "...",
+                "type": "...",
+                "start": "ISO datetime",
+                "end": "ISO datetime",
+            },
+            ...
+        ]
+    }
     """
     today = timezone.localdate()
     weekday_code = _get_today_weekday_code()
@@ -72,11 +103,8 @@ def api_today_schedule(request):
 
     periods = []
     for p in periods_qs:
-        # نبني datetime حقيقية لليوم الحالي + وقت الفترة
-        start_dt = datetime.combine(today, p.start_time)
-        end_dt = datetime.combine(today, p.end_time)
-        start_dt = timezone.make_aware(start_dt, timezone.get_current_timezone())
-        end_dt = timezone.make_aware(end_dt, timezone.get_current_timezone())
+        start_dt = _build_aware_datetime(today, p.start_time)
+        end_dt = _build_aware_datetime(today, p.end_time)
 
         periods.append(
             {
@@ -121,10 +149,8 @@ def api_teacher_waiting_slots(request):
 
     slots = []
     for s in slots_qs:
-        start_dt = datetime.combine(today, s.start_time)
-        end_dt = datetime.combine(today, s.end_time)
-        start_dt = timezone.make_aware(start_dt, timezone.get_current_timezone())
-        end_dt = timezone.make_aware(end_dt, timezone.get_current_timezone())
+        start_dt = _build_aware_datetime(today, s.start_time)
+        end_dt = _build_aware_datetime(today, s.end_time)
 
         slots.append(
             {
@@ -168,10 +194,8 @@ def api_teacher_activity_slots(request):
 
     slots = []
     for s in slots_qs:
-        start_dt = datetime.combine(today, s.start_time)
-        end_dt = datetime.combine(today, s.end_time)
-        start_dt = timezone.make_aware(start_dt, timezone.get_current_timezone())
-        end_dt = timezone.make_aware(end_dt, timezone.get_current_timezone())
+        start_dt = _build_aware_datetime(today, s.start_time)
+        end_dt = _build_aware_datetime(today, s.end_time)
 
         slots.append(
             {
@@ -220,10 +244,8 @@ def api_teacher_main_slots(request):
 
     slots = []
     for s in slots_qs:
-        start_dt = datetime.combine(today, s.start_time)
-        end_dt = datetime.combine(today, s.end_time)
-        start_dt = timezone.make_aware(start_dt, timezone.get_current_timezone())
-        end_dt = timezone.make_aware(end_dt, timezone.get_current_timezone())
+        start_dt = _build_aware_datetime(today, s.start_time)
+        end_dt = _build_aware_datetime(today, s.end_time)
 
         slots.append(
             {

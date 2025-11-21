@@ -32,10 +32,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # تطبيقات المشروع
-    "schoolcore",
-    "schoolaccounts",
-    "schooltimetable",
-    "schooldisplay",
+    "schoolcore",       # لو عندك هذا التطبيق
+    "schoolaccounts",   # تطبيق الحسابات
+    "schooltimetable",  # لو عندك هذا التطبيق
+
+    "display",          # 👈 تطبيق لوحة التوقيت (المجلد display)
 ]
 
 # الوسائط (Middleware)

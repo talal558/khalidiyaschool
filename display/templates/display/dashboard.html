@@ -230,7 +230,7 @@
             text-align: center;
         }
 
-        /* ===== الساعة الدائرية (285px + نبض أسرع وأوضح) ===== */
+        /* ===== الساعة الدائرية ===== */
         .clock-wrapper {
             width: 285px;
             height: 285px;
@@ -250,7 +250,6 @@
             flex-shrink: 0;
         }
 
-        /* هالة النبض حول الساعة – أسرع ومرئية أكثر */
         .clock-wrapper::after {
             content: "";
             position: absolute;
@@ -355,18 +354,18 @@
             margin-top: 0.4rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            font-size: 0.88rem;
-        }
-
         .table-wrapper {
             max-height: 330px;
             overflow-y: auto;
             margin-top: 0.4rem;
             border-radius: 0.75rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.88rem;
         }
 
         th,

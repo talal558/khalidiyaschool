@@ -1,19 +1,38 @@
+# khalidiyaschool/urls.py
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    # لوحة تحكم Django الافتراضية
+    # لوحة الإدارة
     path("admin/", admin.site.urls),
 
-    # الواجهة الرئيسية للمدرسة (شاشة العرض / لوحة التوقيت)
-    # مثال: http://127.0.0.1:8000/
-    path("", include("schooldisplay.urls")),
+    # 👇 واجهة لوحة التوقيت (الصفحات: الرئيسية + لوحة التحكم)
+    # نربط تطبيق display مع namespace = "schooldisplay"
+    path(
+        "",
+        include(
+            ("display.urls", "schooldisplay"),
+            namespace="schooldisplay",
+        ),
+    ),
 
-    # تطبيق الحسابات (تسجيل دخول، تسجيل، الخ...)
-    # مثال: http://127.0.0.1:8000/accounts/...
-    path("accounts/", include("schoolaccounts.urls")),
+    # 👇 صفحات الحسابات (تسجيل الدخول / التسجيل)
+    # نربط تطبيق schoolaccounts مع namespace = "schoolaccounts"
+    path(
+        "accounts/",
+        include(
+            ("schoolaccounts.urls", "schoolaccounts"),
+            namespace="schoolaccounts",
+        ),
+    ),
 
-    # تطبيق الجداول (اليوم + انتظار + نشاط المعلمين + API)
-    # مثال: http://127.0.0.1:8000/timetable/api/today-schedule/
-    path("timetable/", include("schooltimetable.urls")),
+    # 👇 ربط تطبيق التوقيت المدرسي (APIs الجدول اليومي، حصص المعلمين، إلخ)
+    # تبقى على نفس المسارات الحالية مثل: /timetable/api/today-schedule/
+    path(
+        "",
+        include(
+            ("schooltimetable.urls", "schooltimetable"),
+            namespace="schooltimetable",
+        ),
+    ),
 ]
