@@ -1,31 +1,409 @@
-<header class="site-header">
-    <div class="header-inner">
-        <div class="brand">
-            <div class="brand-icon">⏱</div>
-            <div class="brand-text">
-                <div class="brand-title">لوحة التوقيت المدرسي</div>
-                <div class="brand-subtitle">مدرسة الخالدية الابتدائية</div>
+<header class="site-header site-header-3d">
+
+    <div class="site-header-inner">
+
+        <!-- الشعار -->
+        <div class="site-brand">
+            <div class="site-brand-icon">
+                <!-- أيقونة SVG رقمية (ساعة/لوحة) -->
+                <svg viewBox="0 0 32 32" class="brand-svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8"/>
+                            <stop offset="100%" stop-color="#0ea5e9"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="16" cy="16" r="13" fill="none" stroke="url(#brandGradient)" stroke-width="1.6"/>
+                    <circle cx="16" cy="16" r="9" fill="rgba(15,23,42,0.9)" stroke="#1e293b" stroke-width="1.2"/>
+                    <path d="M16 11v5l3 2" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="16" cy="16" r="0.9" fill="#38bdf8"/>
+                </svg>
+            </div>
+            <div class="site-brand-text">
+                <div class="site-brand-title">لوحة التوقيت المدرسي</div>
+                <div class="site-brand-subtitle">مدرسة الخالدية الابتدائية</div>
             </div>
         </div>
 
-        <nav class="main-nav">
-            <!-- الرئيسية -->
-            <a class="nav-link nav-link-active"
-               href="{% url 'schooldisplay:dashboard' %}">
-                الرئيسية
-            </a>
+        <!-- زر رئيسي واحد -->
+        <nav class="site-nav" aria-label="التنقل الرئيسي">
+            <div class="main-menu-dropdown">
 
-            <!-- لوحة التحكم -->
-            <a class="nav-link"
-               href="{% url 'schooldisplay:control_panel' %}">
-                لوحة التحكم
-            </a>
+                <button type="button"
+                        class="main-menu-button"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    <span class="main-menu-label">الرئيسية</span>
+                </button>
 
-            <!-- تسجيل الدخول -->
-            <a class="nav-link"
-               href="{% url 'schoolaccounts:login' %}">
-                تسجيل الدخول
-            </a>
+                <!-- القائمة المنسدلة -->
+                <div class="main-menu-panel" role="menu">
+
+                    <!-- الرئيسية -->
+                    <a href="{% url 'schooldisplay:dashboard' %}"
+                       class="main-menu-link {% if request.resolver_match.url_name == 'dashboard' %}is-active{% endif %}"
+                       role="menuitem">
+                        <span class="main-menu-link-icon" aria-hidden="true">
+                            <!-- SVG home -->
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 11.5 12 4l8 7.5v7a1 1 0 0 1-1 1h-4.5V14h-5V19.5H5a1 1 0 0 1-1-1z"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.6"
+                                      stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span>الرئيسية</span>
+                    </a>
+
+                    <!-- لوحة التوقيت اليوم -->
+                    <a href="{% url 'schooldisplay:today_board' %}"
+                       class="main-menu-link {% if request.resolver_match.url_name == 'today_board' %}is-active{% endif %}"
+                       role="menuitem">
+                        <span class="main-menu-link-icon" aria-hidden="true">
+                            <!-- SVG clock -->
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="8"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.6"/>
+                                <path d="M12 8v4l2.5 1.5"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.6"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span>لوحة التوقيت اليوم</span>
+                    </a>
+
+                    <!-- لوحة التحكم -->
+                    <a href="{% url 'schooldisplay:control_panel' %}"
+                       class="main-menu-link {% if request.resolver_match.url_name == 'control_panel' %}is-active{% endif %}"
+                       role="menuitem">
+                        <span class="main-menu-link-icon" aria-hidden="true">
+                            <!-- SVG gear -->
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="3.2"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.6"/>
+                                <path d="M6.2 9.1 4.4 8.2 5.2 5.9l2 .1
+                                         M17.8 9.1l1.8-0.9-0.8-2.3-2-.1
+                                         M6.2 14.9 4.4 15.8l0.8 2.3 2 .1
+                                         M17.8 14.9l1.8 0.9-0.8 2.3-2 .1"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.2"
+                                      stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <span>لوحة التحكم</span>
+                    </a>
+
+                    <hr class="main-menu-divider">
+
+                    <!-- تسجيل الدخول -->
+                    <a href="{% url 'login' %}"
+                       class="main-menu-link {% if request.resolver_match.url_name == 'login' %}is-active{% endif %}"
+                       role="menuitem">
+                        <span class="main-menu-link-icon" aria-hidden="true">
+                            <!-- SVG key -->
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="9" cy="11" r="3.2"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.6"/>
+                                <path d="M11.2 12.8 16 17.5h2v-2h2v-2"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.6"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span>تسجيل الدخول</span>
+                    </a>
+
+                    <!-- تسجيل جديد -->
+                    <a href="#"
+                       class="main-menu-link"
+                       role="menuitem">
+                        <span class="main-menu-link-icon" aria-hidden="true">
+                            <!-- SVG user-plus -->
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="10" cy="9" r="3.2"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.6"/>
+                                <path d="M4.5 18.5a5.8 5.8 0 0 1 11 0"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.6"
+                                      stroke-linecap="round"/>
+                                <path d="M18 9v4M16 11h4"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.6"
+                                      stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <span>تسجيل جديد</span>
+                    </a>
+
+                </div>
+            </div>
         </nav>
+
     </div>
 </header>
+
+<style>
+/* =========================================================
+   الشريط العلوي – نسخة رقمية ثلاثية الأبعاد مع SVG
+========================================================= */
+
+.site-header-3d {
+    position: sticky;
+    top: 0;
+    inset-inline: 0;
+    z-index: 50;
+
+    background:
+        radial-gradient(circle at top, rgba(56,189,248,0.20), rgba(15,23,42,1));
+    border-bottom: 1px solid rgba(15,23,42,0.9);
+
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 20px 45px rgba(15,23,42,0.95),
+        0 0 60px rgba(15,23,42,1);
+}
+
+/* حاوية الرأس */
+.site-header-inner {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 0.9rem 1.4rem 0.8rem;
+
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+/* الشعار */
+.site-brand {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.site-brand-icon {
+    width: 2.9rem;
+    height: 2.9rem;
+    border-radius: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(circle at top, rgba(56,189,248,0.35), rgba(15,23,42,1));
+    box-shadow:
+        0 0 28px rgba(56,189,248,0.8),
+        0 0 40px rgba(15,23,42,0.9),
+        inset 0 0 12px rgba(15,23,42,0.9);
+}
+
+.brand-svg {
+    width: 1.9rem;
+    height: 1.9rem;
+}
+
+.site-brand-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #e5e7eb;
+}
+
+.site-brand-subtitle {
+    font-size: 0.82rem;
+    color: #9ca3af;
+}
+
+/* تنقّل */
+.site-nav {
+    display: flex;
+    align-items: center;
+}
+
+/* زر القائمة الرئيسي – مظهر 3D */
+.main-menu-dropdown {
+    position: relative;
+}
+
+.main-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.78rem 2.4rem;
+    min-width: 175px;
+
+    border-radius: 999px;
+    border: 1.6px solid rgba(148,163,184,0.65);
+
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e5e7eb;
+
+    background:
+      radial-gradient(circle at top left, rgba(56,189,248,0.32), rgba(15,23,42,0.98));
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.9),
+        0 0 40px rgba(56,189,248,0.8);
+
+    cursor: pointer;
+    transform: translateY(0) translateZ(0);
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        transform .16s ease,
+        background .18s ease;
+}
+
+.main-menu-button:hover {
+    border-color: #38bdf8;
+    background: radial-gradient(circle at top left, rgba(56,189,248,0.40), rgba(15,23,42,0.98));
+    box-shadow:
+        0 14px 35px rgba(0,0,0,0.95),
+        0 0 55px rgba(56,189,248,0.95);
+    transform: translateY(-3px) translateZ(0) scale(1.03);
+}
+
+.main-menu-button:active {
+    transform: translateY(0) scale(0.96);
+}
+
+/* القائمة المنسدلة */
+.main-menu-panel {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 118%;
+    min-width: 230px;
+
+    background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,1));
+    border-radius: 1rem;
+    border: 1px solid rgba(30,64,175,0.85);
+    box-shadow:
+        0 20px 45px rgba(15,23,42,0.95),
+        0 0 35px rgba(15,23,42,0.9);
+
+    padding: 0.45rem 0;
+    display: none;
+    z-index: 60;
+
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .22s ease-out, transform .22s ease-out;
+}
+
+.main-menu-dropdown.open .main-menu-panel {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* العناصر */
+.main-menu-link {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.45rem;
+
+    padding: 0.55rem 1rem;
+    font-size: 0.92rem;
+    color: #e5e7eb;
+    text-decoration: none;
+
+    transition: background-color .16s ease,
+               padding-inline .16s ease,
+               color .16s ease;
+}
+
+.main-menu-link-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #38bdf8;
+}
+
+.main-menu-link-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.main-menu-link:hover {
+    background: radial-gradient(circle at right, rgba(56,189,248,0.18), rgba(15,23,42,0.98));
+    padding-inline: 1.25rem;
+    color: #f9fafb;
+}
+
+.main-menu-link.is-active {
+    background: radial-gradient(circle at right, rgba(56,189,248,0.30), rgba(15,23,42,1));
+}
+
+/* الفاصل */
+.main-menu-divider {
+    border: none;
+    border-top: 1px solid rgba(55,65,81,0.95);
+    margin: 0.45rem 0.85rem;
+}
+
+/* موبايل */
+@media (max-width: 700px) {
+    .site-header-inner {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .main-menu-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .main-menu-panel {
+        inset-inline-end: 0;
+        inset-inline-start: auto;
+        width: 100%;
+        max-width: 270px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const dropdown = document.querySelector(".main-menu-dropdown");
+    const btn = document.querySelector(".main-menu-button");
+
+    if (!dropdown || !btn) return;
+
+    btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", () => {
+        if (dropdown.classList.contains("open")) {
+            dropdown.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+        }
+    });
+});
+</script>

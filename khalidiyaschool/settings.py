@@ -31,12 +31,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # تطبيقات المشروع
-    "schoolcore",       # لو عندك هذا التطبيق
-    "schoolaccounts",   # تطبيق الحسابات
-    "schooltimetable",  # لو عندك هذا التطبيق
+    # مكتبة تحسين قوالب الفورم (مطلوبة لحل add_class)
+    "widget_tweaks",
 
-    "display",          # 👈 تطبيق لوحة التوقيت (المجلد display)
+    # تطبيقات المشروع
+    "schoolcore",
+    "schoolaccounts",
+    "schooltimetable",
+    "display",
 ]
 
 # الوسائط (Middleware)

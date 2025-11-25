@@ -1,16 +1,104 @@
-<footer class="site-footer">
+<footer class="site-footer-3d">
     <div class="footer-inner">
+
         <div class="footer-main">
-            <span>لوحة التوقيت المدرسي</span>
+            <span class="footer-app-name">لوحة التوقيت المدرسي</span>
             <span class="footer-separator">•</span>
-            <span>مدرسة الخالدية الابتدائية</span>
+            <span class="footer-school-name">مدرسة الخالدية الابتدائية</span>
         </div>
 
         <div class="footer-meta">
             <span>الوقت متزامن مع توقيت</span>
-            <strong>Asia/Riyadh</strong>
+            <span class="footer-badge">Asia/Riyadh</span>
             <span class="footer-separator">•</span>
             <span>تحديث الجداول يتم عند إعادة تحميل الصفحة</span>
         </div>
+
     </div>
 </footer>
+
+<style>
+/* =========================================================
+   الشريط السفلي – 3D Digital (مطابق للهيدر)
+========================================================= */
+
+.site-footer-3d {
+    margin-top: 3rem;
+    padding-block: 0.75rem;
+
+    background:
+        radial-gradient(circle at top, rgba(15,23,42,1), #020617);
+    border-top: 1px solid rgba(15,23,42,0.95);
+
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 -12px 35px rgba(0,0,0,0.9),
+        0 -2px 25px rgba(15,23,42,0.9);
+
+    color: #e5e7eb;
+    font-size: 0.8rem;
+}
+
+.footer-inner {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding-inline: 1.4rem;
+
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* النصوص */
+.footer-main,
+.footer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.footer-app-name {
+    font-weight: 600;
+}
+
+.footer-school-name {
+    color: #a5b4fc;
+    font-weight: 500;
+}
+
+/* الفاصل النقطي */
+.footer-separator {
+    opacity: 0.6;
+}
+
+/* بادج التوقيت */
+.footer-badge {
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(56,189,248,0.8);
+    background: radial-gradient(circle at top, rgba(56,189,248,0.3), rgba(15,23,42,1));
+    box-shadow: 0 0 12px rgba(56,189,248,0.7);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+/* استجابة الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .footer-inner {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.4rem;
+    }
+
+    .site-footer-3d {
+        font-size: 0.78rem;
+        padding-block: 0.9rem;
+    }
+}
+</style>

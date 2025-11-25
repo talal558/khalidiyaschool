@@ -6,428 +6,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- خط عربي -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --bg-main: #020617;
-            --bg-card: #020617;
-            --accent: #38bdf8;
-            --accent-soft: rgba(56, 189, 248, 0.12);
             --text-main: #e5e7eb;
             --text-muted: #9ca3af;
-            --border-soft: rgba(148, 163, 184, 0.35);
+            --accent: #0ea5e9;
+            --accent-strong: #38bdf8;
+            --border-subtle: rgba(148,163,184,0.35);
         }
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
-            font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top, #1f2937 0, #020617 50%, #020617 100%);
-            color: var(--text-main);
+            margin: 0;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: "Tajawal", system-ui, sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 55%),
+                radial-gradient(circle at bottom, rgba(15, 23, 42, 0.95), #020617),
+                repeating-linear-gradient(
+                    to right,
+                    rgba(15, 23, 42, 0.7) 0,
+                    rgba(15, 23, 42, 0.7) 1px,
+                    transparent 1px,
+                    transparent 24px
+                ),
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(15, 23, 42, 0.72) 0,
+                    rgba(15, 23, 42, 0.72) 1px,
+                    transparent 1px,
+                    transparent 24px
+                );
+            background-blend-mode: soft-light, normal, soft-light, soft-light;
+            color: var(--text-main);
         }
 
-        /* ===== الشريط العلوي (مطابق للـ dashboard) ===== */
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: rgba(15, 23, 42, 0.96);
-            -webkit-backdrop-filter: blur(18px);
-            backdrop-filter: blur(18px);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .header-inner {
-            max-width: 1280px;
+        .page-main {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0.6rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
+            padding: 2.4rem 1.4rem 3.2rem;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-        }
-
-        .brand-icon {
-            width: 2.4rem;
-            height: 2.4rem;
-            border-radius: 999px;
-            border: 1px solid rgba(56, 189, 248, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            box-shadow:
-                0 0 25px rgba(56, 189, 248, 0.4),
-                0 0 0 1px rgba(15, 23, 42, 0.9);
-        }
-
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-title {
-            font-size: 1.1rem;
-            letter-spacing: 0.06em;
-        }
-
-        .brand-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .main-nav {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link {
-            padding: 0.35rem 0.9rem;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            color: #e5e7eb;
-            text-decoration: none;
-            border: 1px solid transparent;
-            background: transparent;
-            transition: all 0.18s ease-out;
-        }
-
-        .nav-link:hover {
-            border-color: rgba(148, 163, 184, 0.6);
-            background: rgba(15, 23, 42, 0.9);
-        }
-
-        .nav-link-active {
-            border-color: rgba(56, 189, 248, 0.8);
-            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.95));
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-        }
-
-        @media (max-width: 768px) {
-            .header-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .main-nav {
-                width: 100%;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-            }
-        }
-
-        /* الحاوية الداخلية لمحتوى الصفحة */
-        main.control-panel {
-            flex: 1;
-            padding: 1.5rem 1rem 2rem;
-        }
-
-        @media (min-width: 768px) {
-            main.control-panel {
-                padding: 2rem 3rem 3rem;
-            }
-        }
-
-        .page-wrapper {
-            max-width: 1280px;
+        .neon-bar {
+            max-width: 1100px;
             margin: 0 auto;
+            height: 3px;
+            border-radius: 999px;
+            background: linear-gradient(to left, transparent, #38bdf8, transparent);
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.9);
+            opacity: 0.85;
         }
 
-        .cp-header {
-            margin-bottom: 1.5rem;
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
-        .cp-title {
-            font-size: 1.6rem;
+        .page-title {
+            font-size: 1.9rem;
             font-weight: 700;
-            letter-spacing: 0.03em;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 14px rgba(15, 23, 42, 0.9);
         }
 
-        .cp-subtitle {
+        .page-subtitle {
             font-size: 0.95rem;
             color: var(--text-muted);
         }
 
-        .cp-grid {
-            margin-top: 1.5rem;
+        .panel-grid {
             display: grid;
-            grid-template-columns: minmax(0, 1fr);
-            gap: 1rem;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+            gap: 1.6rem;
         }
 
-        @media (min-width: 900px) {
-            .cp-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+        @media (max-width: 960px) {
+            .panel-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        .cp-card {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
-            border-radius: 1.25rem;
-            border: 1px solid var(--border-soft);
-            padding: 1.1rem 1.25rem;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.85);
+        .panel-card {
+            background:
+                radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 65%),
+                radial-gradient(circle at bottom right, rgba(15,23,42,0.96), #020617);
+            border-radius: 1.5rem;
+            padding: 1.6rem 1.5rem;
+            border: 1px solid rgba(15, 23, 42, 0.98);
+            box-shadow:
+                0 24px 60px rgba(0, 0, 0, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 1);
             position: relative;
             overflow: hidden;
+            transition:
+                transform 0.22s ease,
+                box-shadow 0.22s ease,
+                border-color 0.22s ease;
         }
 
-        .cp-card::before {
+        .panel-card::before {
             content: "";
             position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 55%),
-                radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.08), transparent 50%);
-            opacity: 0.9;
+            inset-inline-end: -70px;
+            inset-block-start: -70px;
+            width: 160px;
+            height: 160px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%);
             pointer-events: none;
         }
 
-        .cp-card-inner {
-            position: relative;
-            z-index: 1;
+        .panel-card:hover {
+            transform: translateY(-7px) scale(1.01);
+            box-shadow:
+                0 28px 70px rgba(0,0,0,0.95),
+                0 0 35px rgba(15,23,42,0.95);
+            border-color: rgba(56,189,248,0.7);
         }
 
-        .cp-card-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.4rem;
+        .panel-title {
+            font-size: 1.2rem;
             font-weight: 600;
+            margin-bottom: 0.4rem;
         }
 
-        .cp-card-icon {
-            width: 28px;
-            height: 28px;
+        .panel-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+        }
+
+        .panel-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.22rem 0.75rem;
             border-radius: 999px;
-            border: 1px solid var(--accent);
+            border: 1px solid rgba(148,163,184,0.7);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.65rem;
+            background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,1));
+        }
+
+        .panel-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-primary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.95rem;
-            background: rgba(15, 23, 42, 0.95);
-        }
-
-        .cp-card-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 0.6rem;
-        }
-
-        .cp-card-footer {
-            margin-top: 0.6rem;
-            font-size: 0.8rem;
-            color: var(--accent);
-        }
-
-        .cp-badge {
-            display: inline-block;
-            font-size: 0.75rem;
-            padding: 0.15rem 0.6rem;
+            padding: 0.8rem 1.9rem;
             border-radius: 999px;
-            border: 1px solid var(--accent);
-            background: var(--accent-soft);
-            color: var(--accent);
-            margin-bottom: 0.45rem;
-        }
-
-        /* قسم الجداول الجديد */
-        .tables-section {
-            margin-top: 2rem;
-        }
-
-        .tables-header {
-            margin-bottom: 0.75rem;
-        }
-
-        .tables-title {
-            font-size: 1.2rem;
+            border: none;
+            background: radial-gradient(circle at top, #e0f2fe, #bae6fd);
+            color: #0b1120;
+            font-size: 0.92rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow:
+                0 0 24px rgba(56,189,248,0.8),
+                0 10px 26px rgba(15,23,42,0.9);
+            transition:
+                transform 0.16s ease,
+                box-shadow 0.16s ease;
         }
 
-        .tables-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow:
+                0 0 30px rgba(56,189,248,0.95),
+                0 12px 30px rgba(15,23,42,0.95);
         }
 
-        .tables-grid {
-            margin-top: 1rem;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr);
-            gap: 1rem;
-        }
-
-        @media (min-width: 1024px) {
-            .tables-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        .table-card {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
-            border-radius: 1.35rem;
-            border: 1px solid var(--border-soft);
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
-            padding: 1rem 1.1rem 0.8rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .table-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 55%),
-                radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.15), transparent 60%);
-            opacity: 0.85;
-            pointer-events: none;
-        }
-
-        .table-card-inner {
-            position: relative;
-            z-index: 1;
-        }
-
-        .table-card-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 0.2rem;
-        }
-
-        .table-card-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 0.6rem;
-        }
-
-        .table-wrapper {
-            border-radius: 1rem;
-            border: 1px solid rgba(30, 64, 175, 0.9);
-            background: radial-gradient(circle at top, #020617, #020617);
-            overflow: hidden;
-            max-height: 320px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .table-scroll {
-            overflow-y: auto;
-        }
-
-        .table-scroll::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .table-scroll::-webkit-scrollbar-track {
-            background: #020617;
-        }
-
-        .table-scroll::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #38bdf8, #0ea5e9);
-            border-radius: 999px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 100%;
-        }
-
-        thead {
-            background: linear-gradient(to left, #0f172a, #020617);
-        }
-
-        th,
-        td {
-            padding: 0.55rem 0.4rem;
-            font-size: 0.8rem;
-            text-align: center;
-            border-bottom: 1px solid #1f2937;
-            white-space: nowrap;
-        }
-
-        th {
-            font-weight: 600;
-            color: #e5e7eb;
-        }
-
-        tbody tr:nth-child(even) {
-            background: rgba(15, 23, 42, 0.9);
-        }
-
-        tbody tr:nth-child(odd) {
-            background: rgba(15, 23, 42, 0.7);
-        }
-
-        tbody tr:hover {
-            background: rgba(56, 189, 248, 0.12);
-        }
-
-        .note-danger {
-            color: #f97373;
-            font-weight: 600;
-        }
-
-        /* ===== الفوتر (مطابق للـ dashboard) ===== */
-        .site-footer {
-            margin-top: 1.5rem;
-            border-top: 1px solid rgba(148, 163, 184, 0.25);
-            background: radial-gradient(circle at top, #020617 0, #020617 40%, #020617 100%);
-        }
-
-        .footer-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0.75rem 1.5rem 1rem;
-            display: flex;
-            flex-wrap: wrap;
+        .btn-ghost {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            font-size: 0.85rem;
+            padding: 0.78rem 1.8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top, rgba(15,23,42,1), rgba(15,23,42,0.96));
+            color: var(--text-main);
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition:
+                border-color 0.16s ease,
+                box-shadow 0.16s ease,
+                background 0.16s ease,
+                transform 0.16s ease;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--accent-strong);
+            box-shadow:
+                0 0 22px rgba(56,189,248,0.75),
+                0 10px 24px rgba(15,23,42,0.9);
+            background: radial-gradient(circle at top, rgba(15,23,42,0.97), #020617);
+            transform: translateY(-1px);
+        }
+
+        .panel-small-text {
+            font-size: 0.8rem;
             color: var(--text-muted);
-            text-align: center;
-        }
-
-        .footer-main,
-        .footer-meta {
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-separator {
-            opacity: 0.5;
-        }
-
-        .footer-main strong,
-        .footer-meta strong {
-            color: #e5e7eb;
-        }
-
-        @media (max-width: 768px) {
-            .footer-inner {
-                flex-direction: column;
-                align-items: center;
-            }
+            line-height: 1.7;
         }
     </style>
 </head>
@@ -435,187 +228,46 @@
 
 {% include "header.html" %}
 
-<main class="control-panel">
-    <div class="page-wrapper">
+<div class="neon-bar" aria-hidden="true"></div>
 
-        <!-- قسم البطاقات -->
-        <header class="cp-header">
-            <h1 class="cp-title">لوحة التحكم</h1>
-            <p class="cp-subtitle">
-                هذه الصفحة مخصصة لإدارة إعدادات لوحة التوقيت والمدرسة، ويمكن تطويرها لاحقًا لإضافة مزيد من الأدوات.
+<main class="page-main">
+    <header class="page-header">
+        <h1 class="page-title">لوحة التحكم</h1>
+        <p class="page-subtitle">
+            إدارة الجداول، الفترات، والفصول في نظام لوحة التوقيت المدرسي.
+        </p>
+    </header>
+
+    <section class="panel-grid">
+        <section class="panel-card">
+            <div class="panel-badge">قيد التطوير</div>
+            <h2 class="panel-title">إدارة الجداول اليومية</h2>
+            <p class="panel-text">
+                سيتم من خلال هذه الواجهة إضافة وتعديل جداول الحصص للأيام المختلفة، مع
+                تحديد الفترات، المواد، المعلمين، والفصول المرتبطة بكل حصة، وربطها بلوحة
+                توقيت اليوم بشكل تلقائي.
             </p>
-        </header>
-
-        <section class="cp-grid">
-            <article class="cp-card">
-                <div class="cp-card-inner">
-                    <div class="cp-badge">إعدادات عامة</div>
-                    <h2 class="cp-card-title">
-                        <span class="cp-card-icon">⚙️</span>
-                        <span>إعدادات لوحة التوقيت</span>
-                    </h2>
-                    <p class="cp-card-sub">
-                        ضبط أوقات الحصص، بداية اليوم الدراسي، عدد الحصص، والفواصل بين الحصص.
-                    </p>
-                    <div class="cp-card-footer">
-                        (لاحقًا: ربط بنموذج لإدخال القيم وحفظها في قاعدة البيانات)
-                    </div>
-                </div>
-            </article>
-
-            <article class="cp-card">
-                <div class="cp-card-inner">
-                    <div class="cp-badge">العام الدراسي</div>
-                    <h2 class="cp-card-title">
-                        <span class="cp-card-icon">📅</span>
-                        <span>لوحة العام المدرسي</span>
-                    </h2>
-                    <p class="cp-card-sub">
-                        إدارة بيانات الفصول الدراسية، الإجازات، وخريطة الأسابيع المعروضة في صفحة لوحة العام المدرسي.
-                    </p>
-                    <div class="cp-card-footer">
-                        (يمكن لاحقًا ربطها بنموذج يعدّل محتوى صفحة "لوحة العام المدرسي")
-                    </div>
-                </div>
-            </article>
-
-            <article class="cp-card">
-                <div class="cp-card-inner">
-                    <div class="cp-badge">الصلاحيات</div>
-                    <h2 class="cp-card-title">
-                        <span class="cp-card-icon">👥</span>
-                        <span>حسابات المستخدمين</span>
-                    </h2>
-                    <p class="cp-card-sub">
-                        تخصيص صلاحيات الوصول للوحة التحكم، مثل مدير المدرسة، الوكلاء، أو المرشد الطلابي.
-                    </p>
-                    <div class="cp-card-footer">
-                        (لاحقًا: ربط بنظام المستخدمين في Django)
-                    </div>
-                </div>
-            </article>
-        </section>
-
-        <!-- قسم الجداول -->
-        <section class="tables-section">
-            <header class="tables-header">
-                <h2 class="tables-title">جداول المعلمين لليوم</h2>
-                <p class="tables-subtitle">
-                    يعرض الجدولين حصص النشاط وحصص الانتظار للمعلمين لليوم الدراسي الحالي.
-                </p>
-            </header>
-
-            <div class="tables-grid">
-                <!-- جدول النشاط -->
-                <article class="table-card">
-                    <div class="table-card-inner">
-                        <h3 class="table-card-title">جدول النشاط للمعلمين (اليوم)</h3>
-                        <p class="table-card-sub">
-                            يعرض جميع حصص النشاط المسجلة لليوم الدراسي.
-                        </p>
-
-                        <div class="table-wrapper">
-                            <div class="table-scroll">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>المعلم</th>
-                                            <th>الرمز</th>
-                                            <th>من</th>
-                                            <th>إلى</th>
-                                            <th>ملاحظات</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>احمد محمد الميلان</td>
-                                            <td>معلم : دين</td>
-                                            <td>١٢:٤٥</td>
-                                            <td>١٣:٣٠</td>
-                                            <td>الرياضة / الصف ٥ / ١</td>
-                                        </tr>
-                                        <tr>
-                                            <td>حسين جابر الغامدي</td>
-                                            <td>معلم : إنجليزي</td>
-                                            <td>١١:٤٥</td>
-                                            <td>١٢:٣٠</td>
-                                            <td>الرياضة / الصف ٦</td>
-                                        </tr>
-                                        <tr>
-                                            <td>خالد ابراهيم الدخيل</td>
-                                            <td>معلم : بدنية</td>
-                                            <td>١١:٠٠</td>
-                                            <td>١١:٤٥</td>
-                                            <td>الرياضة / الصف ٦ / ٢</td>
-                                        </tr>
-                                        <!-- صفوف إضافية عند الحاجة -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- جدول الانتظار -->
-                <article class="table-card">
-                    <div class="table-card-inner">
-                        <h3 class="table-card-title">جدول الانتظار للمعلمين (اليوم)</h3>
-                        <p class="table-card-sub">
-                            يعرض جميع حصص الانتظار المحددة لليوم الدراسي الحالي.
-                        </p>
-
-                        <div class="table-wrapper">
-                            <div class="table-scroll">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>المعلم</th>
-                                            <th>الرمز</th>
-                                            <th>من</th>
-                                            <th>إلى</th>
-                                            <th>ملاحظات</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>احمد محمد الميلان</td>
-                                            <td>معلم : دين</td>
-                                            <td>٧:١٥</td>
-                                            <td>٨:٠٠</td>
-                                            <td class="note-danger">منتظر٢</td>
-                                        </tr>
-                                        <tr>
-                                            <td>صالح عوض الشهري</td>
-                                            <td>معلم : عربي</td>
-                                            <td>٨:٠٠</td>
-                                            <td>٨:٤٥</td>
-                                            <td class="note-danger">منتظر١</td>
-                                        </tr>
-                                        <tr>
-                                            <td>عبدالحميد محمد التويجري</td>
-                                            <td>معلم : اجتماعيات</td>
-                                            <td>٨:٤٥</td>
-                                            <td>٩:٣٠</td>
-                                            <td class="note-danger">منتظر٣</td>
-                                        </tr>
-                                        <tr>
-                                            <td>راشد محمد الماضي</td>
-                                            <td>معلم : عربي</td>
-                                            <td>٩:٣٠</td>
-                                            <td>١٠:١٥</td>
-                                            <td class="note-danger">منتظر٢</td>
-                                        </tr>
-                                        <!-- صفوف إضافية عند الحاجة -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+            <div class="panel-actions">
+                <a href="{% url 'schooldisplay:today_board' %}" class="btn-primary">
+                    عرض لوحة توقيت اليوم
+                </a>
+                <a href="{% url 'schooldisplay:dashboard' %}" class="btn-ghost">
+                    العودة إلى الصفحة الرئيسية
+                </a>
             </div>
         </section>
 
-    </div>
+        <section class="panel-card">
+            <div class="panel-badge">ملاحظات</div>
+            <h2 class="panel-title">خريطة التطوير القادمة</h2>
+            <p class="panel-small-text">
+                • إضافة نموذج لإدارة الجداول وربطه بنماذج <span dir="ltr">DaySchedule</span> و <span dir="ltr">Period</span>.<br>
+                • تخصيص صلاحيات للمشرفين والمدير والمعلمين.<br>
+                • دعم جداول خاصة للأيام الاستثنائية (اختبارات، مناسبات).<br>
+                • ربط لوحة التحكم بتقارير زمنية حول حضور الفصول.<br>
+            </p>
+        </section>
+    </section>
 </main>
 
 {% include "footer.html" %}

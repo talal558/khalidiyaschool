@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول - لوحة التوقيت المدرسي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- خط عربي -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020617;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --accent: #0ea5e9;
+            --accent-strong: #38bdf8;
+            --border-subtle: rgba(148,163,184,0.35);
+            --error: #f97373;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Tajawal", system-ui, sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 55%),
+                radial-gradient(circle at bottom, rgba(15, 23, 42, 0.95), #020617),
+                repeating-linear-gradient(
+                    to right,
+                    rgba(15, 23, 42, 0.7) 0,
+                    rgba(15, 23, 42, 0.7) 1px,
+                    transparent 1px,
+                    transparent 24px
+                ),
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(15, 23, 42, 0.72) 0,
+                    rgba(15, 23, 42, 0.72) 1px,
+                    transparent 1px,
+                    transparent 24px
+                );
+            background-blend-mode: soft-light, normal, soft-light, soft-light;
+            color: var(--text-main);
+        }
+
+        .page-main {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 2.4rem 1.4rem 3.2rem;
+        }
+
+        .login-wrapper {
+            margin-top: 2.2rem;
+        }
+
+        .login-card {
+            background:
+                radial-gradient(circle at top left, rgba(56,189,248,0.2), transparent 65%),
+                radial-gradient(circle at bottom right, rgba(15,23,42,0.96), #020617);
+            border-radius: 1.6rem;
+            padding: 1.8rem 1.6rem 1.7rem;
+            border: 1px solid rgba(15, 23, 42, 0.98);
+            box-shadow:
+                0 26px 65px rgba(0, 0, 0, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: "";
+            position: absolute;
+            inset-inline-end: -70px;
+            inset-block-start: -70px;
+            width: 170px;
+            height: 170px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(56,189,248,0.18), transparent 70%);
+            pointer-events: none;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 1.4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .login-subtitle {
+            margin: 0;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.86rem;
+        }
+
+        .form-input {
+            width: 100%;
+            border-radius: 0.9rem;
+            border: 1px solid rgba(30, 64, 175, 0.9);
+            background-color: rgba(15, 23, 42, 0.98);
+            color: var(--text-main);
+            padding: 0.7rem 0.85rem;
+            font-size: 0.9rem;
+            outline: none;
+            box-shadow:
+                0 0 0 1px rgba(15, 23, 42, 1),
+                inset 0 0 18px rgba(15,23,42,0.9);
+            transition:
+                border-color 0.16s ease,
+                box-shadow 0.16s ease,
+                background-color 0.16s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-strong);
+            box-shadow:
+                0 0 20px rgba(56,189,248,0.7),
+                inset 0 0 18px rgba(15,23,42,0.9);
+        }
+
+        .form-help {
+            margin-top: 0.2rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .form-errors {
+            margin-bottom: 0.9rem;
+            border-radius: 0.9rem;
+            border: 1px solid rgba(248,113,113,0.8);
+            background-color: rgba(127,29,29,0.2);
+            padding: 0.6rem 0.8rem;
+            font-size: 0.8rem;
+            color: #fee2e2;
+        }
+
+        .form-errors ul {
+            margin: 0;
+            padding-inline-start: 1.2rem;
+        }
+
+        .form-errors li {
+            margin: 0.15rem 0;
+        }
+
+        .login-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin-top: 0.6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-login {
+            width: 100%;
+            border-radius: 999px;
+            border: none;
+            background: radial-gradient(circle at top, #e0f2fe, #bae6fd);
+            color: #0b1120;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            box-shadow:
+                0 0 24px rgba(56,189,248,0.8),
+                0 10px 26px rgba(15,23,42,0.9);
+            transition:
+                transform 0.16s ease,
+                box-shadow 0.16s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow:
+                0 0 30px rgba(56,189,248,0.95),
+                0 12px 30px rgba(15,23,42,0.95);
+        }
+
+        .login-links {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .login-links a {
+            color: var(--accent-strong);
+            text-decoration: none;
+        }
+
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+{% include "header.html" %}
+
+<main class="page-main">
+    <section class="login-wrapper">
+        <article class="login-card">
+            <header class="login-header">
+                <h1 class="login-title">تسجيل الدخول</h1>
+                <p class="login-subtitle">
+                    دخول لوحة التوقيت المدرسي باستخدام حساب الإدارة أو الإشراف.
+                </p>
+            </header>
+
+            {% if form.errors %}
+                <div class="form-errors" aria-live="polite">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.username.id_for_label }}">اسم المستخدم</label>
+                    <input
+                        type="text"
+                        id="{{ form.username.id_for_label }}"
+                        name="{{ form.username.html_name }}"
+                        class="form-input"
+                        autocomplete="username"
+                        value="{{ form.username.value|default_if_none:'' }}"
+                        required
+                    >
+                    {% if form.username.help_text %}
+                        <p class="form-help">{{ form.username.help_text }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.password.id_for_label }}">كلمة المرور</label>
+                    <input
+                        type="password"
+                        id="{{ form.password.id_for_label }}"
+                        name="{{ form.password.html_name }}"
+                        class="form-input"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div class="login-actions">
+                    <button type="submit" class="btn-login">
+                        دخول إلى النظام
+                    </button>
+                    <p class="login-links">
+                        لا تملك حساباً؟ يمكن إضافة حسابات جديدة من خلال لوحة التحكم مستقبلاً.
+                    </p>
+                </div>
+            </form>
+        </article>
+    </section>
+</main>
+
+{% include "footer.html" %}
+
+</body>
+</html>

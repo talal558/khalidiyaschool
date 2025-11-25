@@ -6,14 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- خط عربي -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --bg-main: #020617;
             --bg-card: #020617;
+            --bg-soft: #020617;
             --text-main: #e5e7eb;
             --text-muted: #9ca3af;
+            --accent: #0ea5e9;
+            --accent-strong: #38bdf8;
+            --border-subtle: rgba(148, 163, 184, 0.35);
         }
 
         * {
@@ -22,586 +26,349 @@
 
         body {
             margin: 0;
-            padding: 0;
-            font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
+            min-height: 100vh;
+            font-family: "Tajawal", system-ui, sans-serif;
+            /* خلفية رقمية 3D مع شبكة خفيفة */
+            background:
+                radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 55%),
+                radial-gradient(circle at bottom, rgba(15, 23, 42, 0.95), #020617),
+                repeating-linear-gradient(
+                    to right,
+                    rgba(15, 23, 42, 0.7) 0,
+                    rgba(15, 23, 42, 0.7) 1px,
+                    transparent 1px,
+                    transparent 24px
+                ),
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(15, 23, 42, 0.72) 0,
+                    rgba(15, 23, 42, 0.72) 1px,
+                    transparent 1px,
+                    transparent 24px
+                );
+            background-blend-mode: soft-light, normal, soft-light, soft-light;
             color: var(--text-main);
         }
 
-        /* ===== الشريط العلوي (مطابقة header.html) ===== */
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: rgba(15, 23, 42, 0.96);
-            -webkit-backdrop-filter: blur(18px);
-            backdrop-filter: blur(18px);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .header-inner {
-            max-width: 1280px;
+        .page-main {
+            max-width: 1120px;
             margin: 0 auto;
-            padding: 0.6rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
+            padding: 2.6rem 1.4rem 3.4rem;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-        }
-
-        .brand-icon {
-            width: 2.4rem;
-            height: 2.4rem;
+        /* خط ضوئي علوي يعطي إحساس 3D */
+        .neon-bar {
+            max-width: 1120px;
+            margin: 0 auto;
+            height: 3px;
             border-radius: 999px;
-            border: 1px solid rgba(56, 189, 248, 0.6);
+            background: linear-gradient(to left, transparent, #38bdf8, transparent);
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.9);
+            opacity: 0.8;
+        }
+
+        /* هيرو رئيسية ثلاثية الأبعاد */
+
+        .hero-wrapper {
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            margin-bottom: 2.4rem;
+            margin-top: 1.5rem;
+        }
+
+        .hero-card {
+            width: 100%;
+            background:
+                radial-gradient(circle at top left, rgba(56, 189, 248, 0.20), transparent 65%),
+                radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.95), #020617);
+            border-radius: 1.8rem;
+            padding: 2.2rem 2rem;
+            border: 1px solid rgba(15, 23, 42, 0.98);
             box-shadow:
-                0 0 25px rgba(56, 189, 248, 0.4),
-                0 0 0 1px rgba(15, 23, 42, 0.9);
-        }
-
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-title {
-            font-size: 1.1rem;
-            letter-spacing: 0.06em;
-        }
-
-        .brand-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .main-nav {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link {
-            padding: 0.35rem 0.9rem;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            color: #e5e7eb;
-            text-decoration: none;
-            border: 1px solid transparent;
-            background: transparent;
-            transition: all 0.18s ease-out;
-        }
-
-        .nav-link:hover {
-            border-color: rgba(148, 163, 184, 0.6);
-            background: rgba(15, 23, 42, 0.9);
-        }
-
-        .nav-link-active {
-            border-color: rgba(56, 189, 248, 0.8);
-            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.95));
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-        }
-
-        @media (max-width: 768px) {
-            .header-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .main-nav {
-                width: 100%;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-            }
-        }
-
-        /* ===== الحاوية الرئيسية ===== */
-        .page-wrapper {
-            max-width: 1280px;
-            margin: 0 auto 2rem;
-            padding: 1rem 1.5rem 2rem;
-        }
-
-        .layout-wide {
-            display: grid;
-            grid-template-rows: auto auto;
-            gap: 1.5rem;
-        }
-
-        /* الصف العلوي: بطاقة واحدة (الجدول + الساعة) */
-        .top-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr);
-            gap: 1.5rem;
-            align-items: stretch;
-        }
-
-        /* الصف السفلي: بطاقات الفصول */
-        .bottom-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr);
-            gap: 1.25rem;
-        }
-
-        /* ===== الكروت ===== */
-        .card {
-            background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
-            border-radius: 1.4rem;
-            padding: 1.3rem 1.6rem;
-            box-shadow:
-                0 24px 60px rgba(15, 23, 42, 0.9),
-                0 0 0 1px rgba(148, 163, 184, 0.18);
+                0 34px 80px rgba(0, 0, 0, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 1),
+                0 0 48px rgba(8, 47, 73, 0.9);
             position: relative;
             overflow: hidden;
+            transform-style: preserve-3d;
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
         }
 
-        .card::before {
+        .hero-card::before {
             content: "";
             position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at top, rgba(56, 189, 248, 0.2), transparent 55%),
-                radial-gradient(circle at bottom, rgba(59, 130, 246, 0.18), transparent 55%);
+            inset-inline-start: -90px;
+            inset-block-start: -90px;
+            width: 260px;
+            height: 260px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.30), transparent 70%);
             opacity: 0.9;
             pointer-events: none;
         }
 
-        .card-inner {
-            position: relative;
-            z-index: 1;
-        }
-
-        .card h2 {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .card-subtitle {
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* ===== جدول اليوم + الساعة المدمجة ===== */
-        .table-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.1rem 0.6rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            border: 1px solid rgba(148, 163, 184, 0.5);
-            color: var(--text-muted);
-        }
-
-        .badge-dot {
-            width: 0.4rem;
-            height: 0.4rem;
-            border-radius: 999px;
-            background: #22c55e;
-        }
-
-        /* صف الساعة والفترة الحالية داخل بطاقة جدول اليوم */
-        .schedule-clock-row {
-            margin-top: 1.1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            text-align: center;
-        }
-
-        /* ===== الساعة الدائرية (285px + نبض أسرع وأوضح) ===== */
-        .clock-wrapper {
-            width: 285px;
-            height: 285px;
-            border-radius: 50%;
-            background:
-                radial-gradient(circle at top, rgba(56, 189, 248, 0.25), transparent 55%),
-                radial-gradient(circle at bottom, rgba(96, 165, 250, 0.25), transparent 55%),
-                radial-gradient(circle, #020617 0, #020617 55%, #020617 100%);
-            box-shadow:
-                0 0 0 1px rgba(148, 163, 184, 0.35),
-                0 0 55px rgba(56, 189, 248, 0.55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        /* هالة النبض حول الساعة – أسرع ومرئية أكثر */
-        .clock-wrapper::after {
+        .hero-card::after {
             content: "";
             position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.85);
-            opacity: 1;
-            animation: clock-pulse 1.6s ease-out infinite;
+            inset-inline-end: -140px;
+            inset-block-end: -140px;
+            width: 320px;
+            height: 320px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(8, 47, 73, 0.65), transparent 70%);
+            opacity: 0.7;
             pointer-events: none;
         }
 
-        @keyframes clock-pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.85);
-                opacity: 1;
-            }
-            40% {
-                box-shadow: 0 0 0 20px rgba(56, 189, 248, 0.45);
-                opacity: 0.9;
-            }
-            80% {
-                box-shadow: 0 0 0 40px rgba(56, 189, 248, 0);
-                opacity: 0;
-            }
-            100% {
-                box-shadow: 0 0 0 40px rgba(56, 189, 248, 0);
-                opacity: 0;
-            }
-        }
-
-        .clock-ring {
-            position: absolute;
-            inset: 22px;
-            border-radius: 50%;
-            border: 2px solid rgba(148, 163, 184, 0.25);
+        .hero-card:hover {
+            transform: translateY(-8px) scale3d(1.01, 1.01, 1) perspective(1000px) rotateX(3deg);
             box-shadow:
-                0 0 0 1px rgba(15, 23, 42, 0.8),
-                0 0 40px rgba(56, 189, 248, 0.5) inset;
+                0 40px 100px rgba(0, 0, 0, 0.95),
+                0 0 0 1px rgba(15, 23, 42, 1),
+                0 0 60px rgba(56, 189, 248, 0.65);
+            border-color: rgba(56, 189, 248, 0.75);
         }
 
-        .clock-time {
+        .hero-inner {
             position: relative;
             z-index: 1;
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: 0.18em;
-        }
-
-        .clock-date {
-            position: relative;
-            z-index: 1;
-            margin-top: 0.3rem;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        .clock-side-info {
-            flex: 1;
-            min-width: 230px;
-            max-width: 480px;
-        }
-
-        .current-period-box {
-            margin-top: 0.6rem;
-            width: 100%;
-            border-radius: 999px;
-            padding: 0.7rem 1rem;
-            background: linear-gradient(90deg, rgba(34, 197, 94, 0.25), rgba(56, 189, 248, 0.12));
-            border: 1px solid rgba(34, 197, 94, 0.5);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .current-period-title {
-            font-weight: 600;
-        }
-
-        .current-countdown {
-            font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
-
-        .no-period {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .small-note {
-            font-size: 0.8rem;
-            color: #d1d5db;
-            margin-top: 0.4rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            font-size: 0.88rem;
-        }
-
-        .table-wrapper {
-            max-height: 330px;
-            overflow-y: auto;
-            margin-top: 0.4rem;
-            border-radius: 0.75rem;
-        }
-
-        th,
-        td {
-            padding: 0.35rem 0.4rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(30, 64, 175, 0.35);
-        }
-
-        th {
-            font-weight: 600;
-            color: #e5e7eb;
-            background: radial-gradient(circle at top, rgba(30, 64, 175, 0.4), rgba(15, 23, 42, 0.4));
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        tbody tr:nth-child(even) {
-            background: linear-gradient(90deg, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95));
-        }
-
-        tbody tr:nth-child(odd) {
-            background: linear-gradient(90deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9));
-        }
-
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.15rem 0.55rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            border: 1px solid transparent;
-        }
-
-        .tag-start {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.4);
-            color: #bbf7d0;
-        }
-
-        .tag-class {
-            background: rgba(59, 130, 246, 0.12);
-            border-color: rgba(59, 130, 246, 0.5);
-            color: #bfdbfe;
-        }
-
-        .tag-break {
-            background: rgba(234, 179, 8, 0.1);
-            border-color: rgba(234, 179, 8, 0.5);
-            color: #fef9c3;
-        }
-
-        .tag-end {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.5);
-            color: #fecaca;
-        }
-
-        .tag-generic {
-            background: rgba(148, 163, 184, 0.12);
-            border-color: rgba(148, 163, 184, 0.5);
-            color: #e5e7eb;
-        }
-
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.15rem 0.6rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            border: 1px solid transparent;
-        }
-
-        .status-current {
-            background: rgba(34, 197, 94, 0.2);
-            border-color: rgba(34, 197, 94, 0.6);
-            color: #bbf7d0;
-        }
-
-        .status-next {
-            background: rgba(56, 189, 248, 0.15);
-            border-color: rgba(56, 189, 248, 0.55);
-            color: #bae6fd;
-        }
-
-        .status-empty {
-            background: rgba(15, 23, 42, 0.9);
-            border-color: rgba(55, 65, 81, 0.8);
-            color: #6b7280;
-        }
-
-        .error-text {
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: #fecaca;
-            text-align: center;
-        }
-
-        /* ===== بطاقات الفصول ===== */
-        .classes-card-title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-        }
-
-        .sub-title {
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .classes-grid {
-            margin-top: 1rem;
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.9rem;
+            grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.1fr);
+            gap: 1.8rem;
+            align-items: center;
         }
 
         @media (max-width: 900px) {
-            .classes-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
         }
 
-        @media (max-width: 600px) {
-            .classes-grid {
-                grid-template-columns: minmax(0, 1fr);
-            }
+        .hero-title {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin-bottom: 0.55rem;
+            text-shadow: 0 0 18px rgba(15, 23, 42, 0.9);
         }
 
-        .class-card {
-            border-radius: 1rem;
-            padding: 0.7rem 0.9rem;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 1));
-            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.85);
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .class-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.4rem;
-        }
-
-        .class-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .class-meta {
-            font-size: 0.8rem;
+        .hero-subtitle {
+            font-size: 0.96rem;
             color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
         }
 
-        .class-actions {
-            margin-top: 0.3rem;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .class-btn {
-            font-size: 0.75rem;
-            padding: 0.2rem 0.7rem;
-            border-radius: 999px;
-            border: 1px solid rgba(56, 189, 248, 0.7);
-            background: rgba(15, 23, 42, 0.95);
-            color: #e0f2fe;
-            cursor: pointer;
-        }
-
-        .class-btn:hover {
-            background: rgba(56, 189, 248, 0.18);
-        }
-
-        .class-current-pill {
-            padding: 0.15rem 0.7rem;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            background: linear-gradient(90deg, rgba(34, 197, 94, 0.3), rgba(56, 189, 248, 0.18));
-            border: 1px solid rgba(34, 197, 94, 0.7);
-            color: #dcfce7;
-            white-space: nowrap;
-        }
-
-        /* ===== الفوتر ===== */
-        .site-footer {
-            margin-top: 1.5rem;
-            border-top: 1px solid rgba(148, 163, 184, 0.25);
-            background: radial-gradient(circle at top, #020617 0, #020617 40%, #020617 100%);
-        }
-
-        .footer-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0.75rem 1.5rem 1rem;
+        .hero-actions {
             display: flex;
             flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        @media (max-width: 900px) {
+            .hero-actions {
+                justify-content: center;
+            }
+        }
+
+        .btn-main {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: center;
+            padding: 0.85rem 2.1rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            background:
+                radial-gradient(circle at top, rgba(248, 250, 252, 0.9), rgba(148, 163, 184, 0.9));
+            color: #0b1120;
+            box-shadow:
+                0 0 28px rgba(56, 189, 248, 0.75),
+                0 10px 26px rgba(15, 23, 42, 0.9);
+            transform: translateZ(20px);
+            transition:
+                transform 0.16s ease,
+                box-shadow 0.16s ease,
+                background 0.16s ease;
         }
 
-        .footer-main,
-        .footer-meta {
-            display: flex;
+        .btn-main:hover {
+            transform: translateY(-2px) translateZ(25px) scale(1.02);
+            box-shadow:
+                0 0 36px rgba(56, 189, 248, 0.95),
+                0 12px 30px rgba(15, 23, 42, 0.95);
+            background:
+                radial-gradient(circle at top, #e0f2fe, #bae6fd);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.82rem 1.9rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+            cursor: pointer;
+            font-size: 0.92rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transform: translateZ(15px);
+            transition:
+                border-color 0.14s ease,
+                background 0.14s ease,
+                box-shadow 0.14s ease,
+                transform 0.14s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-strong);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), #020617);
+            box-shadow:
+                0 0 22px rgba(56, 189, 248, 0.6),
+                0 10px 24px rgba(15, 23, 42, 0.9);
+            transform: translateY(-1px) translateZ(18px);
+        }
+
+        /* صندوق الوقت الصغير 3D */
+        .hero-mini {
+            justify-self: stretch;
+            border-radius: 1.2rem;
+            padding: 1.2rem 1.1rem;
+            border: 1px solid rgba(30, 64, 175, 0.95);
+            background:
+                radial-gradient(circle at top, rgba(15, 23, 42, 0.98), #020617);
+            box-shadow:
+                0 20px 40px rgba(15, 23, 42, 0.96),
+                0 0 28px rgba(15, 23, 42, 0.9);
+            transform: translateZ(18px);
+        }
+
+        .hero-mini-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .hero-mini-time {
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            margin-bottom: 0.45rem;
+        }
+
+        .hero-mini-meta {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 0.9rem;
+        }
+
+        .hero-mini-status {
+            display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            flex-wrap: wrap;
+            padding: 0.28rem 0.95rem;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.8);
+            font-size: 0.8rem;
+            background: radial-gradient(circle at right, rgba(56, 189, 248, 0.28), rgba(15, 23, 42, 1));
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.7);
         }
 
-        .footer-separator {
-            opacity: 0.5;
+        .status-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 999px;
+            background-color: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
         }
 
-        .footer-main strong,
-        .footer-meta strong {
-            color: #e5e7eb;
+        /* بطاقات المعلومات 3D */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.4rem;
         }
 
-        @media (max-width: 768px) {
-            .footer-inner {
-                flex-direction: column;
-                align-items: center;
+        @media (max-width: 900px) {
+            .info-grid {
+                grid-template-columns: 1fr;
             }
+        }
+
+        .info-card {
+            background:
+                radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 65%),
+                radial-gradient(circle at bottom left, rgba(15, 23, 42, 0.96), #020617);
+            border-radius: 1.4rem;
+            padding: 1.35rem 1.25rem 1.3rem;
+            border: 1px solid rgba(31, 41, 55, 0.98);
+            box-shadow:
+                0 20px 45px rgba(0, 0, 0, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 1);
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(10px);
+            transition:
+                transform 0.18s ease,
+                box-shadow 0.18s ease,
+                border-color 0.18s ease;
+        }
+
+        .info-card::before {
+            content: "";
+            position: absolute;
+            inset-inline-end: -55px;
+            inset-block-start: -55px;
+            width: 140px;
+            height: 140px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.12), transparent 70%);
+            pointer-events: none;
+        }
+
+        .info-card:hover {
+            transform: translateY(-6px) translateZ(18px) scale(1.01);
+            box-shadow:
+                0 26px 60px rgba(0, 0, 0, 0.95),
+                0 0 30px rgba(15, 23, 42, 0.95);
+            border-color: rgba(56, 189, 248, 0.7);
+        }
+
+        .info-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.55rem;
+        }
+
+        .info-text {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .info-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.18rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            font-size: 0.78rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 1));
         }
     </style>
 </head>
@@ -609,445 +376,119 @@
 
 {% include "header.html" %}
 
-<main class="page-wrapper">
-    <div class="layout-wide">
+<div class="neon-bar" aria-hidden="true"></div>
 
-        <!-- الصف العلوي: بطاقة واحدة تجمع الجدول + الساعة + الفترة الحالية -->
-        <section class="top-row">
-            <article class="card schedule-card">
-                <div class="card-inner">
-                    <div class="table-card-header">
-                        <div>
-                            <h2>جدول اليوم</h2>
-                            <div class="card-subtitle" id="scheduleMetaText">
-                                تاريخ اليوم: غير محدد • نوع الجدول: غير معروف
-                            </div>
-                        </div>
-                        <div class="badge">
-                            <span class="badge-dot"></span>
-                            <span id="badgeStatusText">مزامنة مع التوقيت الحالي</span>
-                        </div>
-                    </div>
+<main class="page-main">
 
-                    <!-- الساعة + الفترة الحالية/التالية -->
-                    <div class="schedule-clock-row">
-                        <div class="clock-wrapper">
-                            <div class="clock-ring"></div>
-                            <div>
-                                <div id="timeNow" class="clock-time">--:--:--</div>
-                                <div id="dateNow" class="clock-date">-- --- ----</div>
-                            </div>
-                        </div>
+    <!-- الهيرو الرئيسية 3D -->
+    <section class="hero-wrapper">
+        <article class="hero-card">
+            <div class="hero-inner">
+                <div>
+                    <h1 class="hero-title">لوحة التوقيت المدرسي</h1>
+                    <p class="hero-subtitle">
+                        نظام رقمي لمتابعة جداول الحصص، حالة الفصول، وإدارة الجداول اليومية
+                        في مدرسة الخالدية الابتدائية، مع إمكانية العرض على شاشات ذكية داخل المدرسة.
+                    </p>
 
-                        <div class="clock-side-info">
-                            <p class="card-subtitle" id="todayLabel">--</p>
-
-                            <div id="currentInfoBox" class="current-period-box hidden">
-                                <div>
-                                    <div class="current-period-title" id="currentPeriodText"></div>
-                                    <div id="nextPeriodText" class="small-note"></div>
-                                </div>
-                                <div class="current-countdown" id="countdownText">--:--</div>
-                            </div>
-
-                            <div id="noCurrentPeriod" class="no-period">
-                                لا توجد فترة جارية في هذا الوقت.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- جدول اليوم -->
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>الترتيب</th>
-                                <th>الفترة</th>
-                                <th>النوع</th>
-                                <th>من</th>
-                                <th>إلى</th>
-                                <th>الحالة</th>
-                            </tr>
-                            </thead>
-                            <tbody id="mainScheduleBody">
-                            <tr>
-                                <td colspan="6">جاري تحميل جدول اليوم...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div id="scheduleError" class="error-text hidden"></div>
-                </div>
-            </article>
-        </section>
-
-        <!-- الصف السفلي: بطاقات الفصول (٩ بطاقات) -->
-        <section class="bottom-row">
-            <article class="card">
-                <div class="card-inner">
-                    <div class="classes-card-title">
-                        <div>
-                            <h2>بطاقات الفصول</h2>
-                            <p class="sub-title">
-                                تظهر هنا حالة الفترة الحالية لكل فصل، ويمكن لاحقًا ربط كل بطاقة بصفحة خاصة للفصل.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="classes-grid">
-                        <!-- 1 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف الرابع (أ)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 2 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف الرابع (ب)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 3 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف الرابع (ج)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 4 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف الخامس (أ)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 5 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف الخامس (ب)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 6 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف الخامس (ج)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 7 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف السادس (أ)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 8 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف السادس (ب)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
-                        <!-- 9 -->
-                        <div class="class-card">
-                            <div class="class-card-header">
-                                <div class="class-name">الصف السادس (ج)</div>
-                                <div class="class-current-pill">لا توجد فترة حالية</div>
-                            </div>
-                            <div class="class-meta">المرحلة الابتدائية • عدد الطلاب: —</div>
-                            <div class="class-actions">
-                                <button type="button" class="class-btn">عرض الفصل</button>
-                            </div>
-                        </div>
+                    <div class="hero-actions">
+                        <a href="{% url 'schooldisplay:today_board' %}" class="btn-main">
+                            فتح لوحة توقيت اليوم
+                        </a>
+                        <a href="{% url 'schooldisplay:control_panel' %}" class="btn-secondary">
+                            الانتقال إلى لوحة التحكم
+                        </a>
                     </div>
                 </div>
-            </article>
-        </section>
-    </div>
+
+                <aside class="hero-mini" aria-label="لمحة عن التوقيت">
+                    <p class="hero-mini-label">الوقت الآن</p>
+                    <p id="hero-clock-time" class="hero-mini-time">--:--:--</p>
+                    <p id="hero-clock-date" class="hero-mini-meta">اليوم</p>
+                    <div class="hero-mini-status">
+                        <span class="status-dot"></span>
+                        <span>النظام متزامن مع توقيت الخالدية</span>
+                    </div>
+                </aside>
+            </div>
+        </article>
+    </section>
+
+    <!-- بطاقات المعلومات 3D -->
+    <section class="info-grid" aria-label="معلومات عن مكونات النظام">
+        <article class="info-card">
+            <div class="info-inner">
+                <div class="info-tag">عرض مباشر</div>
+                <h2 class="info-title">لوحة توقيت اليوم</h2>
+                <p class="info-text">
+                    صفحة مخصّصة لعرض الساعة الحية، جدول حصص اليوم، وحالة الفصول في اللحظة
+                    الحالية، مع تصميم ثلاثي الأبعاد مناسب لعرضه على شاشات كبيرة داخل المدرسة
+                    أو في غرفة المتابعة.
+                </p>
+            </div>
+        </article>
+
+        <article class="info-card">
+            <div class="info-inner">
+                <div class="info-tag">إدارة الجداول</div>
+                <h2 class="info-title">لوحة التحكم</h2>
+                <p class="info-text">
+                    واجهة رقمية لإدارة الجداول والفترات والفصول. يمكن مستقبلاً إضافة صلاحيات خاصة
+                    للمشرفين والمدير والمعلمين، وتفعيل جداول مختلفة بحسب اليوم أو المناسبات
+                    الخاصة مع تجربة 3D سلسة.
+                </p>
+            </div>
+        </article>
+
+        <article class="info-card">
+            <div class="info-inner">
+                <div class="info-tag">تطوير قادم</div>
+                <h2 class="info-title">تطوير مستقبلي</h2>
+                <p class="info-text">
+                    من المخطط إضافة صفحات لجداول المعلمين، صفحات مخصصة لكل فصل، تقارير زمنية
+                    عن الحضور والانصراف، وتنبيه بالحصة الحالية على الشاشات باستخدام تكامل
+                    مع واجهة <span dir="ltr">API</span> وقاعدة البيانات، مع الحفاظ على نفس الهوية الرقمية.
+                </p>
+            </div>
+        </article>
+    </section>
+
 </main>
 
 {% include "footer.html" %}
 
 <script>
-(function () {
-    const timeNow = document.getElementById("timeNow");
-    const dateNow = document.getElementById("dateNow");
-    const todayLabel = document.getElementById("todayLabel");
-
-    const mainScheduleBody = document.getElementById("mainScheduleBody");
-    const scheduleMetaText = document.getElementById("scheduleMetaText");
-    const scheduleError = document.getElementById("scheduleError");
-
-    const currentInfoBox = document.getElementById("currentInfoBox");
-    const currentPeriodText = document.getElementById("currentPeriodText");
-    const nextPeriodText = document.getElementById("nextPeriodText");
-    const countdownText = document.getElementById("countdownText");
-    const noCurrentPeriod = document.getElementById("noCurrentPeriod");
-
-    const classCurrentPills = document.querySelectorAll(".class-current-pill");
-
-    let schedulePeriods = [];
-
-    function formatTime(date) {
-        const h = String(date.getHours()).padStart(2, "0");
-        const m = String(date.getMinutes()).padStart(2, "0");
-        const s = String(date.getSeconds()).padStart(2, "0");
-        return `${h}:${m}:${s}`;
-    }
-
-    function formatDate(date) {
-        const days = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-        const dayName = days[date.getDay()];
-        return `${dayName} • ${date.getFullYear()} / ${date.getMonth() + 1} / ${date.getDate()}`;
-    }
-
-    function applyTagClass(type) {
-        switch (type) {
-            case "start": return "tag-start";
-            case "class": return "tag-class";
-            case "break": return "tag-break";
-            case "end": return "tag-end";
-            default: return "tag-generic";
-        }
-    }
-
-    function typeLabel(type) {
-        switch (type) {
-            case "start": return "بداية الدوام";
-            case "class": return "حصة";
-            case "break": return "فسحة";
-            case "end": return "نهاية الدوام";
-            default: return "فترة";
-        }
-    }
-
-    // يبني نص التفاصيل (فصل - معلم - مادة) من بيانات الفترة إن كانت موجودة
-    function buildPeriodDetails(p) {
-        if (!p) return "";
-        const parts = [];
-        if (p.class_room) {
-            parts.push(`الفصل: ${p.class_room}`);
-        }
-        if (p.teacher) {
-            parts.push(`المعلم: ${p.teacher}`);
-        }
-        if (p.subject) {
-            parts.push(`المادة: ${p.subject}`);
-        }
-        return parts.join(" • ");
-    }
-
-    async function loadTodaySchedule() {
-        try {
-            const res = await fetch("/timetable/api/today-schedule/");
-            const data = await res.json();
-
-            if (!data.success) {
-                mainScheduleBody.innerHTML =
-                    `<tr><td colspan="6">${data.message || "لا يوجد جدول لهذا اليوم."}</td></tr>`;
-                scheduleError.textContent = "";
-                scheduleError.classList.add("hidden");
-                currentInfoBox.classList.add("hidden");
-                noCurrentPeriod.classList.remove("hidden");
-                schedulePeriods = [];
-                updateClassPills(null);
+    // ساعة الهيرو
+    (function () {
+        function updateHeroClock() {
+            var now = new Date();
+            var timeEl = document.getElementById("hero-clock-time");
+            var dateEl = document.getElementById("hero-clock-date");
+            if (!timeEl || !dateEl) {
                 return;
             }
 
-            scheduleError.classList.add("hidden");
-
-            const schedule = data.schedule || {};
-            const dayName = schedule.day_name || "غير معروف";
-            const desc = schedule.description || "جدول افتراضي";
-            scheduleMetaText.textContent = `اليوم: ${dayName} • نوع الجدول: ${desc}`;
-            todayLabel.textContent = `اليوم: ${dayName}`;
-
-            schedulePeriods = data.periods || [];
-
-            renderMainScheduleTable();
-            updateClock();
-        } catch (err) {
-            mainScheduleBody.innerHTML =
-                `<tr><td colspan="6">فشل الاتصال بخادم الجدول.</td></tr>`;
-            scheduleError.textContent =
-                "تعذر تحميل جدول اليوم. تحقق من الاتصال أو من إعدادات API.";
-            scheduleError.classList.remove("hidden");
-            schedulePeriods = [];
-            updateClassPills(null);
-        }
-    }
-
-    function renderMainScheduleTable() {
-        if (!schedulePeriods.length) {
-            mainScheduleBody.innerHTML =
-                `<tr><td colspan="6">لا توجد فترات محددة لهذا اليوم.</td></tr>`;
-            return;
-        }
-
-        mainScheduleBody.innerHTML = "";
-        const now = new Date();
-
-        let currentId = null;
-        let nextId = null;
-
-        schedulePeriods.forEach((p, index) => {
-            const start = new Date(p.start);
-            const end = new Date(p.end);
-            if (now >= start && now <= end) {
-                currentId = index;
-            } else if (now < start && nextId === null) {
-                nextId = index;
-            }
-        });
-
-        schedulePeriods.forEach((p, index) => {
-            const startD = new Date(p.start);
-            const endD = new Date(p.end);
-
-            const tr = document.createElement("tr");
-
-            let statusHtml = `<span class="status-pill status-empty">—</span>`;
-            if (index === currentId) {
-                statusHtml = `<span class="status-pill status-current">جارية الآن</span>`;
-            } else if (index === nextId) {
-                statusHtml = `<span class="status-pill status-next">تبدأ لاحقًا</span>`;
-            }
-
-            tr.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${p.name}</td>
-                <td><span class="tag ${applyTagClass(p.type)}">${typeLabel(p.type)}</span></td>
-                <td>${startD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                <td>${endD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                <td>${statusHtml}</td>
-            `;
-            mainScheduleBody.appendChild(tr);
-        });
-    }
-
-    function updateClassPills(current) {
-        if (!current) {
-            classCurrentPills.forEach(el => {
-                el.textContent = "لا توجد فترة حالية";
+            var timeString = now.toLocaleTimeString("ar-SA", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false
             });
-            return;
-        }
-        const label = `الفترة الحالية: ${current.name}`;
-        const details = buildPeriodDetails(current);
-        const full = details ? `${label} — ${details}` : label;
-        classCurrentPills.forEach(el => {
-            el.textContent = full;
-        });
-    }
 
-    function updateClock() {
-        const now = new Date();
-        timeNow.textContent = formatTime(now);
-        dateNow.textContent = formatDate(now);
+            var dateString = now.toLocaleDateString("ar-SA", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
 
-        if (!schedulePeriods.length) {
-            currentInfoBox.classList.add("hidden");
-            noCurrentPeriod.classList.remove("hidden");
-            updateClassPills(null);
-            return;
+            timeEl.textContent = timeString;
+            dateEl.textContent = dateString;
         }
 
-        let current = null;
-        let next = null;
-
-        for (let i = 0; i < schedulePeriods.length; i++) {
-            const p = schedulePeriods[i];
-            const start = new Date(p.start);
-            const end = new Date(p.end);
-
-            if (now >= start && now <= end) {
-                current = p;
-            } else if (now < start && !next) {
-                next = p;
-            }
-        }
-
-        if (current) {
-            currentInfoBox.classList.remove("hidden");
-            noCurrentPeriod.classList.add("hidden");
-
-            const currentDetails = buildPeriodDetails(current);
-            let currentText =
-                `الفترة الحالية: ${current.name} (${typeLabel(current.type)})`;
-            if (currentDetails) {
-                currentText += ` — ${currentDetails}`;
-            }
-            currentPeriodText.textContent = currentText;
-
-            if (next) {
-                const nextDetails = buildPeriodDetails(next);
-                const nextTime =
-                    new Date(next.start).toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"});
-                let nextText =
-                    `الفترة التالية: ${next.name} (${typeLabel(next.type)})`;
-                if (nextDetails) {
-                    nextText += ` — ${nextDetails}`;
-                }
-                nextText += ` عند ${nextTime}`;
-                nextPeriodText.textContent = nextText;
-            } else {
-                nextPeriodText.textContent = "لا توجد فترات لاحقة اليوم.";
-            }
-
-            const end = new Date(current.end);
-            const diff = Math.max(0, Math.floor((end - now) / 1000));
-            const m = String(Math.floor(diff / 60)).padStart(2, "0");
-            const s = String(diff % 60).padStart(2, "0");
-            countdownText.textContent = `${m}:${s}`;
-
-            updateClassPills(current);
-        } else {
-            currentInfoBox.classList.add("hidden");
-            noCurrentPeriod.classList.remove("hidden");
-            nextPeriodText.textContent = "";
-            updateClassPills(null);
-        }
-    }
-
-    loadTodaySchedule();
-    setInterval(updateClock, 1000);
-})();
+        updateHeroClock();
+        setInterval(updateHeroClock, 1000);
+    }());
 </script>
 
 </body>
