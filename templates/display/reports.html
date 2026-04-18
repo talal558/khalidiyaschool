@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>التقارير الزمنية - مدرسة الخالدية الابتدائية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#020617;--text:#e5e7eb;--muted:#9ca3af;--accent:#34d399;--border:rgba(148,163,184,0.18)}
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:"Tajawal",system-ui,sans-serif;background:radial-gradient(ellipse 70% 45% at 50% 0%,rgba(52,211,153,.1),transparent),var(--bg);color:var(--text);min-height:100vh}
+        .neon-bar{height:3px;background:linear-gradient(to left,transparent,#34d399,transparent);box-shadow:0 0 14px rgba(52,211,153,.8);opacity:.85}
+        .page-main{max-width:1100px;margin:0 auto;padding:2.4rem 1.4rem 4rem}
+        .page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.4rem}
+        .page-title{font-size:1.7rem;font-weight:700}
+        .page-subtitle{font-size:.88rem;color:var(--muted);margin-top:.25rem}
+        .btn-back{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;border-radius:999px;border:1px solid rgba(148,163,184,.35);background:rgba(15,23,42,.8);color:var(--muted);font-family:inherit;font-size:.88rem;text-decoration:none;transition:border-color .15s,color .15s}
+        .btn-back:hover{border-color:var(--accent);color:var(--accent)}
+        .section-title{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1.2rem;padding-bottom:.5rem;border-bottom:1px solid rgba(52,211,153,.2)}
+        /* Stats grid */
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+        .stat-card{background:radial-gradient(circle at top left,rgba(52,211,153,.1),transparent 60%),rgba(15,23,42,.85);border-radius:1.2rem;border:1px solid var(--border);padding:1.2rem 1rem;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+        .stat-num{font-size:2.2rem;font-weight:700;color:var(--accent);line-height:1}
+        .stat-label{font-size:.78rem;color:var(--muted);margin-top:.4rem}
+        /* Coverage bar */
+        .coverage-section{background:rgba(15,23,42,.85);border-radius:1.2rem;border:1px solid var(--border);padding:1.4rem 1.5rem;margin-bottom:2rem}
+        .coverage-bar-wrap{background:rgba(2,6,23,.8);border-radius:999px;height:14px;overflow:hidden;margin:.8rem 0}
+        .coverage-bar-fill{height:100%;border-radius:999px;background:linear-gradient(to left,#34d399,#a7f3d0);box-shadow:0 0 10px rgba(52,211,153,.5);transition:width .5s}
+        .coverage-label{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+        /* Period type cards */
+        .type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;margin-bottom:2rem}
+        .type-card{border-radius:1rem;border:1px solid;padding:1rem;text-align:center}
+        .type-class{background:rgba(52,211,153,.07);border-color:rgba(52,211,153,.3)}
+        .type-break{background:rgba(251,191,36,.07);border-color:rgba(251,191,36,.3)}
+        .type-activity{background:rgba(139,92,246,.07);border-color:rgba(139,92,246,.3)}
+        .type-other{background:rgba(100,116,139,.07);border-color:rgba(100,116,139,.3)}
+        .type-num{font-size:1.8rem;font-weight:700}
+        .type-class .type-num{color:#34d399}
+        .type-break .type-num{color:#fbbf24}
+        .type-activity .type-num{color:#a78bfa}
+        .type-other .type-num{color:#94a3b8}
+        .type-lbl{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+        /* Day table */
+        .card{background:rgba(15,23,42,.85);border-radius:1.2rem;border:1px solid var(--border);padding:1.4rem 1.5rem;box-shadow:0 8px 24px rgba(0,0,0,.4);margin-bottom:2rem}
+        .table-wrapper{border-radius:.9rem;overflow:hidden;border:1px solid rgba(52,211,153,.15)}
+        table{width:100%;border-collapse:collapse;font-size:.87rem}
+        thead{background:rgba(6,78,59,.3)}
+        th,td{padding:.65rem .75rem;text-align:center;border-bottom:1px solid rgba(15,23,42,.9)}
+        th{font-weight:600;color:#6ee7b7;font-size:.83rem}
+        tbody tr:nth-child(even){background:rgba(15,23,42,.6)}
+        tbody tr:nth-child(odd){background:rgba(15,23,42,.4)}
+        tbody tr:last-child td{border-bottom:none}
+        tbody tr:hover{background:rgba(52,211,153,.07)}
+        .day-badge{display:inline-block;padding:.15rem .6rem;border-radius:999px;font-size:.78rem;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);color:#34d399}
+        .zero{color:var(--muted)}
+    </style>
+</head>
+<body>
+{% include "header.html" %}
+<div class="neon-bar" aria-hidden="true"></div>
+<main class="page-main">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">التقارير الزمنية</h1>
+            <p class="page-subtitle">نظرة شاملة على الجداول والحصص وتغطية المعلمين.</p>
+        </div>
+        <a href="{% url 'schooldisplay:control_panel' %}" class="btn-back">← العودة للوحة التحكم</a>
+    </div>
+
+    <!-- الإحصائيات العامة -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-num">{{ total_schedules }}</div>
+            <div class="stat-label">إجمالي الجداول</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">{{ active_schedules }}</div>
+            <div class="stat-label">جداول مفعّلة</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">{{ total_periods }}</div>
+            <div class="stat-label">إجمالي الفترات</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">{{ total_teachers }}</div>
+            <div class="stat-label">معلمون</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">{{ special_days_count }}</div>
+            <div class="stat-label">أيام خاصة مفعّلة</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">{{ coverage_pct }}%</div>
+            <div class="stat-label">تغطية المعلمين</div>
+        </div>
+    </div>
+
+    <!-- تغطية المعلمين -->
+    <div class="coverage-section">
+        <h2 class="section-title">نسبة تغطية المعلمين في الفترات</h2>
+        <div class="coverage-bar-wrap">
+            <div class="coverage-bar-fill" style="width:{{ coverage_pct }}%"></div>
+        </div>
+        <div class="coverage-label">
+            <span>{{ covered_periods }} فترة مغطاة</span>
+            <span>{{ coverage_pct }}% من {{ total_periods }} فترة</span>
+        </div>
+    </div>
+
+    <!-- الفترات حسب النوع -->
+    <div class="card">
+        <h2 class="section-title">الفترات حسب النوع</h2>
+        <div class="type-grid">
+            {% for type_code, type_label in period_type_labels.items %}
+            <div class="type-card type-{{ type_code }}">
+                <div class="type-num">{{ period_type_counts|get_item:type_code|default:0 }}</div>
+                <div class="type-lbl">{{ type_label }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- الإحصائيات اليومية -->
+    <div class="card">
+        <h2 class="section-title">الإحصائيات اليومية</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>اليوم</th>
+                        <th>الجداول</th>
+                        <th>الفترات</th>
+                        <th>حصص رئيسية</th>
+                        <th>قائمة الانتظار</th>
+                        <th>حصص نشاط</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for d in day_stats %}
+                <tr>
+                    <td><span class="day-badge">{{ d.name }}</span></td>
+                    <td>{% if d.schedules %}{{ d.schedules }}{% else %}<span class="zero">—</span>{% endif %}</td>
+                    <td>{% if d.periods %}{{ d.periods }}{% else %}<span class="zero">—</span>{% endif %}</td>
+                    <td>{% if d.main %}{{ d.main }}{% else %}<span class="zero">—</span>{% endif %}</td>
+                    <td>{% if d.waiting %}{{ d.waiting }}{% else %}<span class="zero">—</span>{% endif %}</td>
+                    <td>{% if d.activity %}{{ d.activity }}{% else %}<span class="zero">—</span>{% endif %}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+{% include "footer.html" %}
+</body>
+</html>

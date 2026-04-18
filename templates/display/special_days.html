@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>الأيام الخاصة - مدرسة الخالدية الابتدائية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#020617;--text:#e5e7eb;--muted:#9ca3af;--accent:#34d399;--border:rgba(148,163,184,0.18)}
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:"Tajawal",system-ui,sans-serif;background:radial-gradient(ellipse 70% 45% at 50% 0%,rgba(52,211,153,.1),transparent),var(--bg);color:var(--text);min-height:100vh}
+        .neon-bar{height:3px;background:linear-gradient(to left,transparent,#34d399,transparent);box-shadow:0 0 14px rgba(52,211,153,.8);opacity:.85}
+        .page-main{max-width:1080px;margin:0 auto;padding:2.4rem 1.4rem 4rem}
+        .page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+        .page-title{font-size:1.7rem;font-weight:700}
+        .page-subtitle{font-size:.88rem;color:var(--muted);margin-top:.25rem}
+        .btn-back{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;border-radius:999px;border:1px solid rgba(148,163,184,.35);background:rgba(15,23,42,.8);color:var(--muted);font-family:inherit;font-size:.88rem;text-decoration:none;transition:border-color .15s,color .15s}
+        .btn-back:hover{border-color:var(--accent);color:var(--accent)}
+        .messages{margin-bottom:1.4rem}
+        .msg{padding:.7rem 1rem;border-radius:.8rem;font-size:.88rem;margin-bottom:.5rem}
+        .msg-success{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.5);color:#6ee7b7}
+        .msg-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.5);color:#fca5a5}
+        .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:1.6rem;align-items:start}
+        @media(max-width:860px){.layout{grid-template-columns:1fr}}
+        .card{background:radial-gradient(circle at top left,rgba(52,211,153,.1),transparent 60%),rgba(15,23,42,.85);border-radius:1.4rem;border:1px solid var(--border);padding:1.6rem 1.5rem;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative;overflow:hidden}
+        .card::before{content:"";position:absolute;inset-inline-end:-60px;inset-block-start:-60px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.1),transparent 70%);pointer-events:none}
+        .card-inner{position:relative;z-index:1}
+        .card-title{font-size:1.1rem;font-weight:600;margin-bottom:1.2rem;padding-bottom:.7rem;border-bottom:1px solid rgba(52,211,153,.2);color:var(--accent)}
+        .form-group{margin-bottom:1.1rem}
+        .form-label{display:block;font-size:.85rem;color:#d1d5db;margin-bottom:.35rem}
+        .form-input{width:100%;padding:.7rem .9rem;border-radius:.8rem;border:1px solid rgba(6,78,59,.8);background:rgba(2,6,23,.9);color:var(--text);font-family:inherit;font-size:.9rem;outline:none;transition:border-color .15s,box-shadow .15s;appearance:auto}
+        .form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(52,211,153,.15)}
+        .form-checkbox{width:1.1rem;height:1.1rem;accent-color:var(--accent)}
+        .form-errors{margin-bottom:1rem;padding:.65rem .9rem;border-radius:.8rem;border:1px solid rgba(248,113,113,.6);background:rgba(127,29,29,.2);font-size:.82rem;color:#fecaca}
+        .form-errors ul{padding-inline-start:1.2rem}
+        .btn-submit{width:100%;padding:.8rem;border-radius:999px;border:none;background:linear-gradient(135deg,#a7f3d0,#34d399);color:#052e16;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 0 22px rgba(52,211,153,.6),0 8px 20px rgba(2,6,23,.8);transition:transform .15s,box-shadow .15s;margin-top:.4rem}
+        .btn-submit:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(52,211,153,.85),0 10px 26px rgba(2,6,23,.9)}
+        .table-wrapper{border-radius:.9rem;overflow:hidden;border:1px solid rgba(52,211,153,.15)}
+        table{width:100%;border-collapse:collapse;font-size:.87rem}
+        thead{background:rgba(6,78,59,.3)}
+        th,td{padding:.65rem .75rem;text-align:center;border-bottom:1px solid rgba(15,23,42,.9)}
+        th{font-weight:600;color:#6ee7b7;font-size:.83rem}
+        tbody tr:nth-child(even){background:rgba(15,23,42,.6)}
+        tbody tr:nth-child(odd){background:rgba(15,23,42,.4)}
+        tbody tr:last-child td{border-bottom:none}
+        tbody tr:hover{background:rgba(52,211,153,.07)}
+        .badge-active{display:inline-block;padding:.15rem .6rem;border-radius:999px;font-size:.75rem;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#34d399}
+        .badge-inactive{display:inline-block;padding:.15rem .6rem;border-radius:999px;font-size:.75rem;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.4);color:#94a3b8}
+        .empty-row td{padding:2rem;color:var(--muted);font-size:.9rem}
+        .btn-delete{display:inline-block;padding:.25rem .75rem;border-radius:999px;border:1px solid rgba(239,68,68,.5);background:rgba(239,68,68,.08);color:#fca5a5;font-family:inherit;font-size:.78rem;cursor:pointer;transition:background .14s}
+        .btn-delete:hover{background:rgba(239,68,68,.18)}
+        .count-badge{display:inline-block;padding:.12rem .6rem;border-radius:999px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#34d399;font-size:.8rem;margin-inline-start:.5rem;font-weight:600}
+        .inline-check{display:flex;align-items:center;gap:.5rem;margin-top:.35rem}
+    </style>
+</head>
+<body>
+{% include "header.html" %}
+<div class="neon-bar" aria-hidden="true"></div>
+<main class="page-main">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">الأيام الخاصة</h1>
+            <p class="page-subtitle">إدارة الأيام الاستثنائية كالاختبارات والمناسبات وتحديد جداولها الخاصة.</p>
+        </div>
+        <a href="{% url 'schooldisplay:control_panel' %}" class="btn-back">← العودة للوحة التحكم</a>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for msg in messages %}
+        <div class="msg msg-{% if msg.tags == 'error' %}error{% else %}success{% endif %}">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="layout">
+        <article class="card">
+            <div class="card-inner">
+                <h2 class="card-title">إضافة يوم خاص</h2>
+                {% if form.errors %}
+                <div class="form-errors"><ul>
+                    {% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}{% endfor %}
+                    {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+                </ul></div>
+                {% endif %}
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group"><label class="form-label">{{ form.date.label }}</label>{{ form.date }}</div>
+                    <div class="form-group"><label class="form-label">{{ form.schedule.label }}</label>{{ form.schedule }}</div>
+                    <div class="form-group"><label class="form-label">{{ form.note.label }}</label>{{ form.note }}</div>
+                    <div class="form-group">
+                        <div class="inline-check">{{ form.is_active }}<label class="form-label" style="margin:0">{{ form.is_active.label }}</label></div>
+                    </div>
+                    <button type="submit" class="btn-submit">إضافة اليوم الخاص</button>
+                </form>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-inner">
+                <h2 class="card-title">الأيام الخاصة المسجلة <span class="count-badge">{{ days|length }}</span></h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>التاريخ</th><th>الجدول</th><th>ملاحظة</th><th>الحالة</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                        {% if days %}
+                            {% for d in days %}
+                            <tr>
+                                <td>{{ d.date }}</td>
+                                <td>{{ d.schedule|default:"—" }}</td>
+                                <td>{{ d.note|default:"—" }}</td>
+                                <td>{% if d.is_active %}<span class="badge-active">مفعّل</span>{% else %}<span class="badge-inactive">معطّل</span>{% endif %}</td>
+                                <td>
+                                    <form method="post" action="{% url 'schooldisplay:special_day_delete' d.pk %}" onsubmit="return confirm('هل تريد حذف هذا اليوم الخاص؟')">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-delete">حذف</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="empty-row"><td colspan="5">لا توجد أيام خاصة مسجلة حتى الآن.</td></tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </article>
+    </div>
+</main>
+{% include "footer.html" %}
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إنشاء حساب جديد - مدرسة الخالدية الابتدائية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #020617;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --accent: #34d399;
+            --border: rgba(148,163,184,0.2);
+            --error: #fecaca;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Tajawal", system-ui, sans-serif;
+            background:
+                radial-gradient(ellipse 70% 50% at 50% 0%, rgba(56,189,248,0.14), transparent),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .page-main {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 2.4rem 1.4rem 4rem;
+        }
+
+        .register-card {
+            margin-top: 1.8rem;
+            background:
+                radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent 60%),
+                rgba(15, 23, 42, 0.85);
+            border-radius: 1.6rem;
+            padding: 2rem 1.8rem;
+            border: 1px solid rgba(56,189,248,0.2);
+            box-shadow: 0 26px 65px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-card::before {
+            content: "";
+            position: absolute;
+            inset-inline-end: -60px;
+            inset-block-start: -60px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-inner { position: relative; z-index: 1; }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 1.6rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .form-group { margin-bottom: 1.1rem; }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.35rem;
+            color: #d1d5db;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.72rem 0.9rem;
+            border-radius: 0.85rem;
+            border: 1px solid rgba(30,64,175,0.8);
+            background: rgba(2,6,23,0.9);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.16s, box-shadow 0.16s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+        }
+
+        .form-help {
+            margin-top: 0.25rem;
+            font-size: 0.77rem;
+            color: var(--muted);
+        }
+
+        .form-errors {
+            margin-bottom: 1.1rem;
+            padding: 0.65rem 0.9rem;
+            border-radius: 0.85rem;
+            border: 1px solid rgba(248,113,113,0.7);
+            background: rgba(127,29,29,0.2);
+            font-size: 0.82rem;
+            color: var(--error);
+        }
+
+        .form-errors ul { padding-inline-start: 1.2rem; }
+        .form-errors li { margin: 0.15rem 0; }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 0.82rem;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #bae6fd, #34d399);
+            color: #0b1120;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 24px rgba(56,189,248,0.7), 0 8px 20px rgba(2,6,23,0.8);
+            transition: transform 0.15s, box-shadow 0.15s;
+            margin-top: 0.4rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 32px rgba(56,189,248,0.9), 0 12px 28px rgba(2,6,23,0.9);
+        }
+
+        .card-footer {
+            text-align: center;
+            margin-top: 1.1rem;
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        .card-footer a { color: var(--accent); text-decoration: none; }
+        .card-footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+{% include "header.html" %}
+
+<main class="page-main">
+    <article class="register-card">
+        <div class="card-inner">
+
+            <header class="card-header">
+                <h1 class="card-title">إنشاء حساب جديد</h1>
+                <p class="card-subtitle">أنشئ حساباً للوصول إلى نظام مدرسة الخالدية الابتدائية.</p>
+            </header>
+
+            {% if form.errors %}
+            <div class="form-errors">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.username.id_for_label }}">
+                        البريد الإلكتروني (اسم المستخدم)
+                    </label>
+                    <input
+                        type="email"
+                        id="{{ form.username.id_for_label }}"
+                        name="{{ form.username.html_name }}"
+                        class="form-input"
+                        placeholder="example@gmail.com"
+                        autocomplete="email"
+                        value="{{ form.username.value|default_if_none:'' }}"
+                        required
+                    >
+                    <p class="form-help">يمكنك استخدام أي بريد إلكتروني (Gmail، Outlook، Yahoo، …)</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.password1.id_for_label }}">كلمة المرور</label>
+                    <input
+                        type="password"
+                        id="{{ form.password1.id_for_label }}"
+                        name="{{ form.password1.html_name }}"
+                        class="form-input"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                        required
+                    >
+                    <p class="form-help">8 أحرف على الأقل، لا تستخدم كلمات شائعة أو أرقاماً فقط.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.password2.id_for_label }}">تأكيد كلمة المرور</label>
+                    <input
+                        type="password"
+                        id="{{ form.password2.id_for_label }}"
+                        name="{{ form.password2.html_name }}"
+                        class="form-input"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-submit">إنشاء الحساب</button>
+            </form>
+
+            <p class="card-footer">
+                لديك حساب بالفعل؟ <a href="{% url 'login' %}">تسجيل الدخول</a>
+            </p>
+
+        </div>
+    </article>
+</main>
+
+{% include "footer.html" %}
+
+</body>
+</html>

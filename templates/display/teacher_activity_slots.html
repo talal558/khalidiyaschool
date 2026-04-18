@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>حصص النشاط - مدرسة الخالدية الابتدائية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:     #020617;
+            --text:   #e5e7eb;
+            --muted:  #9ca3af;
+            --accent: #34d399;
+            --border: rgba(148,163,184,0.18);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Tajawal", system-ui, sans-serif;
+            background:
+                radial-gradient(ellipse 70% 45% at 50% 0%, rgba(52,211,153,0.1), transparent),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .neon-bar {
+            height: 3px;
+            background: linear-gradient(to left, transparent, #34d399, transparent);
+            box-shadow: 0 0 14px rgba(52,211,153,0.8);
+            opacity: 0.85;
+        }
+
+        .page-main {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 2.4rem 1.4rem 4rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-title { font-size: 1.7rem; font-weight: 700; }
+        .page-subtitle { font-size: 0.88rem; color: var(--muted); margin-top: 0.25rem; }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1.4rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148,163,184,0.35);
+            background: rgba(15,23,42,0.8);
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+
+        .messages { margin-bottom: 1.4rem; }
+        .msg {
+            padding: 0.7rem 1rem;
+            border-radius: 0.8rem;
+            font-size: 0.88rem;
+            margin-bottom: 0.5rem;
+        }
+        .msg-success {
+            background: rgba(52,211,153,0.1);
+            border: 1px solid rgba(52,211,153,0.5);
+            color: #6ee7b7;
+        }
+        .msg-error {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.5);
+            color: #fca5a5;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) minmax(0,1.6fr);
+            gap: 1.6rem;
+            align-items: start;
+        }
+        @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+        .card {
+            background:
+                radial-gradient(circle at top left, rgba(52,211,153,0.1), transparent 60%),
+                rgba(15,23,42,0.85);
+            border-radius: 1.4rem;
+            border: 1px solid var(--border);
+            padding: 1.6rem 1.5rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset-inline-end: -60px;
+            inset-block-start: -60px;
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(52,211,153,0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-inner { position: relative; z-index: 1; }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 1px solid rgba(52,211,153,0.2);
+            color: var(--accent);
+        }
+
+        .form-group { margin-bottom: 1.1rem; }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            color: #d1d5db;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border-radius: 0.8rem;
+            border: 1px solid rgba(6,78,59,0.8);
+            background: rgba(2,6,23,0.9);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            appearance: auto;
+        }
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(52,211,153,0.15);
+        }
+
+        .form-errors {
+            margin-bottom: 1rem;
+            padding: 0.65rem 0.9rem;
+            border-radius: 0.8rem;
+            border: 1px solid rgba(248,113,113,0.6);
+            background: rgba(127,29,29,0.2);
+            font-size: 0.82rem;
+            color: #fecaca;
+        }
+        .form-errors ul { padding-inline-start: 1.2rem; }
+        .form-errors li { margin: 0.15rem 0; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #a7f3d0, #34d399);
+            color: #052e16;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 22px rgba(52,211,153,0.6), 0 8px 20px rgba(2,6,23,0.8);
+            transition: transform 0.15s, box-shadow 0.15s;
+            margin-top: 0.4rem;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(52,211,153,0.85), 0 10px 26px rgba(2,6,23,0.9);
+        }
+
+        .table-wrapper {
+            border-radius: 0.9rem;
+            overflow: hidden;
+            border: 1px solid rgba(52,211,153,0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.87rem;
+        }
+
+        thead { background: rgba(6,78,59,0.3); }
+
+        th, td {
+            padding: 0.65rem 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(15,23,42,0.9);
+        }
+
+        th {
+            font-weight: 600;
+            color: #6ee7b7;
+            font-size: 0.83rem;
+        }
+
+        tbody tr:nth-child(even)  { background: rgba(15,23,42,0.6); }
+        tbody tr:nth-child(odd)   { background: rgba(15,23,42,0.4); }
+        tbody tr:last-child td    { border-bottom: none; }
+        tbody tr:hover { background: rgba(52,211,153,0.07); }
+
+        .day-badge {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            background: rgba(52,211,153,0.12);
+            border: 1px solid rgba(52,211,153,0.4);
+            color: #34d399;
+        }
+
+        .empty-row td {
+            padding: 2rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .btn-delete {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(239,68,68,0.5);
+            background: rgba(239,68,68,0.08);
+            color: #fca5a5;
+            font-family: inherit;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: background 0.14s, border-color 0.14s;
+        }
+        .btn-delete:hover {
+            background: rgba(239,68,68,0.18);
+            border-color: rgba(239,68,68,0.8);
+        }
+
+        .count-badge {
+            display: inline-block;
+            padding: 0.12rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(52,211,153,0.12);
+            border: 1px solid rgba(52,211,153,0.35);
+            color: #34d399;
+            font-size: 0.8rem;
+            margin-inline-start: 0.5rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+{% include "header.html" %}
+<div class="neon-bar" aria-hidden="true"></div>
+
+<main class="page-main">
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">حصص النشاط</h1>
+            <p class="page-subtitle">إضافة وإدارة تعيينات المعلمين في حصص النشاط الدراسية.</p>
+        </div>
+        <a href="{% url 'schooldisplay:control_panel' %}" class="btn-back">
+            ← العودة للوحة التحكم
+        </a>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for msg in messages %}
+        <div class="msg msg-{% if msg.tags == 'error' %}error{% else %}success{% endif %}">
+            {{ msg }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="layout">
+
+        <!-- نموذج الإضافة -->
+        <article class="card">
+            <div class="card-inner">
+                <h2 class="card-title">إضافة معلم لحصة نشاط</h2>
+
+                {% if form.errors %}
+                <div class="form-errors">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label class="form-label">{{ form.teacher.label }}</label>
+                        {{ form.teacher }}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">{{ form.day_of_week.label }}</label>
+                        {{ form.day_of_week }}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">{{ form.start_time.label }}</label>
+                        {{ form.start_time }}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">{{ form.end_time.label }}</label>
+                        {{ form.end_time }}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">{{ form.note.label }}</label>
+                        {{ form.note }}
+                    </div>
+
+                    <button type="submit" class="btn-submit">إضافة إلى حصص النشاط</button>
+                </form>
+            </div>
+        </article>
+
+        <!-- جدول السجلات -->
+        <article class="card">
+            <div class="card-inner">
+                <h2 class="card-title">
+                    السجلات الحالية
+                    <span class="count-badge">{{ slots|length }}</span>
+                </h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>المعلم</th>
+                                <th>الرمز</th>
+                                <th>اليوم</th>
+                                <th>من</th>
+                                <th>إلى</th>
+                                <th>ملاحظة</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if slots %}
+                            {% for slot in slots %}
+                            <tr>
+                                <td>{{ slot.teacher.name }}</td>
+                                <td>{{ slot.teacher.code }}</td>
+                                <td><span class="day-badge">{{ slot.get_day_of_week_display }}</span></td>
+                                <td>{{ slot.start_time|time:"H:i" }}</td>
+                                <td>{{ slot.end_time|time:"H:i" }}</td>
+                                <td>{{ slot.note|default:"—" }}</td>
+                                <td>
+                                    <form method="post"
+                                          action="{% url 'schooldisplay:teacher_activity_slot_delete' slot.pk %}"
+                                          onsubmit="return confirm('هل تريد حذف هذا السجل؟')">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-delete">حذف</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="empty-row">
+                                <td colspan="7">لا توجد سجلات حتى الآن. أضف أول معلم باستخدام النموذج.</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </article>
+
+    </div>
+</main>
+
+{% include "footer.html" %}
+
+</body>
+</html>

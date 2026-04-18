@@ -9,14 +9,14 @@
                 <svg viewBox="0 0 32 32" class="brand-svg" aria-hidden="true">
                     <defs>
                         <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#38bdf8"/>
+                            <stop offset="0%" stop-color="#34d399"/>
                             <stop offset="100%" stop-color="#0ea5e9"/>
                         </linearGradient>
                     </defs>
                     <circle cx="16" cy="16" r="13" fill="none" stroke="url(#brandGradient)" stroke-width="1.6"/>
                     <circle cx="16" cy="16" r="9" fill="rgba(15,23,42,0.9)" stroke="#1e293b" stroke-width="1.2"/>
-                    <path d="M16 11v5l3 2" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="16" cy="16" r="0.9" fill="#38bdf8"/>
+                    <path d="M16 11v5l3 2" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="16" cy="16" r="0.9" fill="#34d399"/>
                 </svg>
             </div>
             <div class="site-brand-text">
@@ -104,53 +104,66 @@
 
                     <hr class="main-menu-divider">
 
+                    {% if user.is_authenticated %}
+
+                    <!-- اسم المستخدم -->
+                    <div class="main-menu-user" role="menuitem">
+                        <span class="main-menu-link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 20a8 8 0 0 1 16 0"/>
+                            </svg>
+                        </span>
+                        <span class="main-menu-user-name">{{ user.email|default:user.username }}</span>
+                    </div>
+
+                    <!-- تسجيل الخروج -->
+                    <form method="post" action="{% url 'logout' %}" style="margin:0">
+                        {% csrf_token %}
+                        <button type="submit" class="main-menu-link main-menu-logout" role="menuitem">
+                            <span class="main-menu-link-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                    <polyline points="16 17 21 12 16 7"/>
+                                    <line x1="21" y1="12" x2="9" y2="12"/>
+                                </svg>
+                            </span>
+                            <span>تسجيل الخروج</span>
+                        </button>
+                    </form>
+
+                    {% else %}
+
                     <!-- تسجيل الدخول -->
                     <a href="{% url 'login' %}"
                        class="main-menu-link {% if request.resolver_match.url_name == 'login' %}is-active{% endif %}"
                        role="menuitem">
                         <span class="main-menu-link-icon" aria-hidden="true">
-                            <!-- SVG key -->
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="9" cy="11" r="3.2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.6"/>
-                                <path d="M11.2 12.8 16 17.5h2v-2h2v-2"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      stroke-width="1.6"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"/>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                <polyline points="10 17 15 12 10 7"/>
+                                <line x1="15" y1="12" x2="3" y2="12"/>
                             </svg>
                         </span>
                         <span>تسجيل الدخول</span>
                     </a>
 
                     <!-- تسجيل جديد -->
-                    <a href="#"
-                       class="main-menu-link"
+                    <a href="{% url 'register' %}"
+                       class="main-menu-link {% if request.resolver_match.url_name == 'register' %}is-active{% endif %}"
                        role="menuitem">
                         <span class="main-menu-link-icon" aria-hidden="true">
-                            <!-- SVG user-plus -->
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="10" cy="9" r="3.2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.6"/>
-                                <path d="M4.5 18.5a5.8 5.8 0 0 1 11 0"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      stroke-width="1.6"
-                                      stroke-linecap="round"/>
-                                <path d="M18 9v4M16 11h4"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      stroke-width="1.6"
-                                      stroke-linecap="round"/>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                                <line x1="19" y1="8" x2="19" y2="14"/>
+                                <line x1="22" y1="11" x2="16" y2="11"/>
                             </svg>
                         </span>
                         <span>تسجيل جديد</span>
                     </a>
+
+                    {% endif %}
 
                 </div>
             </div>
@@ -276,7 +289,7 @@
 }
 
 .main-menu-button:hover {
-    border-color: #38bdf8;
+    border-color: #34d399;
     background: radial-gradient(circle at top left, rgba(56,189,248,0.40), rgba(15,23,42,0.98));
     box-shadow:
         0 14px 35px rgba(0,0,0,0.95),
@@ -340,7 +353,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #38bdf8;
+    color: #34d399;
 }
 
 .main-menu-link-icon svg {
@@ -356,6 +369,47 @@
 
 .main-menu-link.is-active {
     background: radial-gradient(circle at right, rgba(56,189,248,0.30), rgba(15,23,42,1));
+}
+
+/* معلومات المستخدم */
+.main-menu-user {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.82rem;
+    color: #34d399;
+    border-bottom: 1px solid rgba(52, 211, 153, 0.15);
+    margin-bottom: 0.1rem;
+}
+
+.main-menu-user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 160px;
+}
+
+/* زر تسجيل الخروج */
+.main-menu-logout {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: #fca5a5;
+    text-align: inherit;
+}
+
+.main-menu-logout .main-menu-link-icon {
+    color: #fca5a5;
+}
+
+.main-menu-logout:hover {
+    background: radial-gradient(circle at right, rgba(239, 68, 68, 0.12), rgba(15,23,42,0.98));
+    color: #fecaca;
+    padding-inline: 1.25rem;
 }
 
 /* الفاصل */

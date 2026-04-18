@@ -2,491 +2,435 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة التوقيت المدرسي - مدرسة الخالدية الابتدائية</title>
+    <title>مدرسة الخالدية الابتدائية - نظام الجداول الدراسية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-main: #020617;
-            --bg-card: #020617;
-            --text-main: #e5e7eb;
-            --text-muted: #9ca3af;
+            --bg:        #020617;
+            --surface:   rgba(15, 23, 42, 0.96);
+            --border:    rgba(148, 163, 184, 0.18);
+            --accent:    #34d399;
+            --accent-lo: rgba(52, 211, 153, 0.18);
+            --text:      #e5e7eb;
+            --muted:     #9ca3af;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
-            color: var(--text-main);
+            font-family: "Tajawal", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
         }
 
-        /* ===== الشريط العلوي ===== */
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: rgba(15, 23, 42, 0.96);
-            -webkit-backdrop-filter: blur(18px); /* دعم سفاري */
-            backdrop-filter: blur(18px);         /* بقية المتصفحات */
-            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .header-inner {
-            max-width: 1280px;
+        /* ───── Utility ───── */
+        .container {
+            max-width: 1140px;
             margin: 0 auto;
-            padding: 0.6rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
+            padding: 0 1.5rem;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-        }
-
-        .brand-icon {
-            width: 2.4rem;
-            height: 2.4rem;
-            border-radius: 999px;
-            border: 1px solid rgba(56, 189, 248, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            box-shadow:
-                0 0 25px rgba(56, 189, 248, 0.4),
-                0 0 0 1px rgba(15, 23, 42, 0.9);
-        }
-
-        .brand-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-title {
-            font-size: 1.1rem;
-            letter-spacing: 0.06em;
-        }
-
-        .brand-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .main-nav {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link {
-            padding: 0.35rem 0.9rem;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            color: #e5e7eb;
-            text-decoration: none;
-            border: 1px solid transparent;
-            background: transparent;
-            transition: all 0.18s ease-out;
-        }
-
-        .nav-link:hover {
-            border-color: rgba(148, 163, 184, 0.6);
-            background: rgba(15, 23, 42, 0.9);
-        }
-
-        .nav-link-active {
-            border-color: rgba(56, 189, 248, 0.8);
-            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), rgba(15, 23, 42, 0.95));
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-        }
-
-        @media (max-width: 768px) {
-            .header-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .main-nav {
-                width: 100%;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-            }
-        }
-
-        /* ===== الحاوية الرئيسية ===== */
-        .page-wrapper {
-            max-width: 1280px;
-            margin: 0 auto 2rem;
-            padding: 1rem 1.5rem 2rem;
-        }
-
-        .layout-wide {
-            display: grid;
-            grid-template-rows: auto auto;
-            gap: 1.5rem;
-        }
-
-        .top-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.7fr);
-            gap: 1.5rem;
-            align-items: stretch;
-        }
-
-        .bottom-row {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.25rem;
-        }
-
-        @media (max-width: 1024px) {
-            .top-row {
-                grid-template-columns: 1fr;
-            }
-
-            .bottom-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ===== الكروت ===== */
-        .card {
-            background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
-            border-radius: 1.4rem;
-            padding: 1.3rem 1.6rem;
-            box-shadow:
-                0 24px 60px rgba(15, 23, 42, 0.9),
-                0 0 0 1px rgba(148, 163, 184, 0.18);
+        /* ───── Hero ───── */
+        .hero {
             position: relative;
             overflow: hidden;
+            padding: 5rem 1.5rem 4rem;
+            text-align: center;
         }
 
-        .card::before {
+        .hero::before {
             content: "";
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(circle at top, rgba(56, 189, 248, 0.2), transparent 55%),
-                radial-gradient(circle at bottom, rgba(59, 130, 246, 0.18), transparent 55%);
-            opacity: 0.9;
+                radial-gradient(ellipse 70% 55% at 50% 0%, rgba(56,189,248,0.22), transparent),
+                radial-gradient(ellipse 60% 40% at 50% 100%, rgba(30,64,175,0.18), transparent);
             pointer-events: none;
         }
 
-        .card-inner {
+        .hero-inner {
             position: relative;
             z-index: 1;
-        }
-
-        .card h2 {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .card-subtitle {
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* ===== بطاقة الساعة ===== */
-        .clock-card {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 340px;
-        }
-
-        .clock-wrapper {
-            margin-top: 1.1rem;
-            width: 260px;
-            height: 260px;
-            border-radius: 50%;
-            background:
-                radial-gradient(circle at top, rgba(56, 189, 248, 0.25), transparent 55%),
-                radial-gradient(circle at bottom, rgba(96, 165, 250, 0.25), transparent 55%),
-                radial-gradient(circle, #020617 0, #020617 55%, #020617 100%);
-            box-shadow:
-                0 0 0 1px rgba(148, 163, 184, 0.35),
-                0 0 45px rgba(56, 189, 248, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .clock-ring {
-            position: absolute;
-            inset: 18px;
-            border-radius: 50%;
-            border: 2px solid rgba(148, 163, 184, 0.25);
-            box-shadow:
-                0 0 0 1px rgba(15, 23, 42, 0.8),
-                0 0 40px rgba(56, 189, 248, 0.5) inset;
-        }
-
-        .clock-time {
-            position: relative;
-            z-index: 1;
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: 0.18em;
-        }
-
-        .clock-date {
-            position: relative;
-            z-index: 1;
-            margin-top: 0.3rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .current-period-box {
-            margin-top: 1.1rem;
-            width: 100%;
-            border-radius: 999px;
-            padding: 0.7rem 1rem;
-            background: linear-gradient(90deg, rgba(34, 197, 94, 0.25), rgba(56, 189, 248, 0.12));
-            border: 1px solid rgba(34, 197, 94, 0.5);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             gap: 1rem;
         }
 
-        .current-period-title {
-            font-weight: 600;
-        }
-
-        .current-countdown {
-            font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
-
-        .no-period {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .small-note {
-            font-size: 0.8rem;
-            color: #d1d5db;
-            margin-top: 0.15rem;
-        }
-
-        .notes-list {
-            margin-top: 0.75rem;
-            padding-right: 1.1rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-            list-style: disc;
-        }
-
-        /* ===== جدول اليوم والجداول الأخرى ===== */
-        .table-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .badge {
+        .school-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
-            padding: 0.1rem 0.6rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            border: 1px solid rgba(148, 163, 184, 0.5);
-            color: var(--text-muted);
-        }
-
-        .badge-dot {
-            width: 0.4rem;
-            height: 0.4rem;
-            border-radius: 999px;
-            background: #22c55e;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0.9rem;
-            font-size: 0.88rem;
-        }
-
-        th, td {
-            padding: 0.35rem 0.4rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(30, 64, 175, 0.35);
-        }
-
-        th {
-            font-weight: 600;
-            color: #e5e7eb;
-            background: radial-gradient(circle at top, rgba(30, 64, 175, 0.4), rgba(15, 23, 42, 0.4));
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        tbody tr:nth-child(even) {
-            background: linear-gradient(90deg, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95));
-        }
-
-        tbody tr:nth-child(odd) {
-            background: linear-gradient(90deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9));
-        }
-
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.15rem 0.55rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            border: 1px solid transparent;
-        }
-
-        .tag-start {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.4);
-            color: #bbf7d0;
-        }
-
-        .tag-class {
-            background: rgba(59, 130, 246, 0.12);
-            border-color: rgba(59, 130, 246, 0.5);
-            color: #bfdbfe;
-        }
-
-        .tag-break {
-            background: rgba(234, 179, 8, 0.1);
-            border-color: rgba(234, 179, 8, 0.5);
-            color: #fef9c3;
-        }
-
-        .tag-end {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.5);
-            color: #fecaca;
-        }
-
-        .tag-generic {
-            background: rgba(148, 163, 184, 0.12);
-            border-color: rgba(148, 163, 184, 0.5);
-            color: #e5e7eb;
-        }
-
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.15rem 0.6rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            border: 1px solid transparent;
-        }
-
-        .status-current {
-            background: rgba(34, 197, 94, 0.2);
-            border-color: rgba(34, 197, 94, 0.6);
-            color: #bbf7d0;
-        }
-
-        .status-next {
-            background: rgba(56, 189, 248, 0.15);
-            border-color: rgba(56, 189, 248, 0.55);
-            color: #bae6fd;
-        }
-
-        .status-empty {
-            background: rgba(15, 23, 42, 0.9);
-            border-color: rgba(55, 65, 81, 0.8);
-            color: #6b7280;
-        }
-
-        .error-text {
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: #fecaca;
-            text-align: center;
-        }
-
-        .table-wrapper {
-            max-height: 270px;
-            overflow-y: auto;
-            margin-top: 0.5rem;
-            border-radius: 0.75rem;
-            border: 1px solid rgba(30, 64, 175, 0.5);
-            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 1));
-        }
-
-        .sub-title {
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* ===== الفوتر ===== */
-        .site-footer {
-            border-top: 1px solid rgba(148, 163, 184, 0.25);
-            background: rgba(15, 23, 42, 0.98);
-        }
-
-        .footer-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0.7rem 1.5rem 0.9rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
             gap: 0.4rem;
+            padding: 0.35rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(52, 211, 153, 0.55);
+            background: rgba(52, 211, 153, 0.08);
+            font-size: 0.82rem;
+            color: var(--accent);
+            letter-spacing: 0.04em;
+        }
+
+        .hero-logo {
+            width: 5.5rem;
+            height: 5.5rem;
+            border-radius: 50%;
+            background: radial-gradient(circle at top, rgba(56,189,248,0.3), rgba(15,23,42,0.95));
+            border: 1px solid rgba(56,189,248,0.5);
+            box-shadow:
+                0 0 40px rgba(56,189,248,0.5),
+                0 0 80px rgba(56,189,248,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-logo svg {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #e0f2fe 0%, #34d399 50%, #7dd3fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #a7f3d0;
+        }
+
+        .hero-desc {
+            font-size: 0.95rem;
+            color: var(--muted);
+            max-width: 480px;
+        }
+
+        /* ───── Auth Section ───── */
+        .auth-section {
+            padding: 0 1.5rem 5rem;
+        }
+
+        .auth-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.75rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 700px) {
+            .auth-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ───── Cards ───── */
+        .auth-card {
+            position: relative;
+            border-radius: 1.5rem;
+            padding: 2rem 1.8rem;
+            border: 1px solid var(--border);
+            background:
+                radial-gradient(circle at top left, rgba(56,189,248,0.12), transparent 60%),
+                rgba(15, 23, 42, 0.8);
+            box-shadow:
+                0 24px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(56,189,248,0.07);
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: "";
+            position: absolute;
+            inset-inline-end: -60px;
+            inset-block-start: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56,189,248,0.12), transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-inner { position: relative; z-index: 1; }
+
+        /* ───── Login Card ───── */
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-icon {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 0.75rem;
+            background: rgba(56,189,248,0.15);
+            border: 1px solid rgba(56,189,248,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .card-icon svg {
+            width: 1.2rem;
+            height: 1.2rem;
+            color: var(--accent);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .card-desc {
+            font-size: 0.84rem;
+            color: var(--muted);
+            margin-bottom: 1.4rem;
+            line-height: 1.6;
+        }
+
+        /* ───── Form ───── */
+        .form-group { margin-bottom: 1rem; }
+
+        .form-label {
+            display: block;
+            font-size: 0.84rem;
+            margin-bottom: 0.35rem;
+            color: #d1d5db;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.72rem 0.9rem;
+            border-radius: 0.85rem;
+            border: 1px solid rgba(6, 78, 59, 0.8);
+            background: rgba(2, 6, 23, 0.9);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.16s, box-shadow 0.16s;
+            box-shadow: inset 0 0 16px rgba(2,6,23,0.8);
+        }
+
+        .form-input::placeholder { color: #4b5563; }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow:
+                0 0 0 3px rgba(56,189,248,0.15),
+                inset 0 0 16px rgba(2,6,23,0.8);
+        }
+
+        .form-error {
+            margin-bottom: 1rem;
+            padding: 0.65rem 0.9rem;
+            border-radius: 0.8rem;
+            border: 1px solid rgba(248, 113, 113, 0.7);
+            background: rgba(127, 29, 29, 0.2);
+            font-size: 0.82rem;
+            color: #fecaca;
+        }
+
+        /* ───── Buttons ───── */
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #a7f3d0, #34d399);
+            color: #0b1120;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow:
+                0 0 24px rgba(56,189,248,0.7),
+                0 8px 20px rgba(2,6,23,0.8);
+            transition: transform 0.15s, box-shadow 0.15s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 0 32px rgba(56,189,248,0.9),
+                0 12px 28px rgba(2,6,23,0.9);
+        }
+
+        .btn-primary:active { transform: translateY(0) scale(0.98); }
+
+        .login-footer {
+            margin-top: 1rem;
+            text-align: center;
             font-size: 0.8rem;
-            color: var(--text-muted);
+            color: var(--muted);
         }
 
-        .footer-main {
+        .login-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .login-footer a:hover { text-decoration: underline; }
+
+        /* ───── Register Card ───── */
+        .register-card {
+            display: flex;
+            flex-direction: column;
+            background:
+                radial-gradient(circle at bottom right, rgba(30,64,175,0.2), transparent 60%),
+                rgba(15, 23, 42, 0.8);
+        }
+
+        .register-card .card-inner {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 0;
+        }
+
+        .register-features {
+            list-style: none;
+            margin: 1rem 0 1.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            flex: 1;
+        }
+
+        .register-features li {
             display: flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.6rem;
+            font-size: 0.88rem;
+            color: #d1d5db;
         }
 
-        .footer-meta {
+        .register-features li::before {
+            content: "";
+            width: 0.45rem;
+            height: 0.45rem;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+            box-shadow: 0 0 6px rgba(56,189,248,0.8);
+        }
+
+        .btn-outline {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 999px;
+            border: 1.5px solid rgba(56,189,248,0.7);
+            background: transparent;
+            color: var(--accent);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 0 16px rgba(56,189,248,0.2);
+            transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
+        }
+
+        .btn-outline:hover {
+            background: rgba(56,189,248,0.1);
+            box-shadow: 0 0 28px rgba(56,189,248,0.4);
+            transform: translateY(-2px);
+        }
+
+        /* ───── Divider ───── */
+        .divider {
             display: flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.7rem;
+            margin: 1.1rem 0;
+            color: var(--muted);
+            font-size: 0.78rem;
         }
 
-        .footer-separator {
-            opacity: 0.5;
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
         }
 
-        @media (max-width: 768px) {
-            .footer-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        /* ───── Features Strip ───── */
+        .features-strip {
+            padding: 0 1.5rem 5rem;
+        }
+
+        .features-grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+        }
+
+        @media (max-width: 700px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 1.4rem 1rem;
+            border-radius: 1.1rem;
+            border: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .feature-icon {
+            width: 2.8rem;
+            height: 2.8rem;
+            border-radius: 0.8rem;
+            background: rgba(56,189,248,0.1);
+            border: 1px solid rgba(56,189,248,0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.7rem;
+        }
+
+        .feature-icon svg {
+            width: 1.3rem;
+            height: 1.3rem;
+            color: var(--accent);
+        }
+
+        .feature-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .feature-desc {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ───── Section label ───── */
+        .section-label {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
         }
     </style>
 </head>
@@ -494,442 +438,202 @@
 
 {% include "header.html" %}
 
-<main class="page-wrapper">
-    <div class="layout-wide">
+<!-- ═══════════ Hero ═══════════ -->
+<section class="hero">
+    <div class="hero-inner">
 
-        <!-- الصف العلوي: الساعة + جدول اليوم -->
-        <section class="top-row">
+        <div class="school-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            مدرسة حكومية ابتدائية — المملكة العربية السعودية
+        </div>
 
-            <!-- بطاقة الساعة / الحصة الحالية -->
-            <article class="card clock-card">
-                <div class="card-inner">
-                    <h2>الوقت الحالي</h2>
-                    <p class="card-subtitle" id="todayLabel">--</p>
+        <div class="hero-logo">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="24" r="19" stroke="#34d399" stroke-width="2"/>
+                <circle cx="24" cy="24" r="13" fill="rgba(15,23,42,0.9)" stroke="#1e3a5f" stroke-width="1.5"/>
+                <path d="M24 17v7l4.5 3" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="24" cy="24" r="1.2" fill="#34d399"/>
+                <circle cx="24" cy="7" r="1.2" fill="#34d399" opacity=".4"/>
+                <circle cx="24" cy="41" r="1.2" fill="#34d399" opacity=".4"/>
+                <circle cx="7" cy="24" r="1.2" fill="#34d399" opacity=".4"/>
+                <circle cx="41" cy="24" r="1.2" fill="#34d399" opacity=".4"/>
+            </svg>
+        </div>
 
-                    <div class="clock-wrapper">
-                        <div class="clock-ring"></div>
-                        <div>
-                            <div id="timeNow" class="clock-time">--:--:--</div>
-                            <div id="dateNow" class="clock-date">-- --- ----</div>
-                        </div>
-                    </div>
+        <h1 class="hero-title">مدرسة الخالدية الابتدائية</h1>
+        <p class="hero-subtitle">نظام إدارة الجداول الدراسية الرقمي</p>
+        <p class="hero-desc">
+            منصة متكاملة لعرض وإدارة الجداول الدراسية والتوقيت للمعلمين والإدارة المدرسية.
+        </p>
 
-                    <div id="currentInfoBox" class="current-period-box hidden">
-                        <div>
-                            <div class="current-period-title" id="currentPeriodText"></div>
-                            <div id="nextPeriodText" class="small-note"></div>
-                        </div>
-                        <div class="current-countdown" id="countdownText">--:--</div>
-                    </div>
-
-                    <div id="noCurrentPeriod" class="no-period">
-                        لا توجد فترة جارية في هذا الوقت.
-                    </div>
-                </div>
-            </article>
-
-            <!-- بطاقة جدول اليوم -->
-            <article class="card">
-                <div class="card-inner">
-                    <div class="table-card-header">
-                        <div>
-                            <h2>جدول اليوم</h2>
-                            <div class="card-subtitle" id="scheduleMetaText">
-                                تاريخ اليوم: غير محدد • نوع الجدول: غير معروف
-                            </div>
-                        </div>
-                        <div class="badge">
-                            <span class="badge-dot"></span>
-                            <span id="badgeStatusText">مزامنة مع التوقيت الحالي</span>
-                        </div>
-                    </div>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>الترتيب</th>
-                                <th>الفترة</th>
-                                <th>النوع</th>
-                                <th>من</th>
-                                <th>إلى</th>
-                                <th>الحالة</th>
-                            </tr>
-                            </thead>
-                            <tbody id="mainScheduleBody">
-                            <tr>
-                                <td colspan="6">جاري تحميل جدول اليوم...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div id="scheduleError" class="error-text hidden"></div>
-                </div>
-            </article>
-        </section>
-
-        <!-- الصف السفلي: الجداول الأخرى -->
-        <section class="bottom-row">
-
-            <!-- جدول الانتظار -->
-            <article class="card">
-                <div class="card-inner">
-                    <h2>جدول الانتظار للمعلمين (اليوم)</h2>
-                    <p class="sub-title">يعرض جميع حصص الانتظار المحددة لليوم الدراسي الحالي.</p>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>المعلم</th>
-                                <th>الرمز</th>
-                                <th>من</th>
-                                <th>إلى</th>
-                                <th>ملاحظات</th>
-                            </tr>
-                            </thead>
-                            <tbody id="waitingSlotsBody">
-                            <tr>
-                                <td colspan="5">جاري تحميل جدول حصص الانتظار...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div id="waitingError" class="error-text hidden"></div>
-                </div>
-            </article>
-
-            <!-- جدول النشاط -->
-            <article class="card">
-                <div class="card-inner">
-                    <h2>جدول النشاط للمعلمين (اليوم)</h2>
-                    <p class="sub-title">يعرض جميع حصص النشاط المسجلة لليوم الدراسي.</p>
-
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>المعلم</th>
-                                <th>الرمز</th>
-                                <th>من</th>
-                                <th>إلى</th>
-                                <th>ملاحظات</th>
-                            </tr>
-                            </thead>
-                            <tbody id="activitySlotsBody">
-                            <tr>
-                                <td colspan="5">جاري تحميل جدول حصص النشاط...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div id="activityError" class="error-text hidden"></div>
-                </div>
-            </article>
-
-            <!-- ملاحظات النظام -->
-            <article class="card">
-                <div class="card-inner">
-                    <h2>ملاحظات النظام</h2>
-                    <p class="sub-title">
-                        يتم تحديث العد التنازلي والوقت تلقائيًا كل ثانية، بينما يتم تحديث الجداول كل مرة تعيد فيها تحميل الصفحة.
-                    </p>
-
-                    <ul class="notes-list">
-                        <li>يعتمد جدول اليوم على <strong>DaySchedule</strong> و <strong>SpecialDay</strong> في قاعدة البيانات.</li>
-                        <li>جداول الانتظار والنشاط تُقرأ من <strong>TeacherWaitingSlot</strong> و <strong>TeacherActivitySlot</strong>.</li>
-                        <li>تأكد من ضبط التوقيت الزمني في الإعدادات <code>TIME_ZONE</code> على <strong>Asia/Riyadh</strong>.</li>
-                        <li>يمكن تخصيص هذه البطاقة لاحقًا لعرض تنبيهات أو رسائل إدارية.</li>
-                    </ul>
-                </div>
-            </article>
-        </section>
     </div>
-</main>
+</section>
+
+<!-- ═══════════ Auth Section ═══════════ -->
+<section class="auth-section">
+    <p class="section-label">دخول النظام</p>
+
+    <div class="auth-grid">
+
+        <!-- ── بطاقة تسجيل الدخول ── -->
+        <article class="auth-card">
+            <div class="card-inner">
+
+                <div class="card-heading">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">تسجيل الدخول</h2>
+                </div>
+
+                <p class="card-desc">
+                    ادخل إلى لوحة التوقيت المدرسي باستخدام بريدك الإلكتروني وكلمة المرور.
+                </p>
+
+                {% if login_error %}
+                <div class="form-error">{{ login_error }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'schooldisplay:home' %}{% if next %}?next={{ next }}{% endif %}" novalidate>
+                    {% csrf_token %}
+                    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">البريد الإلكتروني</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-input"
+                            placeholder="example@gmail.com"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">كلمة المرور</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-input"
+                            placeholder="••••••••"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        دخول إلى النظام
+                    </button>
+                </form>
+
+                <div class="login-footer">
+                    ليس لديك حساب؟
+                    <a href="{% url 'register' %}">إنشاء حساب جديد</a>
+                </div>
+
+            </div>
+        </article>
+
+        <!-- ── بطاقة التسجيل الجديد ── -->
+        <article class="auth-card register-card">
+            <div class="card-inner">
+
+                <div class="card-heading">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                            <line x1="19" y1="8" x2="19" y2="14"/>
+                            <line x1="22" y1="11" x2="16" y2="11"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">إنشاء حساب جديد</h2>
+                </div>
+
+                <p class="card-desc">
+                    انضم إلى نظام مدرسة الخالدية وابدأ في إدارة الجداول الدراسية بسهولة وكفاءة.
+                </p>
+
+                <ul class="register-features">
+                    <li>عرض جدول اليوم الدراسي بشكل فوري</li>
+                    <li>متابعة حصص الانتظار والنشاط للمعلمين</li>
+                    <li>إدارة الجداول والأوقات من لوحة التحكم</li>
+                    <li>عرض التوقيت الحالي والحصة الجارية</li>
+                </ul>
+
+                <div class="divider">أو</div>
+
+                <a href="{% url 'register' %}" class="btn-outline">إنشاء حساب</a>
+
+            </div>
+        </article>
+
+    </div>
+</section>
+
+<!-- ═══════════ Features ═══════════ -->
+<section class="features-strip">
+    <p class="section-label">مميزات النظام</p>
+
+    <div class="features-grid">
+
+        <div class="feature-item">
+            <div class="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="8"/>
+                    <path d="M12 8v4l2.5 1.5"/>
+                </svg>
+            </div>
+            <div class="feature-title">توقيت حي</div>
+            <p class="feature-desc">
+                عرض الوقت الحالي والحصة الجارية مع عداد تنازلي تلقائي ومحدّث كل ثانية.
+            </p>
+        </div>
+
+        <div class="feature-item">
+            <div class="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+            </div>
+            <div class="feature-title">جداول ذكية</div>
+            <p class="feature-desc">
+                إدارة جداول الأسبوع الدراسي مع دعم الأيام الخاصة والجداول المخصصة.
+            </p>
+        </div>
+
+        <div class="feature-item">
+            <div class="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </div>
+            <div class="feature-title">جداول المعلمين</div>
+            <p class="feature-desc">
+                متابعة حصص الانتظار والنشاط لجميع المعلمين خلال اليوم الدراسي.
+            </p>
+        </div>
+
+    </div>
+</section>
 
 {% include "footer.html" %}
-
-<script>
-(function () {
-    const timeNow = document.getElementById("timeNow");
-    const dateNow = document.getElementById("dateNow");
-    const todayLabel = document.getElementById("todayLabel");
-
-    const mainScheduleBody = document.getElementById("mainScheduleBody");
-    const scheduleMetaText = document.getElementById("scheduleMetaText");
-    const scheduleError = document.getElementById("scheduleError");
-
-    const currentInfoBox = document.getElementById("currentInfoBox");
-    const currentPeriodText = document.getElementById("currentPeriodText");
-    const nextPeriodText = document.getElementById("nextPeriodText");
-    const countdownText = document.getElementById("countdownText");
-    const noCurrentPeriod = document.getElementById("noCurrentPeriod");
-
-    const waitingSlotsBody = document.getElementById("waitingSlotsBody");
-    const waitingError = document.getElementById("waitingError");
-
-    const activitySlotsBody = document.getElementById("activitySlotsBody");
-    const activityError = document.getElementById("activityError");
-
-    let schedulePeriods = [];
-
-    function formatTime(date) {
-        const h = String(date.getHours()).padStart(2, "0");
-        const m = String(date.getMinutes()).padStart(2, "0");
-        const s = String(date.getSeconds()).padStart(2, "0");
-        return `${h}:${m}:${s}`;
-    }
-
-    function formatDate(date) {
-        const days = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-        const dayName = days[date.getDay()];
-        return `${dayName} • ${date.getFullYear()} / ${date.getMonth() + 1} / ${date.getDate()}`;
-    }
-
-    function applyTagClass(type) {
-        switch (type) {
-            case "start": return "tag-start";
-            case "class": return "tag-class";
-            case "break": return "tag-break";
-            case "end": return "tag-end";
-            default: return "tag-generic";
-        }
-    }
-
-    function typeLabel(type) {
-        switch (type) {
-            case "start": return "بداية الدوام";
-            case "class": return "حصة";
-            case "break": return "فسحة";
-            case "end": return "نهاية الدوام";
-            default: return "فترة";
-        }
-    }
-
-    async function loadTodaySchedule() {
-        try {
-            const res = await fetch("/timetable/api/today-schedule/");
-            const data = await res.json();
-
-            if (!data.success) {
-                mainScheduleBody.innerHTML = `<tr><td colspan="6">${data.message || "لا يوجد جدول لهذا اليوم."}</td></tr>`;
-                scheduleError.textContent = "";
-                scheduleError.classList.add("hidden");
-                currentInfoBox.classList.add("hidden");
-                noCurrentPeriod.classList.remove("hidden");
-                schedulePeriods = [];
-                return;
-            }
-
-            scheduleError.classList.add("hidden");
-
-            const schedule = data.schedule || {};
-            const dayName = schedule.day_name || "غير معروف";
-            const desc = schedule.description || "جدول افتراضي";
-            scheduleMetaText.textContent = `اليوم: ${dayName} • نوع الجدول: ${desc}`;
-            todayLabel.textContent = `اليوم: ${dayName}`;
-
-            schedulePeriods = data.periods || [];
-
-            renderMainScheduleTable();
-            updateClock();
-        } catch (err) {
-            mainScheduleBody.innerHTML = `<tr><td colspan="6">فشل الاتصال بخادم الجدول.</td></tr>`;
-            scheduleError.textContent = "تعذر تحميل جدول اليوم. تحقق من الاتصال أو من إعدادات API.";
-            scheduleError.classList.remove("hidden");
-            schedulePeriods = [];
-        }
-    }
-
-    function renderMainScheduleTable() {
-        if (!schedulePeriods.length) {
-            mainScheduleBody.innerHTML = `<tr><td colspan="6">لا توجد فترات محددة لهذا اليوم.</td></tr>`;
-            return;
-        }
-
-        mainScheduleBody.innerHTML = "";
-        const now = new Date();
-
-        let currentId = null;
-        let nextId = null;
-
-        schedulePeriods.forEach((p, index) => {
-            const start = new Date(p.start);
-            const end = new Date(p.end);
-            if (now >= start && now <= end) {
-                currentId = index;
-            } else if (now < start && nextId === null) {
-                nextId = index;
-            }
-        });
-
-        schedulePeriods.forEach((p, index) => {
-            const startD = new Date(p.start);
-            const endD = new Date(p.end);
-
-            const tr = document.createElement("tr");
-
-            let statusHtml = `<span class="status-pill status-empty">—</span>`;
-            if (index === currentId) {
-                statusHtml = `<span class="status-pill status-current">جارية الآن</span>`;
-            } else if (index === nextId) {
-                statusHtml = `<span class="status-pill status-next">تبدأ لاحقًا</span>`;
-            }
-
-            tr.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${p.name}</td>
-                <td><span class="tag ${applyTagClass(p.type)}">${typeLabel(p.type)}</span></td>
-                <td>${startD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                <td>${endD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                <td>${statusHtml}</td>
-            `;
-            mainScheduleBody.appendChild(tr);
-        });
-    }
-
-    async function loadWaitingSlots() {
-        try {
-            const res = await fetch("/timetable/api/teacher-waiting-slots/");
-            const data = await res.json();
-
-            if (!data.success) {
-                waitingSlotsBody.innerHTML = `<tr><td colspan="5">${data.message || "لا توجد حصص انتظار لهذا اليوم."}</td></tr>`;
-                waitingError.classList.add("hidden");
-                return;
-            }
-
-            const slots = data.slots || [];
-            if (!slots.length) {
-                waitingSlotsBody.innerHTML = `<tr><td colspan="5">لا توجد حصص انتظار لليوم الحالي.</td></tr>`;
-                waitingError.classList.add("hidden");
-                return;
-            }
-
-            waitingSlotsBody.innerHTML = "";
-            slots.forEach((s) => {
-                const startD = new Date(s.start);
-                const endD = new Date(s.end);
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${s.teacher_name || "-"}</td>
-                    <td>${s.teacher_code || "-"}</td>
-                    <td>${startD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${endD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${s.note || "-"}</td>
-                `;
-                waitingSlotsBody.appendChild(tr);
-            });
-
-            waitingError.classList.add("hidden");
-        } catch (err) {
-            waitingSlotsBody.innerHTML = `<tr><td colspan="5">فشل في تحميل جدول حصص الانتظار.</td></tr>`;
-            waitingError.textContent = "تعذر الوصول إلى API حصص الانتظار. تأكد من الإعدادات.";
-            waitingError.classList.remove("hidden");
-        }
-    }
-
-    async function loadActivitySlots() {
-        try {
-            const res = await fetch("/timetable/api/teacher-activity-slots/");
-            const data = await res.json();
-
-            if (!data.success) {
-                activitySlotsBody.innerHTML = `<tr><td colspan="5">${data.message || "لا توجد حصص نشاط لهذا اليوم."}</td></tr>`;
-                activityError.classList.add("hidden");
-                return;
-            }
-
-            const slots = data.slots || [];
-            if (!slots.length) {
-                activitySlotsBody.innerHTML = `<tr><td colspan="5">لا توجد حصص نشاط لليوم الحالي.</td></tr>`;
-                activityError.classList.add("hidden");
-                return;
-            }
-
-            activitySlotsBody.innerHTML = "";
-            slots.forEach((s) => {
-                const startD = new Date(s.start);
-                const endD = new Date(s.end);
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${s.teacher_name || "-"}</td>
-                    <td>${s.teacher_code || "-"}</td>
-                    <td>${startD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${endD.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"})}</td>
-                    <td>${s.note || "-"}</td>
-                `;
-                activitySlotsBody.appendChild(tr);
-            });
-
-            activityError.classList.add("hidden");
-        } catch (err) {
-            activitySlotsBody.innerHTML = `<tr><td colspan="5">فشل في تحميل جدول حصص النشاط.</td></tr>`;
-            activityError.textContent = "تعذر الوصول إلى API حصص النشاط. تأكد من الإعدادات.";
-            activityError.classList.remove("hidden");
-        }
-    }
-
-    function updateClock() {
-        const now = new Date();
-        timeNow.textContent = formatTime(now);
-        dateNow.textContent = formatDate(now);
-
-        if (!schedulePeriods.length) {
-            currentInfoBox.classList.add("hidden");
-            noCurrentPeriod.classList.remove("hidden");
-            return;
-        }
-
-        let current = null;
-        let next = null;
-
-        for (let i = 0; i < schedulePeriods.length; i++) {
-            const p = schedulePeriods[i];
-            const start = new Date(p.start);
-            const end = new Date(p.end);
-
-            if (now >= start && now <= end) {
-                current = p;
-            } else if (now < start && !next) {
-                next = p;
-            }
-        }
-
-        if (current) {
-            currentInfoBox.classList.remove("hidden");
-            noCurrentPeriod.classList.add("hidden");
-
-            currentPeriodText.textContent = `الفترة الحالية: ${current.name} (${typeLabel(current.type)})`;
-
-            if (next) {
-                nextPeriodText.textContent =
-                    `الفترة التالية: ${next.name} (${typeLabel(next.type)}) عند ` +
-                    new Date(next.start).toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"});
-            } else {
-                nextPeriodText.textContent = "لا توجد فترات لاحقة اليوم.";
-            }
-
-            const end = new Date(current.end);
-            const diff = Math.max(0, Math.floor((end - now) / 1000));
-            const m = String(Math.floor(diff / 60)).padStart(2, "0");
-            const s = String(diff % 60).padStart(2, "0");
-            countdownText.textContent = `${m}:${s}`;
-        } else {
-            currentInfoBox.classList.add("hidden");
-            noCurrentPeriod.classList.remove("hidden");
-        }
-    }
-
-    loadTodaySchedule();
-    loadWaitingSlots();
-    loadActivitySlots();
-    setInterval(updateClock, 1000);
-})();
-</script>
 
 </body>
 </html>

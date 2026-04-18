@@ -15,8 +15,8 @@
             --bg-elevated: #020617;
             --text-main: #e5e7eb;
             --text-muted: #9ca3af;
-            --accent: #0ea5e9;
-            --accent-strong: #38bdf8;
+            --accent: #10b981;
+            --accent-strong: #34d399;
             --border-subtle: rgba(148,163,184,0.35);
             --success: #22c55e;
             --warning: #eab308;
@@ -34,7 +34,7 @@
 
             /* خلفية رقمية 3D مع شبكة */
             background:
-                radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 55%),
+                radial-gradient(circle at top, rgba(52, 211, 153, 0.12), transparent 55%),
                 radial-gradient(circle at bottom, rgba(15, 23, 42, 0.95), #020617),
                 repeating-linear-gradient(
                     to right,
@@ -66,8 +66,8 @@
             margin: 0 auto;
             height: 3px;
             border-radius: 999px;
-            background: linear-gradient(to left, transparent, #38bdf8, transparent);
-            box-shadow: 0 0 16px rgba(56, 189, 248, 0.9);
+            background: linear-gradient(to left, transparent, #34d399, transparent);
+            box-shadow: 0 0 16px rgba(52, 211, 153, 0.9);
             opacity: 0.85;
         }
 
@@ -125,7 +125,7 @@
             box-shadow:
                 0 28px 70px rgba(0, 0, 0, 0.95),
                 0 0 35px rgba(15, 23, 42, 0.95);
-            border-color: rgba(56, 189, 248, 0.7);
+            border-color: rgba(52, 211, 153, 0.7);
         }
 
         .card-header {
@@ -467,6 +467,90 @@
             font-size: 0.78rem;
             color: var(--text-muted);
         }
+
+        /* ── صناديق الحصة الحالية ── */
+        .period-info-box {
+            width: 100%;
+            border-radius: 1rem;
+            padding: 0.85rem 1rem;
+            text-align: center;
+            margin-top: 0.6rem;
+        }
+
+        /* صندوق الحصة الدراسية */
+        .class-box {
+            background: linear-gradient(135deg, rgba(52,211,153,0.15), rgba(15,23,42,0.95));
+            border: 1px solid rgba(52,211,153,0.6);
+            box-shadow: 0 0 20px rgba(52,211,153,0.25);
+        }
+
+        .period-badge {
+            display: inline-block;
+            padding: 0.15rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            background: rgba(52,211,153,0.2);
+            border: 1px solid rgba(52,211,153,0.5);
+            color: #34d399;
+            margin-bottom: 0.5rem;
+        }
+
+        .period-main-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e5e7eb;
+            margin-bottom: 0.15rem;
+        }
+
+        .period-sub {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            min-height: 1rem;
+        }
+
+        .period-countdown {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            color: #34d399;
+            text-shadow: 0 0 18px rgba(52,211,153,0.7);
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+            margin-bottom: 0.35rem;
+        }
+
+        .period-ends-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* صندوق الفترات غير الدراسية */
+        .other-box {
+            background: rgba(15,23,42,0.7);
+            border: 1px solid rgba(148,163,184,0.25);
+        }
+
+        .other-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e5e7eb;
+            margin-bottom: 0.3rem;
+        }
+
+        .other-next {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .no-current-period {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 0.6rem;
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -509,79 +593,70 @@
                     </div>
                 </div>
 
-                <p class="no-current-period">
+                <!-- حصة دراسية جارية: يظهر فقط عند type == class -->
+                <div id="class-box" class="period-info-box class-box hidden">
+                    <span class="period-badge">حصة دراسية</span>
+                    <div id="class-name" class="period-main-name"></div>
+                    <div id="class-subject" class="period-sub"></div>
+                    <div id="class-countdown" class="period-countdown">--:--</div>
+                    <div id="class-ends" class="period-ends-label"></div>
+                </div>
+
+                <!-- فترة غير دراسية (فسحة، بداية، نهاية) -->
+                <div id="other-box" class="period-info-box other-box hidden">
+                    <div id="other-label" class="other-label"></div>
+                    <div id="other-next" class="other-next"></div>
+                </div>
+
+                <!-- لا توجد فترة -->
+                <p id="no-period" class="no-current-period">
                     لا توجد فترة جارية في هذا الوقت.
                 </p>
             </div>
 
             <!-- جزء جدول حصص اليوم -->
             <section aria-label="جدول حصص اليوم">
-                <h3 class="schedule-section-title">جدول حصص اليوم</h3>
+                <h3 class="schedule-section-title">
+                    جدول حصص اليوم
+                    {% if day_name %}<span style="color:var(--text-muted);font-size:0.82rem;margin-inline-start:0.5rem;">— {{ day_name }}</span>{% endif %}
+                </h3>
 
                 <div class="table-wrapper">
                     <table>
                         <thead>
                         <tr>
-                            <th>الحصة</th>
+                            <th>#</th>
+                            <th>الفترة</th>
                             <th>الوقت</th>
                             <th>المادة</th>
-                            <th>المعلم</th>
                             <th>الحالة</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>07:00 - 07:45</td>
-                            <td>القرآن الكريم</td>
-                            <td>أ. أحمد</td>
-                            <td>
-                                <span class="state-chip state-finished">انتهت</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>07:50 - 08:35</td>
-                            <td>اللغة العربية</td>
-                            <td>أ. خالد</td>
-                            <td>
-                                <span class="state-chip state-current">الحصة الحالية</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>08:40 - 09:25</td>
-                            <td>الرياضيات</td>
-                            <td>أ. محمد</td>
-                            <td>
-                                <span class="state-chip state-upcoming">قادمة</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>09:45 - 10:30</td>
-                            <td>العلوم</td>
-                            <td>أ. سعد</td>
-                            <td>
-                                <span class="state-chip state-upcoming">قادمة</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>10:35 - 11:20</td>
-                            <td>التربية الإسلامية</td>
-                            <td>أ. يوسف</td>
-                            <td>
-                                <span class="state-chip state-upcoming">قادمة</span>
-                            </td>
-                        </tr>
+                        {% if today_lessons %}
+                            {% for lesson in today_lessons %}
+                            <tr id="row-{{ lesson.id }}">
+                                <td>{{ lesson.order }}</td>
+                                <td>{{ lesson.name }}</td>
+                                <td style="white-space:nowrap">{{ lesson.start_time }} – {{ lesson.end_time }}</td>
+                                <td>{{ lesson.subject|default:"—" }}</td>
+                                <td>
+                                    {% if lesson.status == 'current' %}
+                                        <span class="state-chip state-current">جارية الآن</span>
+                                    {% elif lesson.status == 'finished' %}
+                                        <span class="state-chip state-finished">انتهت</span>
+                                    {% else %}
+                                        <span class="state-chip state-upcoming">قادمة</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="5" style="color:var(--text-muted);padding:1.2rem">لا توجد حصص مسجلة لهذا اليوم.</td></tr>
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
-
-                <p class="table-footnote">
-                    عند تفعيل واجهة الـ API سيتم تحميل الجدول مباشرة من قاعدة البيانات.
-                </p>
             </section>
         </div>
     </section>
@@ -691,39 +766,99 @@
 
 {% include "footer.html" %}
 
+{{ today_lessons|json_script:"schedule-data" }}
+
 <script>
-    function updateClock() {
-        const now = new Date();
-        const optionsTime = {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: false
-        };
-        const optionsDate = {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit"
-        };
-        const optionsDay = {
-            weekday: "long"
-        };
+(function () {
 
-        const timeEl = document.getElementById("clock-time");
-        const dateEl = document.getElementById("clock-date");
-        const dayEl = document.getElementById("clock-day");
+    /* ── بيانات الجدول من Django ── */
+    const raw = document.getElementById("schedule-data");
+    const PERIODS = raw ? JSON.parse(raw.textContent) : [];
 
-        if (!timeEl || !dateEl || !dayEl) {
-            return;
-        }
-
-        timeEl.textContent = now.toLocaleTimeString("ar-SA", optionsTime);
-        dateEl.textContent = now.toLocaleDateString("ar-SA", optionsDate);
-        dayEl.textContent = now.toLocaleDateString("ar-SA", optionsDay);
+    /* ── مساعدات الوقت ── */
+    function toSec(hhmm) {
+        const [h, m] = hhmm.split(":").map(Number);
+        return h * 3600 + m * 60;
+    }
+    function nowSec() {
+        const n = new Date();
+        return n.getHours() * 3600 + n.getMinutes() * 60 + n.getSeconds();
+    }
+    function pad(n) { return String(n).padStart(2, "0"); }
+    function fmt(sec) {
+        const m = Math.floor(sec / 60), s = sec % 60;
+        return pad(m) + ":" + pad(s);
     }
 
-    updateClock();
-    setInterval(updateClock, 1000);
+    /* ── تحديث الساعة ── */
+    function updateClock() {
+        const now = new Date();
+        const te = document.getElementById("clock-time");
+        const de = document.getElementById("clock-date");
+        const ye = document.getElementById("clock-day");
+        if (!te) return;
+        te.textContent = now.toLocaleTimeString("ar-SA", { hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false });
+        de.textContent = now.toLocaleDateString("ar-SA", { year:"numeric", month:"2-digit", day:"2-digit" });
+        ye.textContent = now.toLocaleDateString("ar-SA", { weekday:"long" });
+    }
+
+    /* ── تحديث صندوق الحصة ── */
+    function updatePeriodBox() {
+        const now = nowSec();
+        let current = null, next = null;
+
+        for (const p of PERIODS) {
+            const s = toSec(p.start_time), e = toSec(p.end_time);
+            if (now >= s && now < e) {
+                current = { ...p, s, e };
+            } else if (now < s && !next) {
+                next = { ...p, s, e };
+            }
+        }
+
+        const classBox  = document.getElementById("class-box");
+        const otherBox  = document.getElementById("other-box");
+        const noPeriod  = document.getElementById("no-period");
+
+        classBox.classList.add("hidden");
+        otherBox.classList.add("hidden");
+        noPeriod.classList.add("hidden");
+
+        if (current) {
+            if (current.type === "class") {
+                /* حصة دراسية → يعرض العداد التنازلي فقط */
+                const remaining = current.e - now;
+                document.getElementById("class-countdown").textContent = fmt(remaining);
+                document.getElementById("class-name").textContent = current.name;
+                document.getElementById("class-subject").textContent = current.subject || "";
+                document.getElementById("class-ends").textContent = "تنتهي عند " + current.end_time;
+                classBox.classList.remove("hidden");
+
+            } else {
+                /* فسحة أو بداية دوام أو نهاية → لا عداد */
+                const labels = { break:"وقت الاستراحة", start:"بداية الدوام", end:"نهاية الدوام" };
+                document.getElementById("other-label").textContent =
+                    labels[current.type] || current.name;
+                document.getElementById("other-next").textContent =
+                    next
+                        ? "الحصة القادمة: " + next.name + " عند " + next.start_time
+                        : "لا توجد حصص دراسية قادمة اليوم";
+                otherBox.classList.remove("hidden");
+            }
+        } else {
+            noPeriod.classList.remove("hidden");
+        }
+    }
+
+    /* ── تشغيل التحديثات ── */
+    function tick() {
+        updateClock();
+        updatePeriodBox();
+    }
+    tick();
+    setInterval(tick, 1000);
+
+}());
 </script>
 
 </body>

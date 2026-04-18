@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة المستخدمين - مدرسة الخالدية الابتدائية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#020617;--text:#e5e7eb;--muted:#9ca3af;--accent:#34d399;--border:rgba(148,163,184,0.18)}
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:"Tajawal",system-ui,sans-serif;background:radial-gradient(ellipse 70% 45% at 50% 0%,rgba(52,211,153,.1),transparent),var(--bg);color:var(--text);min-height:100vh}
+        .neon-bar{height:3px;background:linear-gradient(to left,transparent,#34d399,transparent);box-shadow:0 0 14px rgba(52,211,153,.8);opacity:.85}
+        .page-main{max-width:900px;margin:0 auto;padding:2.4rem 1.4rem 4rem}
+        .page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+        .page-title{font-size:1.7rem;font-weight:700}
+        .page-subtitle{font-size:.88rem;color:var(--muted);margin-top:.25rem}
+        .btn-back{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;border-radius:999px;border:1px solid rgba(148,163,184,.35);background:rgba(15,23,42,.8);color:var(--muted);font-family:inherit;font-size:.88rem;text-decoration:none;transition:border-color .15s,color .15s}
+        .btn-back:hover{border-color:var(--accent);color:var(--accent)}
+        .messages{margin-bottom:1.4rem}
+        .msg{padding:.7rem 1rem;border-radius:.8rem;font-size:.88rem;margin-bottom:.5rem}
+        .msg-success{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.5);color:#6ee7b7}
+        .msg-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.5);color:#fca5a5}
+        .card{background:radial-gradient(circle at top left,rgba(52,211,153,.1),transparent 60%),rgba(15,23,42,.85);border-radius:1.4rem;border:1px solid var(--border);padding:1.6rem 1.5rem;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative;overflow:hidden}
+        .card::before{content:"";position:absolute;inset-inline-end:-60px;inset-block-start:-60px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.1),transparent 70%);pointer-events:none}
+        .card-inner{position:relative;z-index:1}
+        .card-title{font-size:1.1rem;font-weight:600;margin-bottom:1.2rem;padding-bottom:.7rem;border-bottom:1px solid rgba(52,211,153,.2);color:var(--accent)}
+        .table-wrapper{border-radius:.9rem;overflow:hidden;border:1px solid rgba(52,211,153,.15)}
+        table{width:100%;border-collapse:collapse;font-size:.87rem}
+        thead{background:rgba(6,78,59,.3)}
+        th,td{padding:.65rem .9rem;text-align:center;border-bottom:1px solid rgba(15,23,42,.9)}
+        th{font-weight:600;color:#6ee7b7;font-size:.83rem}
+        tbody tr:nth-child(even){background:rgba(15,23,42,.6)}
+        tbody tr:nth-child(odd){background:rgba(15,23,42,.4)}
+        tbody tr:last-child td{border-bottom:none}
+        tbody tr:hover{background:rgba(52,211,153,.07)}
+        .role-admin{color:#f87171;font-weight:600}
+        .role-supervisor{color:#fbbf24;font-weight:600}
+        .role-teacher{color:#60a5fa;font-weight:600}
+        .role-display{color:var(--muted)}
+        .count-badge{display:inline-block;padding:.12rem .6rem;border-radius:999px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#34d399;font-size:.8rem;margin-inline-start:.5rem;font-weight:600}
+        .role-select{padding:.3rem .6rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.4);background:rgba(2,6,23,.9);color:var(--text);font-family:inherit;font-size:.82rem;outline:none}
+        .role-select:focus{border-color:var(--accent)}
+        .btn-save{display:inline-block;padding:.28rem .8rem;border-radius:999px;border:none;background:linear-gradient(135deg,#a7f3d0,#34d399);color:#052e16;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:transform .12s}
+        .btn-save:hover{transform:translateY(-1px)}
+        .superuser-badge{display:inline-block;padding:.15rem .6rem;border-radius:999px;font-size:.75rem;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:#fbbf24}
+        .info-note{font-size:.82rem;color:var(--muted);margin-top:1rem;padding:.6rem .9rem;border-radius:.7rem;background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.15)}
+    </style>
+</head>
+<body>
+{% include "header.html" %}
+<div class="neon-bar" aria-hidden="true"></div>
+<main class="page-main">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">إدارة المستخدمين</h1>
+            <p class="page-subtitle">تعيين صلاحيات المستخدمين في النظام (للمدير فقط).</p>
+        </div>
+        <a href="{% url 'schooldisplay:control_panel' %}" class="btn-back">← العودة للوحة التحكم</a>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for msg in messages %}
+        <div class="msg msg-{% if msg.tags == 'error' %}error{% else %}success{% endif %}">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-inner">
+            <h2 class="card-title">المستخدمون <span class="count-badge">{{ user_list|length }}</span></h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>المستخدم</th><th>البريد الإلكتروني</th><th>تاريخ الانضمام</th><th>الصلاحية الحالية</th><th>تعديل الصلاحية</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for item in user_list %}
+                    <tr>
+                        <td>
+                            {{ item.user.username }}
+                            {% if item.user.is_superuser %}<span class="superuser-badge">سوبر يوزر</span>{% endif %}
+                        </td>
+                        <td>{{ item.user.email|default:"—" }}</td>
+                        <td>{{ item.user.date_joined|date:"Y-m-d" }}</td>
+                        <td class="role-{{ item.role }}">{{ item.role_display }}</td>
+                        <td>
+                            {% if not item.user.is_superuser %}
+                            <form method="post" action="{% url 'schooldisplay:user_role_update' item.user.pk %}" style="display:inline-flex;gap:.5rem;align-items:center">
+                                {% csrf_token %}
+                                <select name="role" class="role-select">
+                                    {% for role_code, role_label in roles %}
+                                    <option value="{{ role_code }}" {% if item.role == role_code %}selected{% endif %}>{{ role_label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn-save">حفظ</button>
+                            </form>
+                            {% else %}
+                            <span style="color:var(--muted);font-size:.82rem">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p class="info-note">
+                الصلاحيات: <strong style="color:#f87171">مدير</strong> — وصول كامل لجميع صفحات التحكم وإدارة المستخدمين. |
+                <strong style="color:#fbbf24">مشرف</strong> — وصول لجميع صفحات التحكم بدون إدارة المستخدمين. |
+                <strong style="color:#60a5fa">معلم</strong> — عرض الجداول فقط. |
+                <strong>عرض فقط</strong> — لوحة اليوم فقط.
+            </p>
+        </div>
+    </div>
+</main>
+{% include "footer.html" %}
+</body>
+</html>

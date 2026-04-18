@@ -1,17 +1,80 @@
 from __future__ import annotations
 
 from datetime import datetime
+from functools import wraps
 
-from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login, get_user_model
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
+from schooltimetable.forms import (
+    TeacherMainSlotForm, TeacherWaitingSlotForm, TeacherActivitySlotForm,
+    DayScheduleForm, PeriodForm, SpecialDayForm,
+)
 from schooltimetable.models import (
     DaySchedule,
     DailyTimeSlot,
     Period,
     SpecialDay,
+    Teacher,
+    TeacherMainSlot,
+    TeacherWaitingSlot,
+    TeacherActivitySlot,
     DAYS_OF_WEEK,
 )
+
+User = get_user_model()
+
+
+# ── Role helpers ─────────────────────────────────────────────────────────────
+
+def _get_user_role(user) -> str:
+    if user.is_superuser:
+        return 'admin'
+    try:
+        return user.profile.role
+    except Exception:
+        return 'display'
+
+
+def _require_role(*roles):
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            if _get_user_role(request.user) not in roles:
+                messages.error(request, "ليس لديك صلاحية للوصول إلى هذه الصفحة.")
+                return redirect('schooldisplay:dashboard')
+            return view_func(request, *args, **kwargs)
+        return wrapper
+    return decorator
+
+
+# ── Auth helpers ─────────────────────────────────────────────────────────────
+
+def home(request):
+    if request.user.is_authenticated:
+        next_url = request.GET.get("next", "")
+        return redirect(next_url or "schooldisplay:dashboard")
+
+    error = None
+    next_url = request.POST.get("next") or request.GET.get("next", "")
+
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip()
+        password = request.POST.get("password", "")
+        if email and password:
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect(next_url or "schooldisplay:dashboard")
+            else:
+                error = "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+        else:
+            error = "يرجى ملء جميع الحقول."
+
+    return render(request, "home.html", {"login_error": error, "next": next_url})
 
 
 def _get_today_weekday_code() -> int:
@@ -26,6 +89,8 @@ def _build_aware_datetime(today, time_value):
     return timezone.make_aware(dt, timezone.get_current_timezone())
 
 
+# ── Dashboard ────────────────────────────────────────────────────────────────
+
 def dashboard(request):
     today = timezone.localdate()
     now = timezone.localtime()
@@ -34,7 +99,6 @@ def dashboard(request):
     today_weekday_label = dict(DAYS_OF_WEEK).get(weekday_code, "")
     today_date_str = today.strftime("%Y-%m-%d")
 
-    # هل يوجد يوم خاص مفعّل اليوم؟
     special = (
         SpecialDay.objects.select_related("schedule")
         .filter(date=today, is_active=True, schedule__is_active=True)
@@ -71,7 +135,6 @@ def dashboard(request):
                 "status": status,
             })
 
-    # بناء الجداول اليومية الزمنية من DailyTimeSlot
     all_slots = list(DailyTimeSlot.objects.order_by("day_of_week", "period_number"))
     daily_timetables = [
         {
@@ -89,14 +152,265 @@ def dashboard(request):
         "today_lessons": today_lessons,
         "daily_timetables": daily_timetables,
         "today_day_value": weekday_code,
+        "user_role": _get_user_role(request.user),
     }
     return render(request, "display/dashboard.html", context)
 
 
+# ── Control Panel ────────────────────────────────────────────────────────────
+
+@_require_role('admin', 'supervisor')
 def control_panel(request):
-    context = {"page_title": "لوحة التحكم - مدرسة الخالدية الابتدائية"}
+    user_role = _get_user_role(request.user)
+    context = {
+        "page_title": "لوحة التحكم - مدرسة الخالدية الابتدائية",
+        "slots_count":    TeacherMainSlot.objects.count(),
+        "waiting_count":  TeacherWaitingSlot.objects.count(),
+        "activity_count": TeacherActivitySlot.objects.count(),
+        "teachers_count": Teacher.objects.count(),
+        "schedules_count": DaySchedule.objects.count(),
+        "periods_count":   Period.objects.count(),
+        "special_days_count": SpecialDay.objects.filter(is_active=True).count(),
+        "users_count":    User.objects.count(),
+        "user_role": user_role,
+    }
     return render(request, "display/control_panel.html", context)
 
+
+# ── Teacher Slots ─────────────────────────────────────────────────────────────
+
+@_require_role('admin', 'supervisor')
+def teacher_main_slots(request):
+    form = TeacherMainSlotForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "تمت إضافة المعلم إلى الحصة الرئيسية بنجاح.")
+        return redirect("schooldisplay:teacher_main_slots")
+
+    slots = TeacherMainSlot.objects.select_related("teacher").order_by("day_of_week", "start_time")
+    return render(request, "display/teacher_main_slots.html", {"form": form, "slots": slots})
+
+
+@_require_role('admin', 'supervisor')
+def teacher_main_slot_delete(request, pk):
+    slot = get_object_or_404(TeacherMainSlot, pk=pk)
+    if request.method == "POST":
+        slot.delete()
+        messages.success(request, "تم حذف السجل بنجاح.")
+    return redirect("schooldisplay:teacher_main_slots")
+
+
+@_require_role('admin', 'supervisor')
+def teacher_activity_slots(request):
+    form = TeacherActivitySlotForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "تمت إضافة المعلم إلى حصص النشاط بنجاح.")
+        return redirect("schooldisplay:teacher_activity_slots")
+
+    slots = TeacherActivitySlot.objects.select_related("teacher").order_by("day_of_week", "start_time")
+    return render(request, "display/teacher_activity_slots.html", {"form": form, "slots": slots})
+
+
+@_require_role('admin', 'supervisor')
+def teacher_activity_slot_delete(request, pk):
+    slot = get_object_or_404(TeacherActivitySlot, pk=pk)
+    if request.method == "POST":
+        slot.delete()
+        messages.success(request, "تم حذف السجل بنجاح.")
+    return redirect("schooldisplay:teacher_activity_slots")
+
+
+@_require_role('admin', 'supervisor')
+def teacher_waiting_slots(request):
+    form = TeacherWaitingSlotForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "تمت إضافة المعلم إلى قائمة الانتظار بنجاح.")
+        return redirect("schooldisplay:teacher_waiting_slots")
+
+    slots = TeacherWaitingSlot.objects.select_related("teacher").order_by("day_of_week", "start_time")
+    return render(request, "display/teacher_waiting_slots.html", {"form": form, "slots": slots})
+
+
+@_require_role('admin', 'supervisor')
+def teacher_waiting_slot_delete(request, pk):
+    slot = get_object_or_404(TeacherWaitingSlot, pk=pk)
+    if request.method == "POST":
+        slot.delete()
+        messages.success(request, "تم حذف السجل بنجاح.")
+    return redirect("schooldisplay:teacher_waiting_slots")
+
+
+# ── Schedule Management ───────────────────────────────────────────────────────
+
+@_require_role('admin', 'supervisor')
+def schedule_list(request):
+    form = DayScheduleForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "تم إنشاء الجدول بنجاح.")
+        return redirect("schooldisplay:schedule_list")
+
+    schedules = (
+        DaySchedule.objects
+        .annotate(period_count=Count("periods"))
+        .order_by("day_of_week", "id")
+    )
+    days_map = dict(DAYS_OF_WEEK)
+    return render(request, "display/schedule_list.html", {
+        "form": form,
+        "schedules": schedules,
+        "days_map": days_map,
+    })
+
+
+@_require_role('admin', 'supervisor')
+def schedule_delete(request, pk):
+    schedule = get_object_or_404(DaySchedule, pk=pk)
+    if request.method == "POST":
+        schedule.delete()
+        messages.success(request, "تم حذف الجدول بنجاح.")
+    return redirect("schooldisplay:schedule_list")
+
+
+@_require_role('admin', 'supervisor')
+def schedule_detail(request, pk):
+    schedule = get_object_or_404(DaySchedule, pk=pk)
+    form = PeriodForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        period = form.save(commit=False)
+        period.schedule = schedule
+        period.save()
+        messages.success(request, "تمت إضافة الفترة بنجاح.")
+        return redirect("schooldisplay:schedule_detail", pk=pk)
+
+    periods = Period.objects.filter(schedule=schedule).order_by("order", "start_time")
+    return render(request, "display/schedule_detail.html", {
+        "schedule": schedule,
+        "periods": periods,
+        "form": form,
+    })
+
+
+@_require_role('admin', 'supervisor')
+def period_delete(request, schedule_pk, pk):
+    period = get_object_or_404(Period, pk=pk, schedule_id=schedule_pk)
+    if request.method == "POST":
+        period.delete()
+        messages.success(request, "تم حذف الفترة بنجاح.")
+    return redirect("schooldisplay:schedule_detail", pk=schedule_pk)
+
+
+# ── Special Days ──────────────────────────────────────────────────────────────
+
+@_require_role('admin', 'supervisor')
+def special_days(request):
+    form = SpecialDayForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "تمت إضافة اليوم الخاص بنجاح.")
+        return redirect("schooldisplay:special_days")
+
+    days = SpecialDay.objects.select_related("schedule").order_by("-date")
+    return render(request, "display/special_days.html", {"form": form, "days": days})
+
+
+@_require_role('admin', 'supervisor')
+def special_day_delete(request, pk):
+    day = get_object_or_404(SpecialDay, pk=pk)
+    if request.method == "POST":
+        day.delete()
+        messages.success(request, "تم حذف اليوم الخاص بنجاح.")
+    return redirect("schooldisplay:special_days")
+
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+
+@_require_role('admin', 'supervisor')
+def reports(request):
+    period_type_counts = {
+        pt: Period.objects.filter(period_type=pt).count()
+        for pt, _ in Period.PERIOD_TYPES
+    }
+    covered_periods  = Period.objects.exclude(teacher_name="").count()
+    total_periods    = Period.objects.count()
+    coverage_pct     = round(covered_periods / total_periods * 100) if total_periods else 0
+
+    day_stats = []
+    days_map = dict(DAYS_OF_WEEK)
+    for code, name in DAYS_OF_WEEK:
+        day_stats.append({
+            "name": name,
+            "schedules": DaySchedule.objects.filter(day_of_week=code).count(),
+            "periods":   Period.objects.filter(schedule__day_of_week=code).count(),
+            "main":      TeacherMainSlot.objects.filter(day_of_week=code).count(),
+            "waiting":   TeacherWaitingSlot.objects.filter(day_of_week=code).count(),
+            "activity":  TeacherActivitySlot.objects.filter(day_of_week=code).count(),
+        })
+
+    context = {
+        "period_type_counts": period_type_counts,
+        "period_type_labels": dict(Period.PERIOD_TYPES),
+        "covered_periods":    covered_periods,
+        "total_periods":      total_periods,
+        "coverage_pct":       coverage_pct,
+        "day_stats":          day_stats,
+        "total_schedules":    DaySchedule.objects.count(),
+        "active_schedules":   DaySchedule.objects.filter(is_active=True).count(),
+        "total_teachers":     Teacher.objects.count(),
+        "special_days_count": SpecialDay.objects.filter(is_active=True).count(),
+    }
+    return render(request, "display/reports.html", context)
+
+
+# ── User Management ───────────────────────────────────────────────────────────
+
+@_require_role('admin')
+def user_management(request):
+    from schoolaccounts.models import UserProfile
+
+    all_users = User.objects.order_by("date_joined")
+    user_list = []
+    for u in all_users:
+        try:
+            role = u.profile.role
+            role_display = u.profile.get_role_display()
+        except Exception:
+            role = 'display'
+            role_display = 'عرض فقط'
+        user_list.append({
+            "user": u,
+            "role": role,
+            "role_display": role_display,
+        })
+
+    roles = UserProfile.ROLES
+    return render(request, "display/user_management.html", {
+        "user_list": user_list,
+        "roles": roles,
+    })
+
+
+@_require_role('admin')
+def user_role_update(request, user_id):
+    from schoolaccounts.models import UserProfile
+
+    target_user = get_object_or_404(User, pk=user_id)
+    if request.method == "POST":
+        new_role = request.POST.get("role", "display")
+        valid_roles = [r[0] for r in UserProfile.ROLES]
+        if new_role in valid_roles:
+            profile, _ = UserProfile.objects.get_or_create(user=target_user)
+            profile.role = new_role
+            profile.save()
+            messages.success(request, f"تم تحديث صلاحية {target_user.username} بنجاح.")
+        else:
+            messages.error(request, "صلاحية غير صالحة.")
+    return redirect("schooldisplay:user_management")
+
+
+# ── Other views ───────────────────────────────────────────────────────────────
 
 def school_year_board(request):
     context = {"page_title": "لوحة العام الدراسي - مدرسة الخالدية الابتدائية"}
@@ -147,12 +461,11 @@ def today_board(request):
             "id": p.id,
             "order": p.order,
             "name": p.name,
-            "subject": p.subject,
-            "teacher": p.teacher_name,
-            "class_room": "",
+            "subject": p.subject or "",
+            "teacher": p.teacher_name or "",
             "type": p.period_type,
-            "start_time": p.start_time,
-            "end_time": p.end_time,
+            "start_time": p.start_time.strftime("%H:%M"),
+            "end_time": p.end_time.strftime("%H:%M"),
             "status": status,
         })
 

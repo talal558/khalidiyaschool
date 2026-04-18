@@ -14,7 +14,7 @@
             --text-main: #e5e7eb;
             --text-muted: #9ca3af;
             --accent: #0ea5e9;
-            --accent-strong: #38bdf8;
+            --accent-strong: #34d399;
             --border-subtle: rgba(148,163,184,0.35);
             --error: #f97373;
         }
@@ -28,7 +28,7 @@
             min-height: 100vh;
             font-family: "Tajawal", system-ui, sans-serif;
             background:
-                radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 55%),
+                radial-gradient(circle at top, rgba(52, 211, 153, 0.12), transparent 55%),
                 radial-gradient(circle at bottom, rgba(15, 23, 42, 0.95), #020617),
                 repeating-linear-gradient(
                     to right,
@@ -118,7 +118,7 @@
         .form-input {
             width: 100%;
             border-radius: 0.9rem;
-            border: 1px solid rgba(30, 64, 175, 0.9);
+            border: 1px solid rgba(6, 78, 59, 0.9);
             background-color: rgba(15, 23, 42, 0.98);
             color: var(--text-main);
             padding: 0.7rem 0.85rem;
@@ -178,7 +178,7 @@
             width: 100%;
             border-radius: 999px;
             border: none;
-            background: radial-gradient(circle at top, #e0f2fe, #bae6fd);
+            background: radial-gradient(circle at top, #d1fae5, #a7f3d0);
             color: #0b1120;
             font-size: 0.95rem;
             font-weight: 600;
@@ -225,7 +225,7 @@
             <header class="login-header">
                 <h1 class="login-title">تسجيل الدخول</h1>
                 <p class="login-subtitle">
-                    دخول لوحة التوقيت المدرسي باستخدام حساب الإدارة أو الإشراف.
+                    دخول نظام مدرسة الخالدية الابتدائية باستخدام بريدك الإلكتروني.
                 </p>
             </header>
 
@@ -248,19 +248,17 @@
                 {% csrf_token %}
 
                 <div class="form-group">
-                    <label class="form-label" for="{{ form.username.id_for_label }}">اسم المستخدم</label>
+                    <label class="form-label" for="{{ form.username.id_for_label }}">البريد الإلكتروني</label>
                     <input
-                        type="text"
+                        type="email"
                         id="{{ form.username.id_for_label }}"
                         name="{{ form.username.html_name }}"
                         class="form-input"
-                        autocomplete="username"
+                        placeholder="example@gmail.com"
+                        autocomplete="email"
                         value="{{ form.username.value|default_if_none:'' }}"
                         required
                     >
-                    {% if form.username.help_text %}
-                        <p class="form-help">{{ form.username.help_text }}</p>
-                    {% endif %}
                 </div>
 
                 <div class="form-group">
@@ -280,7 +278,7 @@
                         دخول إلى النظام
                     </button>
                     <p class="login-links">
-                        لا تملك حساباً؟ يمكن إضافة حسابات جديدة من خلال لوحة التحكم مستقبلاً.
+                        ليس لديك حساب؟ <a href="{% url 'register' %}">إنشاء حساب جديد</a>
                     </p>
                 </div>
             </form>

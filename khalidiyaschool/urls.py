@@ -3,6 +3,9 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
 
 urlpatterns = [
     # لوحة الإدارة
@@ -20,6 +23,17 @@ urlpatterns = [
         "accounts/logout/",
         auth_views.LogoutView.as_view(next_page="/"),
         name="logout",
+    ),
+
+    # مسار إنشاء حساب جديد
+    path(
+        "accounts/register/",
+        CreateView.as_view(
+            form_class=UserCreationForm,
+            template_name="registration/register.html",
+            success_url=reverse_lazy("login"),
+        ),
+        name="register",
     ),
 
     # API الجداول (schooltimetable)

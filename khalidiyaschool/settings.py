@@ -51,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "khalidiyaschool.middleware.LoginRequiredMiddleware",
 ]
 
 # ملف الروابط الرئيسي
@@ -122,9 +123,15 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # إعدادات تسجيل الدخول
-LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/"
+LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
+
+# خلفيات المصادقة — تدعم تسجيل الدخول بالبريد الإلكتروني
+AUTHENTICATION_BACKENDS = [
+    "khalidiyaschool.auth_backends.EmailBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 # حالياً نستخدم نموذج المستخدم الافتراضي لدجانغو
 # عند إنشاء موديل مستخدم مخصص يمكن إضافة:
