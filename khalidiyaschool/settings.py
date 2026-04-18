@@ -8,8 +8,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # تحميل ملف .env من جذر المشروع
 load_dotenv(BASE_DIR / ".env")
 
-# مفاتيح الأمان
-SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
+# مفاتيح الأمان — يجب تعيين SECRET_KEY في ملف .env قبل النشر
+_secret = os.getenv("SECRET_KEY", "")
+if not _secret:
+    if os.getenv("DEBUG", "False").lower() == "true":
+        _secret = "dev-only-unsafe-key-never-use-in-production-abc123xyz"
+    else:
+        raise RuntimeError(
+            "SECRET_KEY غير محدد في ملف .env — أضفه قبل تشغيل الخادم."
+        )
+SECRET_KEY = _secret
 
 # وضع التطوير أو الإنتاج
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
@@ -70,6 +78,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "schoolaccounts.context_processors.user_role_context",
             ],
         },
     },
@@ -133,6 +142,29 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-# حالياً نستخدم نموذج المستخدم الافتراضي لدجانغو
-# عند إنشاء موديل مستخدم مخصص يمكن إضافة:
-# AUTH_USER_MODEL = "schoolaccounts.CustomUser"
+# ── إعدادات الأمان ──────────────────────────────────────────────────────────
+
+# منع تخمين نوع المحتوى (MIME sniffing)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# حماية ضد تضمين الصفحة في iframe خارجي
+X_FRAME_OPTIONS = "DENY"
+
+# الكوكيز — httpOnly يمنع قراءتها من JavaScript
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+# مدة الجلسة: 8 ساعات (يوم دراسي + هامش)
+SESSION_COOKIE_AGE = 28800
+
+# إنهاء الجلسة عند إغلاق المتصفح
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# إعدادات الإنتاج — فعّلها في .env عند النشر على HTTPS
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True

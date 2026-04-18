@@ -109,6 +109,9 @@ def api_today_schedule(request: HttpRequest) -> JsonResponse:
     يرجع جدول اليوم (DaySchedule + Periods) بناءً على اليوم الحالي،
     مع مراعاة SpecialDay إن وجد.
     """
+    if not request.user.is_authenticated:
+        return JsonResponse({"success": False, "message": "يجب تسجيل الدخول أولاً."}, status=401)
+
     if request.method != "GET":
         return JsonResponse(
             {
@@ -178,6 +181,9 @@ def api_teacher_waiting_slots(request: HttpRequest) -> JsonResponse:
     """
     يرجع حصص الانتظار للمعلمين لليوم الحالي (TeacherWaitingSlot).
     """
+    if not request.user.is_authenticated:
+        return JsonResponse({"success": False, "message": "يجب تسجيل الدخول أولاً."}, status=401)
+
     if request.method != "GET":
         return JsonResponse(
             {
@@ -219,6 +225,9 @@ def api_teacher_activity_slots(request: HttpRequest) -> JsonResponse:
     """
     يرجع حصص النشاط للمعلمين لليوم الحالي (TeacherActivitySlot).
     """
+    if not request.user.is_authenticated:
+        return JsonResponse({"success": False, "message": "يجب تسجيل الدخول أولاً."}, status=401)
+
     if request.method != "GET":
         return JsonResponse(
             {
@@ -261,6 +270,9 @@ def api_teacher_main_slots(request: HttpRequest) -> JsonResponse:
     يرجع حصص الجدول العام للمعلمين لليوم الحالي (TeacherMainSlot)
     لاستخدامها في صفحة لوحة التحكم.
     """
+    if not request.user.is_authenticated:
+        return JsonResponse({"success": False, "message": "يجب تسجيل الدخول أولاً."}, status=401)
+
     if request.method != "GET":
         return JsonResponse(
             {

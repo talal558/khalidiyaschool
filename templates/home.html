@@ -122,14 +122,10 @@
 
         .auth-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 1.75rem;
-            max-width: 900px;
+            max-width: 480px;
             margin: 0 auto;
-        }
-
-        @media (max-width: 700px) {
-            .auth-grid { grid-template-columns: 1fr; }
         }
 
         /* ───── Cards ───── */
@@ -537,43 +533,8 @@
                 </form>
 
                 <div class="login-footer">
-                    ليس لديك حساب؟
-                    <a href="{% url 'register' %}">إنشاء حساب جديد</a>
+                    للحصول على حساب، تواصل مع مدير النظام.
                 </div>
-
-            </div>
-        </article>
-
-        <!-- ── بطاقة التسجيل الجديد ── -->
-        <article class="auth-card register-card">
-            <div class="card-inner">
-
-                <div class="card-heading">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                            <line x1="19" y1="8" x2="19" y2="14"/>
-                            <line x1="22" y1="11" x2="16" y2="11"/>
-                        </svg>
-                    </div>
-                    <h2 class="card-title">إنشاء حساب جديد</h2>
-                </div>
-
-                <p class="card-desc">
-                    انضم إلى نظام مدرسة الخالدية وابدأ في إدارة الجداول الدراسية بسهولة وكفاءة.
-                </p>
-
-                <ul class="register-features">
-                    <li>عرض جدول اليوم الدراسي بشكل فوري</li>
-                    <li>متابعة حصص الانتظار والنشاط للمعلمين</li>
-                    <li>إدارة الجداول والأوقات من لوحة التحكم</li>
-                    <li>عرض التوقيت الحالي والحصة الجارية</li>
-                </ul>
-
-                <div class="divider">أو</div>
-
-                <a href="{% url 'register' %}" class="btn-outline">إنشاء حساب</a>
 
             </div>
         </article>

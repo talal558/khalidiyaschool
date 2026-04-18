@@ -8,12 +8,17 @@ class EmailBackend(ModelBackend):
         email = kwargs.get("email") or username
         if not email:
             return None
-        try:
-            user = UserModel.objects.get(email__iexact=email)
-        except UserModel.DoesNotExist:
+
+        # Single-query path — eliminates timing difference between
+        # "user exists" and "user not found" that would allow email enumeration.
+        user = UserModel.objects.filter(email__iexact=email).order_by("id").first()
+
+        if user is None:
+            # Run a dummy check_password so response time stays constant
+            # regardless of whether the email exists in the database.
+            UserModel().check_password(password)
             return None
-        except UserModel.MultipleObjectsReturned:
-            user = UserModel.objects.filter(email__iexact=email).order_by("id").first()
-        if user and user.check_password(password) and self.user_can_authenticate(user):
+
+        if user.check_password(password) and self.user_can_authenticate(user):
             return user
         return None

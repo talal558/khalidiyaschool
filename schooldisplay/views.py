@@ -5,9 +5,10 @@ from functools import wraps
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, get_user_model
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from schooltimetable.forms import (
     TeacherMainSlotForm, TeacherWaitingSlotForm, TeacherActivitySlotForm,
@@ -53,13 +54,25 @@ def _require_role(*roles):
 
 # ── Auth helpers ─────────────────────────────────────────────────────────────
 
+def _safe_next(request, url: str) -> str | None:
+    """Return url only if it is a safe same-host relative URL."""
+    if url and url_has_allowed_host_and_scheme(
+        url=url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return url
+    return None
+
+
 def home(request):
     if request.user.is_authenticated:
-        next_url = request.GET.get("next", "")
+        next_url = _safe_next(request, request.GET.get("next", ""))
         return redirect(next_url or "schooldisplay:dashboard")
 
     error = None
-    next_url = request.POST.get("next") or request.GET.get("next", "")
+    raw_next = request.POST.get("next") or request.GET.get("next", "")
+    next_url = _safe_next(request, raw_next)
 
     if request.method == "POST":
         email = request.POST.get("email", "").strip()
@@ -379,16 +392,11 @@ def user_management(request):
         except Exception:
             role = 'display'
             role_display = 'عرض فقط'
-        user_list.append({
-            "user": u,
-            "role": role,
-            "role_display": role_display,
-        })
+        user_list.append({"user": u, "role": role, "role_display": role_display})
 
-    roles = UserProfile.ROLES
     return render(request, "display/user_management.html", {
         "user_list": user_list,
-        "roles": roles,
+        "roles": UserProfile.ROLES,
     })
 
 
@@ -397,6 +405,9 @@ def user_role_update(request, user_id):
     from schoolaccounts.models import UserProfile
 
     target_user = get_object_or_404(User, pk=user_id)
+    if target_user.is_superuser:
+        messages.error(request, "لا يمكن تغيير صلاحية مستخدم السوبر يوزر.")
+        return redirect("schooldisplay:user_management")
     if request.method == "POST":
         new_role = request.POST.get("role", "display")
         valid_roles = [r[0] for r in UserProfile.ROLES]

@@ -1,10 +1,11 @@
+from urllib.parse import quote
+
 from django.conf import settings
 from django.shortcuts import redirect
 
 _PUBLIC_PREFIXES = (
     "/accounts/login/",
     "/accounts/logout/",
-    "/accounts/register/",
     "/admin/",
     settings.STATIC_URL,
 )
@@ -21,4 +22,6 @@ class LoginRequiredMiddleware:
         if any(request.path.startswith(p) for p in _PUBLIC_PREFIXES):
             return self.get_response(request)
 
-        return redirect(f"/?next={request.path}")
+        # URL-encode the path to prevent header injection
+        safe_next = quote(request.path, safe="/?=&")
+        return redirect(f"/?next={safe_next}")

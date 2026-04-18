@@ -35,7 +35,7 @@ urlpatterns = [
     # التقارير
     path("control-panel/reports/", views.reports, name="reports"),
 
-    # إدارة المستخدمين (مدير فقط)
+    # إدارة المستخدمين والصلاحيات (مدير فقط)
     path("control-panel/users/", views.user_management, name="user_management"),
     path("control-panel/users/<int:user_id>/role/", views.user_role_update, name="user_role_update"),
 

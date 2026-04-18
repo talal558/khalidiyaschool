@@ -130,6 +130,15 @@ def control_panel(request):
     """
     صفحة لوحة التحكم (يمكن تطويرها لاحقًا).
     """
+    role = (
+        "admin"
+        if request.user.is_superuser
+        else getattr(getattr(request.user, "profile", None), "role", "display")
+    )
+    if role not in ("admin", "supervisor"):
+        from django.shortcuts import redirect
+        return redirect("schooldisplay:dashboard")
+
     context = {
         "page_title": "لوحة التحكم - مدرسة الخالدية الابتدائية",
     }

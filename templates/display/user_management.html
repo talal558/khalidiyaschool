@@ -10,7 +10,7 @@
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         body{font-family:"Tajawal",system-ui,sans-serif;background:radial-gradient(ellipse 70% 45% at 50% 0%,rgba(52,211,153,.1),transparent),var(--bg);color:var(--text);min-height:100vh}
         .neon-bar{height:3px;background:linear-gradient(to left,transparent,#34d399,transparent);box-shadow:0 0 14px rgba(52,211,153,.8);opacity:.85}
-        .page-main{max-width:900px;margin:0 auto;padding:2.4rem 1.4rem 4rem}
+        .page-main{max-width:960px;margin:0 auto;padding:2.4rem 1.4rem 4rem}
         .page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
         .page-title{font-size:1.7rem;font-weight:700}
         .page-subtitle{font-size:.88rem;color:var(--muted);margin-top:.25rem}
@@ -20,40 +20,64 @@
         .msg{padding:.7rem 1rem;border-radius:.8rem;font-size:.88rem;margin-bottom:.5rem}
         .msg-success{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.5);color:#6ee7b7}
         .msg-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.5);color:#fca5a5}
-        .card{background:radial-gradient(circle at top left,rgba(52,211,153,.1),transparent 60%),rgba(15,23,42,.85);border-radius:1.4rem;border:1px solid var(--border);padding:1.6rem 1.5rem;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative;overflow:hidden}
-        .card::before{content:"";position:absolute;inset-inline-end:-60px;inset-block-start:-60px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.1),transparent 70%);pointer-events:none}
+        .card{background:radial-gradient(circle at top left,rgba(52,211,153,.08),transparent 60%),rgba(15,23,42,.88);border-radius:1.4rem;border:1px solid var(--border);padding:1.6rem 1.5rem;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative;overflow:hidden}
+        .card::before{content:"";position:absolute;inset-inline-end:-60px;inset-block-start:-60px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.08),transparent 70%);pointer-events:none}
         .card-inner{position:relative;z-index:1}
         .card-title{font-size:1.1rem;font-weight:600;margin-bottom:1.2rem;padding-bottom:.7rem;border-bottom:1px solid rgba(52,211,153,.2);color:var(--accent)}
+        .count-badge{display:inline-block;padding:.12rem .6rem;border-radius:999px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#34d399;font-size:.8rem;margin-inline-start:.5rem;font-weight:600}
         .table-wrapper{border-radius:.9rem;overflow:hidden;border:1px solid rgba(52,211,153,.15)}
         table{width:100%;border-collapse:collapse;font-size:.87rem}
         thead{background:rgba(6,78,59,.3)}
-        th,td{padding:.65rem .9rem;text-align:center;border-bottom:1px solid rgba(15,23,42,.9)}
+        th,td{padding:.7rem .9rem;text-align:center;border-bottom:1px solid rgba(15,23,42,.9)}
         th{font-weight:600;color:#6ee7b7;font-size:.83rem}
         tbody tr:nth-child(even){background:rgba(15,23,42,.6)}
         tbody tr:nth-child(odd){background:rgba(15,23,42,.4)}
         tbody tr:last-child td{border-bottom:none}
-        tbody tr:hover{background:rgba(52,211,153,.07)}
-        .role-admin{color:#f87171;font-weight:600}
-        .role-supervisor{color:#fbbf24;font-weight:600}
-        .role-teacher{color:#60a5fa;font-weight:600}
-        .role-display{color:var(--muted)}
-        .count-badge{display:inline-block;padding:.12rem .6rem;border-radius:999px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#34d399;font-size:.8rem;margin-inline-start:.5rem;font-weight:600}
-        .role-select{padding:.3rem .6rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.4);background:rgba(2,6,23,.9);color:var(--text);font-family:inherit;font-size:.82rem;outline:none}
+        tbody tr:hover{background:rgba(52,211,153,.06)}
+        /* دور ألوان */
+        .role-admin    {color:#f87171;font-weight:700}
+        .role-supervisor{color:#fbbf24;font-weight:700}
+        .role-teacher  {color:#60a5fa;font-weight:700}
+        .role-display  {color:var(--muted)}
+        .superuser-badge{display:inline-block;padding:.12rem .55rem;border-radius:999px;font-size:.72rem;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:#fbbf24;margin-inline-start:.3rem}
+        /* نموذج تغيير الدور */
+        .role-form{display:inline-flex;gap:.5rem;align-items:center}
+        .role-select{padding:.32rem .7rem;border-radius:.6rem;border:1px solid rgba(52,211,153,.35);background:rgba(2,6,23,.9);color:var(--text);font-family:inherit;font-size:.82rem;outline:none;cursor:pointer;transition:border-color .15s}
         .role-select:focus{border-color:var(--accent)}
-        .btn-save{display:inline-block;padding:.28rem .8rem;border-radius:999px;border:none;background:linear-gradient(135deg,#a7f3d0,#34d399);color:#052e16;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:transform .12s}
-        .btn-save:hover{transform:translateY(-1px)}
-        .superuser-badge{display:inline-block;padding:.15rem .6rem;border-radius:999px;font-size:.75rem;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:#fbbf24}
-        .info-note{font-size:.82rem;color:var(--muted);margin-top:1rem;padding:.6rem .9rem;border-radius:.7rem;background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.15)}
+        .btn-save{padding:.3rem .85rem;border-radius:999px;border:none;background:linear-gradient(135deg,#a7f3d0,#34d399);color:#052e16;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .12s;box-shadow:0 0 12px rgba(52,211,153,.35)}
+        .btn-save:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(52,211,153,.6)}
+        /* بطاقة الصلاحيات */
+        .perms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:1.6rem}
+        .perm-card{border-radius:1rem;padding:1rem 1.1rem;border:1px solid}
+        .perm-admin    {background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.3)}
+        .perm-supervisor{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.3)}
+        .perm-teacher  {background:rgba(96,165,250,.06);border-color:rgba(96,165,250,.3)}
+        .perm-display  {background:rgba(148,163,184,.05);border-color:rgba(148,163,184,.2)}
+        .perm-role-name{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
+        .perm-admin .perm-role-name{color:#f87171}
+        .perm-supervisor .perm-role-name{color:#fbbf24}
+        .perm-teacher .perm-role-name{color:#60a5fa}
+        .perm-display .perm-role-name{color:#9ca3af}
+        .perm-list{list-style:none;padding:0;margin:0}
+        .perm-list li{font-size:.8rem;color:var(--muted);padding:.2rem 0;display:flex;align-items:center;gap:.4rem}
+        .perm-list li::before{content:"✓";font-size:.75rem}
+        .perm-admin .perm-list li::before{color:#f87171}
+        .perm-supervisor .perm-list li::before{color:#fbbf24}
+        .perm-teacher .perm-list li::before{color:#60a5fa}
+        .perm-display .perm-list li::before{color:#9ca3af}
+        .section-sep{font-size:.8rem;font-weight:600;letter-spacing:.06em;color:var(--muted);margin:1.8rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid rgba(52,211,153,.1)}
+        td.email-cell{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     </style>
 </head>
 <body>
 {% include "header.html" %}
 <div class="neon-bar" aria-hidden="true"></div>
 <main class="page-main">
+
     <div class="page-header">
         <div>
-            <h1 class="page-title">إدارة المستخدمين</h1>
-            <p class="page-subtitle">تعيين صلاحيات المستخدمين في النظام (للمدير فقط).</p>
+            <h1 class="page-title">إدارة المستخدمين والصلاحيات</h1>
+            <p class="page-subtitle">تعيين أدوار المديرين والمشرفين والمعلمين للتحكم في وصول كل مستخدم.</p>
         </div>
         <a href="{% url 'schooldisplay:control_panel' %}" class="btn-back">← العودة للوحة التحكم</a>
     </div>
@@ -66,31 +90,48 @@
     </div>
     {% endif %}
 
+    <!-- جدول المستخدمين -->
     <div class="card">
         <div class="card-inner">
-            <h2 class="card-title">المستخدمون <span class="count-badge">{{ user_list|length }}</span></h2>
+            <h2 class="card-title">
+                المستخدمون المسجلون
+                <span class="count-badge">{{ user_list|length }}</span>
+            </h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>المستخدم</th><th>البريد الإلكتروني</th><th>تاريخ الانضمام</th><th>الصلاحية الحالية</th><th>تعديل الصلاحية</th></tr>
+                        <tr>
+                            <th>المستخدم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>تاريخ الانضمام</th>
+                            <th>الدور الحالي</th>
+                            <th>تغيير الدور</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {% for item in user_list %}
                     <tr>
                         <td>
                             {{ item.user.username }}
-                            {% if item.user.is_superuser %}<span class="superuser-badge">سوبر يوزر</span>{% endif %}
+                            {% if item.user.is_superuser %}
+                            <span class="superuser-badge">سوبر يوزر</span>
+                            {% endif %}
                         </td>
-                        <td>{{ item.user.email|default:"—" }}</td>
+                        <td class="email-cell">{{ item.user.email|default:"—" }}</td>
                         <td>{{ item.user.date_joined|date:"Y-m-d" }}</td>
                         <td class="role-{{ item.role }}">{{ item.role_display }}</td>
                         <td>
                             {% if not item.user.is_superuser %}
-                            <form method="post" action="{% url 'schooldisplay:user_role_update' item.user.pk %}" style="display:inline-flex;gap:.5rem;align-items:center">
+                            <form method="post"
+                                  action="{% url 'schooldisplay:user_role_update' item.user.pk %}"
+                                  class="role-form">
                                 {% csrf_token %}
                                 <select name="role" class="role-select">
                                     {% for role_code, role_label in roles %}
-                                    <option value="{{ role_code }}" {% if item.role == role_code %}selected{% endif %}>{{ role_label }}</option>
+                                    <option value="{{ role_code }}"
+                                            {% if item.role == role_code %}selected{% endif %}>
+                                        {{ role_label }}
+                                    </option>
                                     {% endfor %}
                                 </select>
                                 <button type="submit" class="btn-save">حفظ</button>
@@ -104,12 +145,46 @@
                     </tbody>
                 </table>
             </div>
-            <p class="info-note">
-                الصلاحيات: <strong style="color:#f87171">مدير</strong> — وصول كامل لجميع صفحات التحكم وإدارة المستخدمين. |
-                <strong style="color:#fbbf24">مشرف</strong> — وصول لجميع صفحات التحكم بدون إدارة المستخدمين. |
-                <strong style="color:#60a5fa">معلم</strong> — عرض الجداول فقط. |
-                <strong>عرض فقط</strong> — لوحة اليوم فقط.
-            </p>
+
+            <!-- جدول الصلاحيات -->
+            <div class="section-sep">صلاحيات كل دور</div>
+            <div class="perms-grid">
+                <div class="perm-card perm-admin">
+                    <div class="perm-role-name">مدير</div>
+                    <ul class="perm-list">
+                        <li>لوحة التحكم كاملة</li>
+                        <li>إدارة الجداول والفترات</li>
+                        <li>إدارة المعلمين والحصص</li>
+                        <li>الأيام الخاصة</li>
+                        <li>التقارير الزمنية</li>
+                        <li>تعيين أدوار المستخدمين</li>
+                    </ul>
+                </div>
+                <div class="perm-card perm-supervisor">
+                    <div class="perm-role-name">مشرف</div>
+                    <ul class="perm-list">
+                        <li>لوحة التحكم كاملة</li>
+                        <li>إدارة الجداول والفترات</li>
+                        <li>إدارة المعلمين والحصص</li>
+                        <li>الأيام الخاصة</li>
+                        <li>التقارير الزمنية</li>
+                    </ul>
+                </div>
+                <div class="perm-card perm-teacher">
+                    <div class="perm-role-name">معلم</div>
+                    <ul class="perm-list">
+                        <li>عرض الجداول اليومية</li>
+                        <li>لوحة توقيت اليوم</li>
+                    </ul>
+                </div>
+                <div class="perm-card perm-display">
+                    <div class="perm-role-name">عرض فقط</div>
+                    <ul class="perm-list">
+                        <li>لوحة توقيت اليوم</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </div>
 </main>

@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <title>لوحة التحكم - مدرسة الخالدية الابتدائية</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --bg-main: #020617;
@@ -16,324 +14,225 @@
             --accent-strong: #34d399;
             --border-subtle: rgba(148,163,184,0.35);
         }
-
         * { box-sizing: border-box; }
-
         body {
-            margin: 0;
-            min-height: 100vh;
+            margin: 0; min-height: 100vh;
             font-family: "Tajawal", system-ui, sans-serif;
             background:
                 radial-gradient(circle at top, rgba(52,211,153,0.12), transparent 55%),
-                radial-gradient(circle at bottom, rgba(15,23,42,0.95), #020617),
-                repeating-linear-gradient(to right, rgba(15,23,42,0.7) 0, rgba(15,23,42,0.7) 1px, transparent 1px, transparent 24px),
-                repeating-linear-gradient(to bottom, rgba(15,23,42,0.72) 0, rgba(15,23,42,0.72) 1px, transparent 1px, transparent 24px);
-            background-blend-mode: soft-light, normal, soft-light, soft-light;
+                radial-gradient(circle at bottom, rgba(15,23,42,0.95), #020617);
             color: var(--text-main);
         }
+        .page-main { max-width: 1100px; margin: 0 auto; padding: 2.4rem 1.4rem 3.2rem; }
+        .neon-bar { height: 3px; background: linear-gradient(to left, transparent, #34d399, transparent); box-shadow: 0 0 16px rgba(52,211,153,0.9); opacity: .85; }
+        .page-header { text-align: center; margin-bottom: 2rem; }
+        .page-title { font-size: 1.9rem; font-weight: 700; margin-bottom: .5rem; }
+        .page-subtitle { font-size: .95rem; color: var(--text-muted); }
 
-        .page-main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2.4rem 1.4rem 3.2rem;
-        }
-
-        .neon-bar {
-            height: 3px;
-            background: linear-gradient(to left, transparent, #34d399, transparent);
-            box-shadow: 0 0 16px rgba(52,211,153,0.9);
-            opacity: 0.85;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .page-title {
-            font-size: 1.9rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-subtitle {
-            font-size: 0.95rem;
+        /* section label */
+        .section-label {
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .08em;
             color: var(--text-muted);
+            text-transform: uppercase;
+            margin: 2rem 0 .8rem;
+            padding-bottom: .4rem;
+            border-bottom: 1px solid rgba(52,211,153,.15);
         }
 
         .panel-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.6rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.4rem;
         }
-
         .panel-card {
             background:
-                radial-gradient(circle at top left, rgba(52,211,153,0.12), transparent 65%),
-                radial-gradient(circle at bottom right, rgba(15,23,42,0.96), #020617);
+                radial-gradient(circle at top left, rgba(52,211,153,0.1), transparent 65%),
+                rgba(15,23,42,0.88);
             border-radius: 1.5rem;
-            padding: 1.6rem 1.5rem;
-            border: 1px solid rgba(52,211,153,0.15);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.7);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-            display: flex;
-            flex-direction: column;
+            padding: 1.5rem;
+            border: 1px solid rgba(52,211,153,.15);
+            box-shadow: 0 20px 50px rgba(0,0,0,.6);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+            transition: transform .2s, border-color .2s, box-shadow .2s;
         }
-
         .panel-card::before {
             content: "";
-            position: absolute;
-            inset-inline-end: -70px;
-            inset-block-start: -70px;
-            width: 160px; height: 160px;
-            border-radius: 999px;
-            background: radial-gradient(circle, rgba(52,211,153,0.12), transparent 70%);
+            position: absolute; inset-inline-end: -60px; inset-block-start: -60px;
+            width: 140px; height: 140px; border-radius: 999px;
+            background: radial-gradient(circle, rgba(52,211,153,.1), transparent 70%);
             pointer-events: none;
         }
-
-        .panel-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 28px 70px rgba(0,0,0,0.85);
-            border-color: rgba(52,211,153,0.5);
-        }
+        .panel-card:hover { transform: translateY(-4px); border-color: rgba(52,211,153,.45); box-shadow: 0 24px 60px rgba(0,0,0,.75); }
 
         .panel-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.22rem 0.75rem;
-            border-radius: 999px;
-            border: 1px solid rgba(52,211,153,0.4);
-            font-size: 0.78rem;
-            color: #34d399;
-            margin-bottom: 0.65rem;
-            background: rgba(52,211,153,0.08);
-            width: fit-content;
+            display: inline-flex; align-items: center;
+            padding: .2rem .7rem; border-radius: 999px;
+            border: 1px solid rgba(52,211,153,.4); font-size: .75rem;
+            color: #34d399; background: rgba(52,211,153,.08);
+            width: fit-content; margin-bottom: .6rem;
         }
+        .panel-badge.muted { border-color: rgba(148,163,184,.35); color: var(--text-muted); background: transparent; }
+        .panel-badge.admin-only { border-color: rgba(248,113,113,.4); color: #f87171; background: rgba(248,113,113,.07); }
 
-        .panel-badge.muted {
-            border-color: rgba(148,163,184,0.4);
-            color: var(--text-muted);
-            background: transparent;
-        }
+        .panel-title { font-size: 1.1rem; font-weight: 600; margin-bottom: .35rem; }
+        .panel-text { font-size: .88rem; color: var(--text-muted); line-height: 1.75; flex: 1; margin-bottom: 1rem; }
 
-        .panel-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-        }
+        .panel-stat { display: flex; gap: 1.4rem; margin-bottom: 1rem; }
+        .stat-num { font-size: 1.9rem; font-weight: 700; color: var(--accent-strong); line-height: 1; }
+        .stat-label { font-size: .75rem; color: var(--text-muted); margin-top: .2rem; }
 
-        .panel-text {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 1.2rem;
-            flex: 1;
-        }
-
-        .panel-small-text {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-            flex: 1;
-        }
-
-        .panel-stat {
-            display: flex;
-            gap: 1.2rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-num {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--accent-strong);
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-top: 0.2rem;
-        }
-
-        .panel-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: auto;
-        }
-
+        .panel-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: auto; }
         .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem 1.6rem;
-            border-radius: 999px;
-            border: none;
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: .75rem 1.4rem; border-radius: 999px; border: none;
             background: linear-gradient(135deg, #a7f3d0, #34d399);
-            color: #052e16;
-            font-size: 0.92rem;
-            font-weight: 700;
-            font-family: inherit;
-            text-decoration: none;
-            cursor: pointer;
-            box-shadow: 0 0 22px rgba(52,211,153,0.6), 0 8px 20px rgba(2,6,23,0.8);
-            transition: transform 0.16s ease, box-shadow 0.16s ease;
+            color: #052e16; font-size: .9rem; font-weight: 700;
+            font-family: inherit; text-decoration: none; cursor: pointer;
+            box-shadow: 0 0 20px rgba(52,211,153,.5), 0 6px 18px rgba(2,6,23,.8);
+            transition: transform .15s, box-shadow .15s;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(52,211,153,0.85), 0 10px 26px rgba(2,6,23,0.9);
-        }
-
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 28px rgba(52,211,153,.8), 0 8px 22px rgba(2,6,23,.9); }
         .btn-ghost {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.78rem 1.6rem;
-            border-radius: 999px;
-            border: 1px solid var(--border-subtle);
-            background: rgba(15,23,42,0.8);
-            color: var(--text-main);
-            font-size: 0.9rem;
-            font-family: inherit;
-            text-decoration: none;
-            cursor: pointer;
-            transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: .72rem 1.3rem; border-radius: 999px;
+            border: 1px solid var(--border-subtle); background: rgba(15,23,42,.8);
+            color: var(--text-main); font-size: .88rem; font-family: inherit;
+            text-decoration: none; cursor: pointer;
+            transition: border-color .15s, box-shadow .15s, transform .15s;
         }
-
-        .btn-ghost:hover {
-            border-color: var(--accent-strong);
-            box-shadow: 0 0 18px rgba(52,211,153,0.4);
-            transform: translateY(-1px);
-        }
+        .btn-ghost:hover { border-color: var(--accent-strong); box-shadow: 0 0 14px rgba(52,211,153,.3); transform: translateY(-1px); }
     </style>
 </head>
 <body>
 
 {% include "header.html" %}
-
 <div class="neon-bar" aria-hidden="true"></div>
 
 <main class="page-main">
     <header class="page-header">
         <h1 class="page-title">لوحة التحكم</h1>
-        <p class="page-subtitle">إدارة الجداول، الفترات، والمعلمين في نظام لوحة التوقيت المدرسي.</p>
+        <p class="page-subtitle">إدارة الجداول، الفترات، المعلمين، والمستخدمين.</p>
     </header>
 
-    <section class="panel-grid">
+    <!-- ── قسم حصص المعلمين ───────────────────────────────────── -->
+    <div class="section-label">حصص المعلمين</div>
+    <div class="panel-grid">
 
-        <!-- بطاقة حصص المعلمين الرئيسية -->
         <section class="panel-card">
-            <div class="panel-badge">حصص المعلمين</div>
-            <h2 class="panel-title">حصص المعلمين الرئيسية</h2>
-            <p class="panel-text">
-                إضافة وإدارة تعيينات المعلمين في الحصص الدراسية الرئيسية لكل يوم من أيام الأسبوع.
-            </p>
+            <div class="panel-badge">حصص رئيسية</div>
+            <h2 class="panel-title">الحصص الرئيسية</h2>
+            <p class="panel-text">إضافة وإدارة تعيينات المعلمين في الحصص الدراسية الرئيسية لكل يوم.</p>
             <div class="panel-stat">
-                <div class="stat-item">
-                    <div class="stat-num">{{ slots_count }}</div>
-                    <div class="stat-label">حصة مسجلة</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">{{ teachers_count }}</div>
-                    <div class="stat-label">معلم</div>
-                </div>
+                <div class="stat-item"><div class="stat-num">{{ slots_count }}</div><div class="stat-label">حصة مسجلة</div></div>
+                <div class="stat-item"><div class="stat-num">{{ teachers_count }}</div><div class="stat-label">معلم</div></div>
             </div>
             <div class="panel-actions">
-                <a href="{% url 'schooldisplay:teacher_main_slots' %}" class="btn-primary">
-                    إضافة / إدارة الحصص
-                </a>
+                <a href="{% url 'schooldisplay:teacher_main_slots' %}" class="btn-primary">إضافة / إدارة</a>
             </div>
         </section>
 
-        <!-- بطاقة قائمة انتظار المعلمين -->
         <section class="panel-card">
             <div class="panel-badge">قائمة الانتظار</div>
-            <h2 class="panel-title">قائمة انتظار المعلمين</h2>
-            <p class="panel-text">
-                إضافة وإدارة المعلمين في قائمة الانتظار للحصص الدراسية، لتغطية الغيابات والطوارئ.
-            </p>
+            <h2 class="panel-title">قائمة الانتظار</h2>
+            <p class="panel-text">إضافة وإدارة المعلمين في قائمة الانتظار لتغطية الغيابات والطوارئ.</p>
             <div class="panel-stat">
-                <div class="stat-item">
-                    <div class="stat-num">{{ waiting_count }}</div>
-                    <div class="stat-label">سجل انتظار</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">{{ teachers_count }}</div>
-                    <div class="stat-label">معلم</div>
-                </div>
+                <div class="stat-item"><div class="stat-num">{{ waiting_count }}</div><div class="stat-label">سجل انتظار</div></div>
+                <div class="stat-item"><div class="stat-num">{{ teachers_count }}</div><div class="stat-label">معلم</div></div>
             </div>
             <div class="panel-actions">
-                <a href="{% url 'schooldisplay:teacher_waiting_slots' %}" class="btn-primary">
-                    إضافة / إدارة الانتظار
-                </a>
+                <a href="{% url 'schooldisplay:teacher_waiting_slots' %}" class="btn-primary">إضافة / إدارة</a>
             </div>
         </section>
 
-        <!-- بطاقة حصص النشاط -->
         <section class="panel-card">
             <div class="panel-badge">حصص النشاط</div>
             <h2 class="panel-title">حصص النشاط</h2>
-            <p class="panel-text">
-                إضافة وإدارة تعيينات المعلمين في حصص النشاط الدراسية لكل يوم من أيام الأسبوع.
-            </p>
+            <p class="panel-text">إضافة وإدارة تعيينات المعلمين في حصص النشاط الدراسية لكل يوم.</p>
             <div class="panel-stat">
-                <div class="stat-item">
-                    <div class="stat-num">{{ activity_count }}</div>
-                    <div class="stat-label">حصة نشاط</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num">{{ teachers_count }}</div>
-                    <div class="stat-label">معلم</div>
-                </div>
+                <div class="stat-item"><div class="stat-num">{{ activity_count }}</div><div class="stat-label">حصة نشاط</div></div>
+                <div class="stat-item"><div class="stat-num">{{ teachers_count }}</div><div class="stat-label">معلم</div></div>
             </div>
             <div class="panel-actions">
-                <a href="{% url 'schooldisplay:teacher_activity_slots' %}" class="btn-primary">
-                    إضافة / إدارة النشاط
-                </a>
+                <a href="{% url 'schooldisplay:teacher_activity_slots' %}" class="btn-primary">إضافة / إدارة</a>
             </div>
         </section>
 
-        <!-- بطاقة لوحة توقيت اليوم -->
+    </div>
+
+    <!-- ── قسم الجداول ───────────────────────────────────────── -->
+    <div class="section-label">الجداول والأيام</div>
+    <div class="panel-grid">
+
+        <section class="panel-card">
+            <div class="panel-badge">جداول الحصص</div>
+            <h2 class="panel-title">إدارة الجداول اليومية</h2>
+            <p class="panel-text">إنشاء وإدارة جداول الحصص لكل يوم دراسي مع تحديد الفترات والأوقات والمواد.</p>
+            <div class="panel-stat">
+                <div class="stat-item"><div class="stat-num">{{ schedules_count }}</div><div class="stat-label">جدول</div></div>
+                <div class="stat-item"><div class="stat-num">{{ periods_count }}</div><div class="stat-label">فترة</div></div>
+            </div>
+            <div class="panel-actions">
+                <a href="{% url 'schooldisplay:schedule_list' %}" class="btn-primary">إدارة الجداول</a>
+            </div>
+        </section>
+
+        <section class="panel-card">
+            <div class="panel-badge">أيام استثنائية</div>
+            <h2 class="panel-title">الأيام الخاصة</h2>
+            <p class="panel-text">إدارة الأيام الاستثنائية كالاختبارات والمناسبات وتحديد جداول خاصة لها.</p>
+            <div class="panel-stat">
+                <div class="stat-item"><div class="stat-num">{{ special_days_count }}</div><div class="stat-label">يوم خاص مفعّل</div></div>
+            </div>
+            <div class="panel-actions">
+                <a href="{% url 'schooldisplay:special_days' %}" class="btn-primary">إدارة الأيام</a>
+            </div>
+        </section>
+
         <section class="panel-card">
             <div class="panel-badge">عرض</div>
             <h2 class="panel-title">لوحة توقيت اليوم</h2>
-            <p class="panel-text">
-                عرض جدول حصص اليوم الحالي مع العداد التنازلي للحصة الجارية ومتابعة حالة كل فترة.
-            </p>
+            <p class="panel-text">عرض جدول حصص اليوم الحالي مع العداد التنازلي للحصة الجارية.</p>
             <div class="panel-actions">
-                <a href="{% url 'schooldisplay:today_board' %}" class="btn-primary">
-                    عرض لوحة اليوم
-                </a>
-                <a href="{% url 'schooldisplay:dashboard' %}" class="btn-ghost">
-                    الصفحة الرئيسية
-                </a>
+                <a href="{% url 'schooldisplay:today_board' %}" class="btn-primary">عرض لوحة اليوم</a>
+                <a href="{% url 'schooldisplay:dashboard' %}" class="btn-ghost">الصفحة الرئيسية</a>
             </div>
         </section>
 
-        <!-- بطاقة خريطة التطوير -->
+    </div>
+
+    <!-- ── قسم التقارير والمستخدمين ──────────────────────────── -->
+    <div class="section-label">التقارير والإدارة</div>
+    <div class="panel-grid">
+
         <section class="panel-card">
-            <div class="panel-badge muted">قيد التطوير</div>
-            <h2 class="panel-title">خريطة التطوير القادمة</h2>
-            <p class="panel-small-text">
-                • إضافة نموذج لإدارة الجداول وربطه بنماذج DaySchedule و Period.<br>
-                • تخصيص صلاحيات للمشرفين والمدير والمعلمين.<br>
-                • دعم جداول خاصة للأيام الاستثنائية (اختبارات، مناسبات).<br>
-                • ربط لوحة التحكم بتقارير زمنية حول حضور الفصول.<br>
-            </p>
+            <div class="panel-badge">تقارير</div>
+            <h2 class="panel-title">التقارير الزمنية</h2>
+            <p class="panel-text">نظرة شاملة على الجداول والفترات وتغطية المعلمين مع إحصائيات تفصيلية لكل يوم.</p>
+            <div class="panel-actions">
+                <a href="{% url 'schooldisplay:reports' %}" class="btn-primary">عرض التقارير</a>
+            </div>
         </section>
 
-    </section>
+        {% if user_role == 'admin' %}
+        <section class="panel-card">
+            <div class="panel-badge admin-only" style="border-color:rgba(248,113,113,.4);color:#f87171;background:rgba(248,113,113,.07)">للمدير فقط</div>
+            <h2 class="panel-title">إدارة المستخدمين والصلاحيات</h2>
+            <p class="panel-text">تعيين أدوار المديرين والمشرفين والمعلمين والتحكم في صلاحيات وصول كل مستخدم.</p>
+            <div class="panel-stat">
+                <div class="stat-item"><div class="stat-num">{{ users_count }}</div><div class="stat-label">مستخدم</div></div>
+            </div>
+            <div class="panel-actions">
+                <a href="{% url 'schooldisplay:user_management' %}" class="btn-primary">إدارة الصلاحيات</a>
+            </div>
+        </section>
+        {% endif %}
+
+    </div>
 </main>
 
 {% include "footer.html" %}
-
 </body>
 </html>
