@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "schoolcore",
     "schoolaccounts",
     "schooltimetable",
+    "schooldisplay",
     "display",
 ]
 

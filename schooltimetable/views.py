@@ -1,75 +1,69 @@
+from __future__ import annotations
+
 from datetime import datetime
 
-from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils import timezone
 
-from .models import (
+from schooltimetable.models import (
     DaySchedule,
     Period,
     SpecialDay,
-    TeacherMainSlot,
-    TeacherWaitingSlot,
-    TeacherActivitySlot,
     DAYS_OF_WEEK,
 )
 
 
 def _get_today_weekday_code() -> int:
     """
-    تحويل weekday تبع بايثون (الاثنين=0 .. الأحد=6)
-    إلى كود DAYS_OF_WEEK (الأحد=0 .. الخميس=4).
+    يحوّل weekday تبع بايثون (الاثنين=0 .. الأحد=6)
+    إلى كود أيام المدرسة في DAYS_OF_WEEK (الأحد=0 .. الخميس=4).
+
+    Monday (0)  -> 1  (الاثنين)
+    Tuesday (1) -> 2  (الثلاثاء)
+    Wednesday(2)-> 3  (الأربعاء)
+    Thursday (3)-> 4  (الخميس)
+    Sunday (6)  -> 0  (الأحد)
+
+    في حال كان اليوم جمعة (4) أو سبت (5)، يرجع قيمة خارج مدى
+    أيام المدرسة، وعندها غالبًا لن يكون هناك جدول مفعّل.
     """
     django_weekday = timezone.localdate().weekday()  # Monday=0 .. Sunday=6
 
-    # إذا كان الأحد (6) نخليه 0، والباقي نحركه واحد
-    if django_weekday == 6:
+    if django_weekday == 6:  # الأحد
         return 0
+
+    # الباقي نحركه واحد (0->1، 1->2، 2->3، 3->4)
     return django_weekday + 1
 
 
 def _build_aware_datetime(today, time_value):
     """
-    يبني datetime aware (مع المنطقة الزمنية الحالية)
-    من تاريخ اليوم + وقت معين.
+    يبني datetime (aware) باستخدام تاريخ اليوم + وقت معيّن،
+    مع ربطه بالمنطقة الزمنية الحالية من إعدادات Django.
     """
     dt = datetime.combine(today, time_value)
     return timezone.make_aware(dt, timezone.get_current_timezone())
 
 
-# =========================
-#  API: جدول اليوم العام
-# =========================
+def dashboard(request):
+    """
+    صفحة لوحة التوقيت المدرسي (جدول اليوم):
+    - تجيب DaySchedule المناسب لليوم (مع مراعاة SpecialDay إن وجد).
+    - تجيب Period المرتبطة به.
+    - تحسب حالة كل حصة (finished / current / upcoming).
+    - ترسل البيانات إلى القالب display/dashboard.html.
+    """
 
-def api_today_schedule(request):
-    """
-    يرجع جدول اليوم (DaySchedule + Periods) بناءً على اليوم الحالي
-    مع مراعاة SpecialDay إن وجد.
-    الاستجابة متوافقة مع JavaScript في dashboard.html:
-    {
-        "success": True/False,
-        "message": "...",        # في حالة عدم النجاح
-        "schedule": {
-            "id": ...,
-            "day": ...,
-            "day_name": "...",
-            "description": "...",
-        },
-        "periods": [
-            {
-                "id": ...,
-                "name": "...",
-                "type": "...",
-                "start": "ISO datetime",
-                "end": "ISO datetime",
-            },
-            ...
-        ]
-    }
-    """
     today = timezone.localdate()
+    now = timezone.localtime()
     weekday_code = _get_today_weekday_code()
 
-    # لو فيه يوم خاص في SpecialDay نستخدم جدوله
+    # اسم اليوم (من ثابت DAYS_OF_WEEK)
+    today_weekday_label = dict(DAYS_OF_WEEK).get(weekday_code, "")
+    # صيغة التاريخ الظاهرة تحت الساعة
+    today_date_str = today.strftime("%Y-%m-%d")
+
+    # 1) هل يوجد يوم خاص مفعّل اليوم؟
     special = (
         SpecialDay.objects.select_related("schedule")
         .filter(date=today, is_active=True, schedule__is_active=True)
@@ -79,192 +73,75 @@ def api_today_schedule(request):
     if special and special.schedule:
         schedule = special.schedule
     else:
+        # 2) لو ما فيه يوم خاص: نستخدم الجدول العادي لليوم
         schedule = (
             DaySchedule.objects.filter(day_of_week=weekday_code, is_active=True)
             .order_by("id")
             .first()
         )
 
-    if not schedule:
-        return JsonResponse(
-            {
-                "success": False,
-                "message": "لا يوجد جدول معرف لهذا اليوم في قاعدة البيانات.",
-            }
+    today_lessons = []
+
+    if schedule is not None:
+        periods_qs = (
+            Period.objects.filter(schedule=schedule)
+            .order_by("order", "start_time")
+            .all()
         )
 
-    day_name = dict(DAYS_OF_WEEK).get(schedule.day_of_week, str(schedule.day_of_week))
+        for index, p in enumerate(periods_qs, start=1):
+            start_dt = _build_aware_datetime(today, p.start_time)
+            end_dt = _build_aware_datetime(today, p.end_time)
 
-    periods_qs = (
-        Period.objects.filter(schedule=schedule)
-        .order_by("order", "start_time")
-        .all()
-    )
+            # حساب الحالة حسب الوقت الحالي
+            if end_dt <= now:
+                status = "finished"
+            elif start_dt <= now <= end_dt:
+                status = "current"
+            else:
+                status = "upcoming"
 
-    periods = []
-    for p in periods_qs:
-        start_dt = _build_aware_datetime(today, p.start_time)
-        end_dt = _build_aware_datetime(today, p.end_time)
+            # اسم المادة واسم المعلم (لو الحقول موجودة)
+            subject = getattr(p, "subject", None) or getattr(p, "name", "")
+            teacher_name = getattr(p, "teacher_name", None) or getattr(p, "teacher", None) or ""
 
-        periods.append(
-            {
-                "id": p.id,
-                "name": p.name,
-                "type": p.period_type,
-                "start": start_dt.isoformat(),
-                "end": end_dt.isoformat(),
-            }
-        )
+            today_lessons.append(
+                {
+                    "order": getattr(p, "order", index),
+                    "start_time": p.start_time,
+                    "end_time": p.end_time,
+                    "subject": subject,
+                    "teacher_name": teacher_name,
+                    "status": status,
+                }
+            )
 
-    return JsonResponse(
-        {
-            "success": True,
-            "schedule": {
-                "id": schedule.id,
-                "day": schedule.day_of_week,
-                "day_name": day_name,
-                "description": schedule.description,
-            },
-            "periods": periods,
-        }
-    )
+    context = {
+        "page_title": "لوحة التوقيت المدرسي - مدرسة الخالدية الابتدائية",
+        "today_weekday": today_weekday_label,
+        "today_date": today_date_str,
+        "today_lessons": today_lessons,
+    }
+
+    return render(request, "display/dashboard.html", context)
 
 
-# =========================
-#  API: حصص الانتظار اليوم
-# =========================
-
-def api_teacher_waiting_slots(request):
+def control_panel(request):
     """
-    يرجع حصص الانتظار للمعلمين لليوم الحالي (TeacherWaitingSlot).
+    صفحة لوحة التحكم (يمكن تطويرها لاحقًا).
     """
-    today = timezone.localdate()
-    weekday_code = _get_today_weekday_code()
-
-    slots_qs = (
-        TeacherWaitingSlot.objects.select_related("teacher")
-        .filter(day_of_week=weekday_code)
-        .order_by("start_time")
-    )
-
-    slots = []
-    for s in slots_qs:
-        start_dt = _build_aware_datetime(today, s.start_time)
-        end_dt = _build_aware_datetime(today, s.end_time)
-
-        slots.append(
-            {
-                "id": s.id,
-                "teacher_name": s.teacher.name,
-                "teacher_code": s.teacher.code,
-                "start": start_dt.isoformat(),
-                "end": end_dt.isoformat(),
-                "note": s.note or "",
-            }
-        )
-
-    if not slots:
-        return JsonResponse(
-            {
-                "success": False,
-                "message": "لا توجد حصص انتظار للمعلمين لليوم الحالي.",
-                "slots": [],
-            }
-        )
-
-    return JsonResponse({"success": True, "slots": slots})
+    context = {
+        "page_title": "لوحة التحكم - مدرسة الخالدية الابتدائية",
+    }
+    return render(request, "display/control_panel.html", context)
 
 
-# =========================
-#  API: حصص النشاط اليوم
-# =========================
-
-def api_teacher_activity_slots(request):
+def school_year_board(request):
     """
-    يرجع حصص النشاط للمعلمين لليوم الحالي (TeacherActivitySlot).
+    صفحة لوحة العام الدراسي (school_year_board).
+    حاليًا صفحة بسيطة؛ يمكن تطويرها لاحقًا لعرض جدول السنة كاملة.
     """
-    today = timezone.localdate()
-    weekday_code = _get_today_weekday_code()
-
-    slots_qs = (
-        TeacherActivitySlot.objects.select_related("teacher")
-        .filter(day_of_week=weekday_code)
-        .order_by("start_time")
-    )
-
-    slots = []
-    for s in slots_qs:
-        start_dt = _build_aware_datetime(today, s.start_time)
-        end_dt = _build_aware_datetime(today, s.end_time)
-
-        slots.append(
-            {
-                "id": s.id,
-                "teacher_name": s.teacher.name,
-                "teacher_code": s.teacher.code,
-                "start": start_dt.isoformat(),
-                "end": end_dt.isoformat(),
-                "note": s.note or "",
-            }
-        )
-
-    if not slots:
-        return JsonResponse(
-            {
-                "success": False,
-                "message": "لا توجد حصص نشاط للمعلمين لليوم الحالي.",
-                "slots": [],
-            }
-        )
-
-    return JsonResponse({"success": True, "slots": slots})
-
-
-# =========================
-#  API: الجدول العام للمعلمين (لوحة التحكم)
-# =========================
-
-def api_teacher_main_slots(request):
-    """
-    يرجع حصص الجدول العام للمعلمين لليوم الحالي (TeacherMainSlot)
-    لاستخدامها في صفحة لوحة التحكم:
-    - اسم المعلم
-    - الرمز
-    - من / إلى
-    - ملاحظات
-    """
-    today = timezone.localdate()
-    weekday_code = _get_today_weekday_code()
-
-    slots_qs = (
-        TeacherMainSlot.objects.select_related("teacher")
-        .filter(day_of_week=weekday_code)
-        .order_by("start_time", "teacher__name")
-    )
-
-    slots = []
-    for s in slots_qs:
-        start_dt = _build_aware_datetime(today, s.start_time)
-        end_dt = _build_aware_datetime(today, s.end_time)
-
-        slots.append(
-            {
-                "id": s.id,
-                "teacher_name": s.teacher.name,
-                "teacher_code": s.teacher.code,
-                "start": start_dt.isoformat(),
-                "end": end_dt.isoformat(),
-                "note": s.note or "",
-            }
-        )
-
-    if not slots:
-        return JsonResponse(
-            {
-                "success": False,
-                "message": "لا توجد حصص في الجدول العام للمعلمين لليوم الحالي.",
-                "slots": [],
-            }
-        )
-
-    return JsonResponse({"success": True, "slots": slots})
+    context = {
+        "page_title": "لوحة العام الدراسي - مدرسة الخالدية الابتدائية",
+    }
+    return render(request, "display/school_year_board.html", context)

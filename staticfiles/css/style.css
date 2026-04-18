@@ -1,3 +1,88 @@
+.cp-table-wrapper {
+    border-radius: 1rem;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    overflow: hidden;
+}
+
+.cp-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cp-table thead {
+    background: linear-gradient(90deg, #020617, #0b1120);
+}
+
+.cp-table th,
+.cp-table td {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.cp-table th {
+    color: #e5e7eb;
+    font-weight: 600;
+}
+
+.cp-row:nth-child(even) {
+    background-color: rgba(15, 23, 42, 0.8);
+}
+
+.cp-row:hover {
+    background-color: rgba(30, 64, 175, 0.35);
+}
+
+.cp-row-loading td {
+    padding: 1.5rem;
+    color: #9ca3af;
+}
+
+.time-text {
+    font-variant-numeric: tabular-nums;
+}
+
+/* شارة الحالة */
+.cp-status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6rem;
+    padding: 0.25rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    border: 1px solid transparent;
+}
+
+/* انتهت */
+.cp-status-pill-done {
+    background: rgba(148, 163, 184, 0.15);
+    border-color: rgba(148, 163, 184, 0.4);
+    color: #e5e7eb;
+}
+
+/* الحالية */
+.cp-status-pill-current {
+    background: radial-gradient(circle at center, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 0.95));
+    border-color: rgba(56, 189, 248, 0.8);
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.75);
+    color: #e0f2fe;
+}
+
+/* قادمة */
+.cp-status-pill-upcoming {
+    background: rgba(234, 179, 8, 0.08);
+    border-color: rgba(234, 179, 8, 0.8);
+    color: #facc15;
+}
+
+.cp-card-day-label {
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
 /* ================== Reset بسيط ================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 

@@ -370,6 +370,169 @@
             color: var(--text-muted);
             background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 1));
         }
+
+        /* ===============================
+           بطاقة الجداول اليومية الزمنية 3D
+           =============================== */
+
+        .timetable-section {
+            margin-bottom: 2.4rem;
+        }
+
+        .timetable-card {
+            background:
+                radial-gradient(circle at top left,
+                    rgba(56, 189, 248, 0.18),
+                    transparent 60%
+                ),
+                radial-gradient(circle at bottom right,
+                    rgba(15, 23, 42, 0.98),
+                    #020617
+                );
+            border-radius: 1.6rem;
+            padding: 1.6rem 1.6rem 1.4rem;
+            border: 1px solid rgba(15, 23, 42, 1);
+            box-shadow:
+                0 26px 70px rgba(0, 0, 0, 0.95),
+                0 0 0 1px rgba(15, 23, 42, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timetable-card::before {
+            content: "";
+            position: absolute;
+            inset-inline-start: -70px;
+            inset-block-end: -70px;
+            width: 210px;
+            height: 210px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cp-card-header {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .cp-card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .cp-card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .day-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .day-card {
+            background: rgba(15, 23, 42, 0.98);
+            border-radius: 1rem;
+            padding: 0.9rem 0.9rem 0.8rem;
+            border: 1px solid rgba(31, 41, 55, 0.95);
+            box-shadow:
+                0 14px 34px rgba(0, 0, 0, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 1);
+        }
+
+        .day-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .day-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .day-badge {
+            padding: 0.18rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 1), #020617);
+        }
+
+        .day-badge-today {
+            border-color: var(--accent-strong);
+            color: var(--accent-strong);
+            box-shadow:
+                0 0 0 1px rgba(56, 189, 248, 0.45),
+                0 0 16px rgba(56, 189, 248, 0.75);
+        }
+
+        .day-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .day-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            direction: rtl;
+        }
+
+        .day-table thead th {
+            text-align: right;
+            padding: 0.35rem 0.25rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+            white-space: nowrap;
+        }
+
+        .day-table tbody td {
+            padding: 0.35rem 0.25rem;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.95);
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .day-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .day-table tbody td:first-child {
+            font-weight: 600;
+            color: var(--accent-strong);
+        }
+
+        .no-slots-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin: 0.2rem 0.1rem 0;
+        }
+
+        @media (max-width: 900px) {
+            .timetable-card {
+                padding: 1.4rem 1.1rem 1.1rem;
+            }
+
+            .cp-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -410,6 +573,65 @@
                         <span>النظام متزامن مع توقيت الخالدية</span>
                     </div>
                 </aside>
+            </div>
+        </article>
+    </section>
+
+    <!-- بطاقة الجداول اليومية الزمنية (ديناميكية من قاعدة البيانات) -->
+    <section class="timetable-section" aria-label="الجداول اليومية الزمنية">
+        <article class="timetable-card">
+            <header class="cp-card-header">
+                <div>
+                    <h2 class="cp-card-title">الجداول اليومية الزمنية</h2>
+                    <p class="cp-card-subtitle">
+                        أوقات الحصص خلال أيام الأسبوع الدراسي، يتم توليدها مباشرة من قاعدة البيانات.
+                    </p>
+                </div>
+            </header>
+
+            <div class="day-grid" role="list">
+                {% for day in daily_timetables %}
+                    <section class="day-card" role="listitem">
+                        <header class="day-card-header">
+                            <span class="day-name">{{ day.name }}</span>
+
+                            {% if today_day_value is not None and day.value == today_day_value %}
+                                <span class="day-badge day-badge-today">اليوم</span>
+                            {% else %}
+                                <span class="day-badge">جدول ثابت</span>
+                            {% endif %}
+                        </header>
+
+                        <div class="day-table-wrapper">
+                            {% if day.slots %}
+                                <table class="day-table" aria-label="جدول الحصص ليوم {{ day.name }}">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">الحصة</th>
+                                            <th scope="col">وقت البداية</th>
+                                            <th scope="col">وقت النهاية</th>
+                                            <th scope="col">المدة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for slot in day.slots %}
+                                            <tr>
+                                                <td>{{ slot.period_number }}</td>
+                                                <td>{{ slot.start_time|time:"H:i" }}</td>
+                                                <td>{{ slot.end_time|time:"H:i" }}</td>
+                                                <td>{{ slot.duration_minutes }} دقيقة</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p class="no-slots-text">
+                                    لا توجد فترات زمنية مسجلة لهذا اليوم حتى الآن.
+                                </p>
+                            {% endif %}
+                        </div>
+                    </section>
+                {% endfor %}
             </div>
         </article>
     </section>
