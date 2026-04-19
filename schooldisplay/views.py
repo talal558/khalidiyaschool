@@ -183,6 +183,7 @@ def control_panel(request):
         "teachers_count": Teacher.objects.count(),
         "schedules_count": DaySchedule.objects.count(),
         "periods_count":   Period.objects.count(),
+        "class_periods_count": Period.objects.filter(period_type="class").count(),
         "special_days_count": SpecialDay.objects.filter(is_active=True).count(),
         "users_count":    User.objects.count(),
         "user_role": user_role,
