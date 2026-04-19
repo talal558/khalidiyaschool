@@ -36,7 +36,7 @@ def _get_user_role(user) -> str:
         return 'admin'
     try:
         return user.profile.role
-    except Exception:
+    except AttributeError:
         return 'display'
 
 
@@ -390,7 +390,7 @@ def user_management(request):
         try:
             role = u.profile.role
             role_display = u.profile.get_role_display()
-        except Exception:
+        except AttributeError:
             role = 'display'
             role_display = 'عرض فقط'
         user_list.append({"user": u, "role": role, "role_display": role_display})

@@ -14,7 +14,7 @@ def user_role_context(request):
     else:
         try:
             role = request.user.profile.role
-        except Exception:
+        except AttributeError:
             role = 'display'
     return {
         'user_role': role,

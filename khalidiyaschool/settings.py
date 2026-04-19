@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "schoolaccounts",
     "schooltimetable",
     "schooldisplay",
-    "display",
 ]
 
 # الوسائط (Middleware)
