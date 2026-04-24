@@ -14,7 +14,7 @@ from .models import (
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ("name", "code")
+    list_display = ("name", "code", "photo")
     search_fields = ("name", "code")
 
 

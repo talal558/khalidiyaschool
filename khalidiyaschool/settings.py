@@ -119,6 +119,34 @@ USE_TZ = True
 # الملفات الثابتة
 STATIC_URL = "/static/"
 
+# ── إعدادات الوسائط (Media) ──────────────────────────────────────────────────
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+_storage_backend = os.getenv("STORAGE_BACKEND", "").lower()
+
+if _storage_backend == "s3":
+    STORAGES = {
+        "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    }
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "")
+    AWS_S3_REGION_NAME      = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
+    AWS_ACCESS_KEY_ID       = os.getenv("AWS_ACCESS_KEY_ID", "")
+    AWS_SECRET_ACCESS_KEY   = os.getenv("AWS_SECRET_ACCESS_KEY", "")
+    AWS_DEFAULT_ACL         = "private"
+    AWS_S3_FILE_OVERWRITE   = False
+
+elif _storage_backend == "azure":
+    STORAGES = {
+        "default": {"BACKEND": "storages.backends.azure_storage.AzureStorage"},
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    }
+    AZURE_ACCOUNT_NAME = os.getenv("AZURE_ACCOUNT_NAME", "")
+    AZURE_ACCOUNT_KEY  = os.getenv("AZURE_ACCOUNT_KEY", "")
+    AZURE_CONTAINER    = os.getenv("AZURE_CONTAINER", "media")
+
 # مجلدات الملفات الثابتة في وضع التطوير
 STATICFILES_DIRS = [
     BASE_DIR / "staticfiles",

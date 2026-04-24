@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, date
 from django.db import models
 from django.utils import timezone
+from khalidiyaschool.utils.images import convert_image_to_webp
 
 # =========================
 # ثوابت الأيام
@@ -19,8 +20,9 @@ DAYS_OF_WEEK = [
 # المعلم
 # =========================
 class Teacher(models.Model):
-    name = models.CharField("اسم المعلم", max_length=100)
-    code = models.CharField("رمز المعلم", max_length=20, unique=True)
+    name  = models.CharField("اسم المعلم", max_length=100)
+    code  = models.CharField("رمز المعلم", max_length=20, unique=True)
+    photo = models.ImageField("صورة المعلم", upload_to="teachers/photos/", blank=True, null=True)
 
     class Meta:
         verbose_name = "معلم"
@@ -28,6 +30,11 @@ class Teacher(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} ({self.code})"
+
+    def save(self, *args, **kwargs) -> None:
+        if self.photo and not self.photo.name.endswith(".webp"):
+            convert_image_to_webp(self.photo, upload_path="teachers/photos/")
+        super().save(*args, **kwargs)
 
 
 # =========================
